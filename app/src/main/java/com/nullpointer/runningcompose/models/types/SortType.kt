@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.models
+package com.nullpointer.runningcompose.models.types
 
 import androidx.annotation.StringRes
 import com.nullpointer.runningcompose.R
