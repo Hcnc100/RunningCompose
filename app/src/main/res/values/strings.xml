@@ -1,0 +1,9 @@
+<resources>
+    <!-- type name sort running -->
+    <string name="app_name">RunningCompose</string>
+    <string name="date_type_name">Fecha</string>
+    <string name="running_time_type_name">Tiempo del recorrido</string>
+    <string name="avg_speed_type_name">Velocidad Media</string>
+    <string name="distance_type_name">Distancia</string>
+    <string name="calories_burned_type_name">Calorias Quemadas</string>
+</resources>
