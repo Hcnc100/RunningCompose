@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nullpointer.runningcompose">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".inject.Application"
         android:allowBackup="true"
@@ -15,7 +17,7 @@
         android:theme="@style/Theme.RunningCompose"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activitys.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.RunningCompose">

@@ -6,4 +6,17 @@
     <string name="avg_speed_type_name">Velocidad Media</string>
     <string name="distance_type_name">Distancia</string>
     <string name="calories_burned_type_name">Calorias Quemadas</string>
+
+    <!-- toolbar -->
+    <string name="description_clear_selection">Deselect items</string>
+    <string name="description_arrow_back">Regresa a la pantalla anterior</string>
+
+    <!-- error run -->
+    <string name="error_load_runs">Error al cargar los recorrdos</string>
+
+    <!-- runs screen -->
+    <string name="description_button_add_run">Iniciar la interfaz del nuevo recorrido</string>
+    <string name="description_deleter_select_runs">Elimina los recorridos seleccinados</string>
+    <string name="description_current_run_img">Imagen del recorrido actual</string>
+    <string name="message_empty_runs">No hay recorrdios guardados</string>
 </resources>

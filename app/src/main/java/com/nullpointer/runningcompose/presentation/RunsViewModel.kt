@@ -2,6 +2,7 @@ package com.nullpointer.runningcompose.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.domain.config.ConfigRepoImpl
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepoImpl
@@ -10,6 +11,7 @@ import com.nullpointer.runningcompose.models.Run
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -23,10 +25,14 @@ class RunsViewModel @Inject constructor(
     confRepository: ConfigRepoImpl,
 ) : ViewModel() {
 
-    val listRuns: Flow<List<Run>?> = confRepository.sortConfig.flatMapLatest {
+    private val _messageRuns= Channel<Int>()
+    val messageRuns=_messageRuns.receiveAsFlow()
+
+    val listRuns = confRepository.sortConfig.flatMapLatest {
         runsRepository.getListForTypeSort(it.sortType)
     }.catch {
         Timber.e("Error when load run $it")
+        _messageRuns.trySend(R.string.error_load_runs)
         emit(emptyList())
     }.flowOn(Dispatchers.IO).stateIn(
         viewModelScope,

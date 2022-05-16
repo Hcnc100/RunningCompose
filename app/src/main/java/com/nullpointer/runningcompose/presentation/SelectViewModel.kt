@@ -22,6 +22,9 @@ class SelectViewModel @Inject constructor(
     )
     private var listRunsSelect = mutableListOf<Run>()
 
+    val isSelectEnable=listSelect.isNotEmpty()
+    val sizeSelected=listSelect.size
+
     fun changeSelect(runSelect:Run){
         listSelect=if(listSelect.contains(runSelect.id!!)){
             runSelect.isSelected=false
