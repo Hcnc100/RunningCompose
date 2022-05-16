@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object ConfigUserModule {
+object DatabaseModule {
     private const val NAME_DATABASE = "RUN_DATABASE"
 
     @Provides
@@ -34,7 +34,5 @@ object ConfigUserModule {
         runDatabase: RunDatabase,
     ): RunDAO = runDatabase.getRunDao()
 
-    fun providePreferences(
-        @ApplicationContext context: Context
-    ) = ConfigUserStore(context)
+
 }

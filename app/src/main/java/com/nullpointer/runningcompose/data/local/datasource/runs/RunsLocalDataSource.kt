@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.data.local.datasource
+package com.nullpointer.runningcompose.data.local.datasource.runs
 
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.config.MapConfig
@@ -7,15 +7,11 @@ import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
 
-interface LocalDataSource {
+interface RunsLocalDataSource {
     val totalAVGSpeed: Flow<Float?>
     val totalCaloriesBurden: Flow<Float>
     val totalDistance: Flow<Float>
     val totalTimeRun: Flow<Long>
-
-    val userConfig: Flow<UserConfig?>
-    val mapConfig: Flow<MapConfig>
-    val sortConfig: Flow<SortConfig>
 
     suspend fun deleterListRuns(listIds: List<Long>)
     suspend fun deleterRun(run: Run)

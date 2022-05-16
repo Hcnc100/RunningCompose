@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.domain
+package com.nullpointer.runningcompose.domain.runs
 
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.config.MapConfig
@@ -12,10 +12,6 @@ interface RunRepository {
     val totalCaloriesBurden: Flow<Float>
     val totalDistance: Flow<Float>
     val totalTimeRun: Flow<Long>
-
-    val userConfig: Flow<UserConfig?>
-    val mapConfig: Flow<MapConfig>
-    val sortConfig: Flow<SortConfig>
 
     suspend fun deleterListRuns(listIds: List<Long>)
     suspend fun deleterRun(run: Run)

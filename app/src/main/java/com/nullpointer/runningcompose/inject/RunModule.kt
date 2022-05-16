@@ -1,11 +1,10 @@
 package com.nullpointer.runningcompose.inject
 
 import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
-import com.nullpointer.runningcompose.data.local.datasource.LocalDataSource
-import com.nullpointer.runningcompose.data.local.datasource.LocalDataSourceImpl
+import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSource
+import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSourceImpl
 import com.nullpointer.runningcompose.data.local.room.RunDAO
-import com.nullpointer.runningcompose.domain.RunRepoImpl
-import com.nullpointer.runningcompose.domain.RunRepository
+import com.nullpointer.runningcompose.domain.runs.RunRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +20,7 @@ object RunModule {
     fun provideLocalDataSource(
         runDAO: RunDAO,
         configUserStore: ConfigUserStore
-    ):LocalDataSource=LocalDataSourceImpl(
+    ): RunsLocalDataSource = RunsLocalDataSourceImpl(
         runDAO,
         configUserStore
     )
@@ -29,7 +28,7 @@ object RunModule {
     @Provides
      @Singleton
     fun provideRunRepository(
-        localDataSource: LocalDataSource
-    ):RunRepoImpl=RunRepoImpl(localDataSource)
+        localDataSource: RunsLocalDataSource
+    ): RunRepoImpl = RunRepoImpl(localDataSource)
 
 }
