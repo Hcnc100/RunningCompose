@@ -19,6 +19,7 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
+import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ItemRun
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ItemRunFake
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.first
 fun RunsScreens(
     runsViewModel: RunsViewModel,
     selectViewModel: SelectViewModel,
-    navigator:DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
     val messageRuns = runsViewModel.messageRuns
     val scaffoldState = rememberScaffoldState()
@@ -72,7 +73,7 @@ fun RunsScreens(
         }
     ) {
         ListRuns(listRuns = listRunsState.value,
-            actionClick = {},
+            actionClick = { navigator.navigate(DetailsRunDestination.invoke(it)) },
             actionSelect = selectViewModel::changeSelect,
             isSelectEnable = selectViewModel.isSelectEnable)
     }

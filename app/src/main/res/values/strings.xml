@@ -33,4 +33,12 @@
 
     <!-- details screen-->
     <string name="title_details">Detalles</string>
+    <string name="item_title_date">Fecha:</string>
+    <string name="item_title_hour">Hora:</string>
+    <string name="item_title_duration">Duracion:</string>
+    <string name="item_title_distance">Distancia:</string>
+    <string name="item_title_speed">Velocidad:</string>
+    <string name="item_title_calories">Calorias:</string>
+
+    <!-- item runs -->
 </resources>

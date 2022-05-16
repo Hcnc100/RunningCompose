@@ -7,7 +7,14 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 fun Long.toFullFormat(context: Context): String {
-    val base = "EEEE dd/MM/yyyy hh:mm"
+    val base = "dd/MM/yyyy hh:mm"
+    val newPattern = if (DateFormat.is24HourFormat(context)) base else "$base a"
+    val sdf = SimpleDateFormat(newPattern, Locale.getDefault())
+    return sdf.format(this)
+}
+
+fun Long.toDateOnlyTime(context: Context):String{
+    val base = "hh:mm"
     val newPattern = if (DateFormat.is24HourFormat(context)) base else "$base a"
     val sdf = SimpleDateFormat(newPattern, Locale.getDefault())
     return sdf.format(this)

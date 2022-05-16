@@ -1,6 +1,7 @@
 package com.nullpointer.runningcompose.ui.screens.details
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -33,7 +34,11 @@ fun DetailsRun(
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
             Card(modifier = Modifier.padding(10.dp)) {
-                InfoRun(itemRun = itemsRun, dataComplete = true)
+                InfoRun(
+                    itemRun = itemsRun,
+                    dataComplete = true,
+                    modifier = Modifier.padding(10.dp),
+                    isMiniTitle = false)
             }
         }
     }

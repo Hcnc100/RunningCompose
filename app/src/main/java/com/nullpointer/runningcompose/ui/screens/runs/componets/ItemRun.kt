@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -58,30 +59,41 @@ fun ItemRun(
                     .clip(RoundedCornerShape(10.dp))
             )
             Spacer(modifier = Modifier.width(20.dp))
-            InfoRun(itemRun = itemRun, modifier = Modifier.weight(.5f), dataComplete = false)
+            InfoRun(itemRun = itemRun,
+                modifier = Modifier.weight(.5f),
+                dataComplete = false,
+                isMiniTitle = true)
         }
     }
 }
 
 
 @Composable
-fun InfoRun(itemRun: Run, modifier: Modifier = Modifier, dataComplete: Boolean) {
-    Row(modifier = modifier.padding(vertical = 10.dp)) {
+fun InfoRun(
+    itemRun: Run,
+    modifier: Modifier = Modifier,
+    dataComplete: Boolean,
+    isMiniTitle: Boolean,
+) {
+    Row(modifier = modifier
+        .padding(vertical = 10.dp)
+        .fillMaxWidth(),
+        horizontalArrangement = if(isMiniTitle) Arrangement.SpaceBetween else Arrangement.SpaceEvenly) {
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
-            TextMiniTitle(text = "Fecha:")
-            TextMiniTitle(text = "Duracion:")
-            TextMiniTitle(text = "Distancia:")
-            TextMiniTitle(text = "Velocidad:")
-            TextMiniTitle(text = "Calorias:")
+            TextMiniTitle(text = stringResource(R.string.item_title_date), isMiniTitle)
+            TextMiniTitle(text = stringResource(R.string.item_title_hour), isMiniTitle)
+            TextMiniTitle(text = stringResource(R.string.item_title_duration), isMiniTitle)
+            TextMiniTitle(text = stringResource(R.string.item_title_distance), isMiniTitle)
+            TextMiniTitle(text = stringResource(R.string.item_title_speed), isMiniTitle)
+            TextMiniTitle(text = stringResource(R.string.item_title_calories), isMiniTitle)
         }
-        Spacer(modifier = Modifier.width(10.dp))
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
-            TextMiniTitle(text = if (dataComplete)
-                itemRun.timestamp.toFullFormat(LocalContext.current) else itemRun.timestamp.toDateFormat())
-            TextMiniTitle(text = itemRun.timeRunInMillis.toFullFormatTime(dataComplete))
-            TextMiniTitle(text = itemRun.distance.toMeters(true))
-            TextMiniTitle(text = itemRun.avgSpeed.toAVGSpeed(true))
-            TextMiniTitle(text = itemRun.caloriesBurned.toCaloriesBurned(true))
+            TextMiniTitle(text = itemRun.timestamp.toDateFormat(), isMiniTitle)
+            TextMiniTitle(text = itemRun.timestamp.toDateOnlyTime(LocalContext.current), isMiniTitle)
+            TextMiniTitle(text = itemRun.timeRunInMillis.toFullFormatTime(dataComplete), isMiniTitle)
+            TextMiniTitle(text = itemRun.distance.toMeters(true), isMiniTitle)
+            TextMiniTitle(text = itemRun.avgSpeed.toAVGSpeed(true), isMiniTitle)
+            TextMiniTitle(text = itemRun.caloriesBurned.toCaloriesBurned(true), isMiniTitle)
         }
     }
 }
@@ -89,10 +101,11 @@ fun InfoRun(itemRun: Run, modifier: Modifier = Modifier, dataComplete: Boolean) 
 @Composable
 fun TextMiniTitle(
     text: String,
+    isMiniTitle: Boolean,
 ) {
     Text(text = text,
-        style = MaterialTheme.typography.caption,
-        fontSize = 14.sp,
+        style = if (isMiniTitle) MaterialTheme.typography.caption else MaterialTheme.typography.body1,
+        fontSize = if (isMiniTitle) 14.sp else TextUnit.Unspecified,
         maxLines = 1,
-        overflow = TextOverflow.Ellipsis)
+        overflow = if (isMiniTitle) TextOverflow.Ellipsis else TextOverflow.Clip)
 }
