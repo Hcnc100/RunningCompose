@@ -8,13 +8,15 @@ import com.nullpointer.runningcompose.models.types.SortType.*
 import kotlinx.coroutines.flow.Flow
 
 class RunsLocalDataSourceImpl(
-    private val runDao: RunDAO,
-    private val configUserStore: ConfigUserStore,
+    private val runDao: RunDAO
 ) : RunsLocalDataSource {
     override val totalAVGSpeed: Flow<Float?> = runDao.getTotalAVGSpeed()
     override val totalCaloriesBurden: Flow<Float> = runDao.getTotalCaloriesBurned()
     override val totalDistance: Flow<Float> = runDao.getTotalDistance()
     override val totalTimeRun: Flow<Long> = runDao.getTotalTimeInMillis()
+
+    override suspend fun insertNewRun(run: Run) =
+        runDao.insertNewRun(run)
 
     override suspend fun deleterListRuns(listIds: List<Long>) =
         runDao.deleterListRuns(listIds)

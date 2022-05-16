@@ -12,7 +12,7 @@ interface ConfigLocalDataSource {
     val mapConfig: Flow<MapConfig>
     val sortConfig: Flow<SortConfig>
 
-    suspend fun changeUserConfig(nameUser: String? = null, weight: Float? = null)
-    suspend fun changeMapConfig(style: MapStyle? = null, weight: Float? = null)
-    suspend fun changeSortConfig(sortType: SortType? = null, isReverse: Boolean? = null)
+    suspend fun changeUserConfig(nameUser: String?, weight: Float?)
+    suspend fun changeMapConfig(style: MapStyle?, weight: Float?)
+    suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
 }

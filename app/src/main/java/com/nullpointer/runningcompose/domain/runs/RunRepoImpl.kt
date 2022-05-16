@@ -23,4 +23,7 @@ class RunRepoImpl(
 
     override suspend fun getListForTypeSort(sort: SortType): Flow<List<Run>> =
         runsLocalDataSource.getListForTypeSort(sort)
+
+    override suspend fun insertNewRun(run: Run) =
+        runsLocalDataSource.insertNewRun(run)
 }

@@ -19,11 +19,7 @@ object RunModule {
     @Singleton
     fun provideLocalDataSource(
         runDAO: RunDAO,
-        configUserStore: ConfigUserStore
-    ): RunsLocalDataSource = RunsLocalDataSourceImpl(
-        runDAO,
-        configUserStore
-    )
+    ): RunsLocalDataSource = RunsLocalDataSourceImpl(runDAO)
 
     @Provides
      @Singleton

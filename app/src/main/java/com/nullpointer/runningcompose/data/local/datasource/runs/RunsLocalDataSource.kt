@@ -16,4 +16,5 @@ interface RunsLocalDataSource {
     suspend fun deleterListRuns(listIds: List<Long>)
     suspend fun deleterRun(run: Run)
     suspend fun getListForTypeSort(sort: SortType): Flow<List<Run>>
+    suspend fun insertNewRun(run: Run)
 }
