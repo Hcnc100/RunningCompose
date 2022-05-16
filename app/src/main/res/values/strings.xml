@@ -1,4 +1,15 @@
 <resources>
+
+    <!-- selection resource-->
+    <plurals name="selected_items">
+        <item quantity="one">Un elemento seleccionado</item>
+        <item quantity="other">%d elementos seleccionados</item>
+    </plurals>
+    <plurals name="deleted_items">
+        <item quantity="one">Un elemento eliminado</item>
+        <item quantity="other">%d elementos eliminados</item>
+    </plurals>
+
     <!-- type name sort running -->
     <string name="app_name">RunningCompose</string>
     <string name="date_type_name">Fecha</string>
@@ -19,4 +30,7 @@
     <string name="description_deleter_select_runs">Elimina los recorridos seleccinados</string>
     <string name="description_current_run_img">Imagen del recorrido actual</string>
     <string name="message_empty_runs">No hay recorrdios guardados</string>
+
+    <!-- details screen-->
+    <string name="title_details">Detalles</string>
 </resources>

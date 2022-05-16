@@ -10,12 +10,12 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "run_table")
 @Parcelize
 data class Run(
-    val nameFileImg:String="",
-    val avgSpeed:Float=1f,
-    val distance:Float=2f,
-    val timeRunInMillis:Long=2L,
-    val caloriesBurned:Float=2f,
-    val listPolyLineEncode:List<String> = emptyList(),
+    val nameFileImg:String,
+    val avgSpeed:Float,
+    val distance:Float,
+    val timeRunInMillis:Long,
+    val caloriesBurned:Float,
+    val listPolyLineEncode:List<String>,
     val timestamp:Long=System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
     val id:Long?=null
@@ -24,4 +24,15 @@ data class Run(
     @IgnoredOnParcel
     @Ignore
     var isSelected:Boolean=false
+
+    companion object{
+        fun generateFake()=Run(
+            nameFileImg = "",
+            avgSpeed = 100F,
+            distance = 100F,
+            timeRunInMillis = (13000..50000).random().toLong(),
+            caloriesBurned = 1500F,
+            listPolyLineEncode = emptyList()
+        )
+    }
 }

@@ -17,7 +17,6 @@ fun SelectToolbar(
     numberSelection: Int,
     actionClear: () -> Unit,
 ) {
-    val (showMenu, changeVisibleMenu) = rememberSaveable { mutableStateOf(false) }
     TopAppBar(
         backgroundColor = if (numberSelection == 0) MaterialTheme.colors.primarySurface else MaterialTheme.colors.primary,
         title = {
