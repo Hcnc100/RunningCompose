@@ -22,7 +22,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context,
-    ): RoomDatabase = Room.databaseBuilder(
+    ): RunDatabase = Room.databaseBuilder(
         context,
         RunDatabase::class.java,
         NAME_DATABASE
