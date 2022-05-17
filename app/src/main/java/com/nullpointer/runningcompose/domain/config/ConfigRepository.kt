@@ -13,6 +13,6 @@ interface ConfigRepository {
     val sortConfig: Flow<SortConfig>
 
     suspend fun changeUserConfig(nameUser: String?, weight: Float?)
-    suspend fun changeMapConfig(style: MapStyle?, weight: Float?)
+    suspend fun changeMapConfig(style: MapStyle?, weight: Int?)
     suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
 }

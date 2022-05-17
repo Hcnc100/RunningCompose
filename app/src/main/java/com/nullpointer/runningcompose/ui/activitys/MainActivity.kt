@@ -20,6 +20,7 @@ import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.screens.NavGraph
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
+import com.nullpointer.runningcompose.ui.screens.config.ConfigScreen
 import com.nullpointer.runningcompose.ui.screens.runs.RunsScreens
 import com.nullpointer.runningcompose.ui.screens.statistics.StatisticsScreen
 import com.nullpointer.runningcompose.ui.share.SelectToolbar
@@ -41,7 +42,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
 //                    MainScreen(selectViewModel, runsViewModel)
-                    StatisticsScreen()
+//                    StatisticsScreen()
+                    ConfigScreen()
                 }
             }
         }

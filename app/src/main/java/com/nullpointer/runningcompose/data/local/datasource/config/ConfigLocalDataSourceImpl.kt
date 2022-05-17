@@ -19,7 +19,7 @@ class ConfigLocalDataSourceImpl(
         configUserStore.changeUserConf(nameUser,weight)
     }
 
-    override suspend fun changeMapConfig(style: MapStyle?, weight: Float?) {
+    override suspend fun changeMapConfig(style: MapStyle?, weight: Int?) {
         configUserStore.changeMapConfig(style,weight)
     }
 

@@ -37,7 +37,7 @@ class ConfigUserStore(
     private val keyWeight = floatPreferencesKey(KEY_WEIGHT)
 
     private val keyMapStyle = stringPreferencesKey(KEY_MAP_STYLE)
-    private val keyMapWeight = floatPreferencesKey(KEY_WEIGHT_MAP)
+    private val keyMapWeight = intPreferencesKey(KEY_WEIGHT_MAP)
 
     suspend fun changeSortConf(
         sortType: SortType? = null,
@@ -70,7 +70,7 @@ class ConfigUserStore(
 
     suspend fun changeMapConfig(
         style: MapStyle? = null,
-        weight: Float? = null,
+        weight: Int? = null,
     ) = context.dataStore.edit { pref ->
         style?.let { pref[keyMapStyle] = it.name }
         weight?.let { pref[keyMapWeight] = it }
@@ -79,7 +79,7 @@ class ConfigUserStore(
     fun getMapConfig() = context.dataStore.data.map { pref ->
         MapConfig(
             pref[keyMapStyle]?.let { MapStyle.valueOf(it) } ?: MapStyle.LITE,
-            weight = pref[keyMapWeight] ?: 5f
+            weight = pref[keyMapWeight] ?: 5
         )
     }
 

@@ -19,7 +19,7 @@ class ConfigRepoImpl(
         configLocalDataSource.changeUserConfig(nameUser, weight)
     }
 
-    override suspend fun changeMapConfig(style: MapStyle?, weight: Float?) {
+    override suspend fun changeMapConfig(style: MapStyle?, weight: Int?) {
         configLocalDataSource.changeMapConfig(style, weight)
     }
 

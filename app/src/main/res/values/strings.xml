@@ -1,5 +1,13 @@
 <resources>
 
+    <string name="name_style_lite" translatable="false">Lite</string>
+    <string name="name_style_assassin" translatable="false">Assassin</string>
+    <string name="name_style_midnight" translatable="false">Midnight</string>
+    <string name="name_style_blue" translatable="false">Blue Essence</string>
+    <string name="name_style_paper" translatable="false">Paper</string>
+    <string name="name_style_gray" translatable="false">Gray</string>
+    <string name="name_style_uber" translatable="false">Uber</string>
+
     <!-- selection resource-->
     <plurals name="selected_items">
         <item quantity="one">Un elemento seleccionado</item>
@@ -49,5 +57,6 @@
     <string name="textTemplateCaloriesBurned" translatable="false">0kcal</string>
     <string name="textTemplateSpeedAVG" translatable="false">0km/h</string>
     <string name="textTemplateTimeMili" translatable="false">00:00:00:00</string>
+    <string name="describe_icon_drop_menu">Despliega el menu de opciones</string>
 
 </resources>

@@ -49,7 +49,7 @@ class ConfigViewModel @Inject constructor(
 
     fun changeMapConfig(
         style: MapStyle?=null,
-        weight:Float?=null
+        weight:Int?=null
     ) = viewModelScope.launch(Dispatchers.IO){
         configRepo.changeMapConfig(style, weight)
     }
@@ -60,4 +60,5 @@ class ConfigViewModel @Inject constructor(
     )=viewModelScope.launch(Dispatchers.IO){
         configRepo.changeSortConfig(sortType, isReverse)
     }
+
 }
