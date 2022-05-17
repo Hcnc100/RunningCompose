@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    android:backgroundTint="@android:color/darker_gray"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/textDateMarker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textTemplateDate"
+            android:textSize="18sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/textDurationMarker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textTemplateTime"
+            android:textSize="18sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/textSpeedMarker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textTemplateSpeedAVG"
+            android:textSize="18sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/textDistanceMarker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textTemplateKm"
+            android:textSize="18sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/textCaloriesMarker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/textTemplateCaloriesBurned"
+            android:textSize="18sp"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

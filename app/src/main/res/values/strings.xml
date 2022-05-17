@@ -33,6 +33,8 @@
 
     <!-- details screen-->
     <string name="title_details">Detalles</string>
+
+    <!-- item runs -->
     <string name="item_title_date">Fecha:</string>
     <string name="item_title_hour">Hora:</string>
     <string name="item_title_duration">Duracion:</string>
@@ -40,5 +42,12 @@
     <string name="item_title_speed">Velocidad:</string>
     <string name="item_title_calories">Calorias:</string>
 
-    <!-- item runs -->
+    <!-- templates -->
+    <string name="textTemplateDate" translatable="false">12.12.12</string>
+    <string name="textTemplateKm" translatable="false">0km</string>
+    <string name="textTemplateTime" translatable="false">00:00:00</string>
+    <string name="textTemplateCaloriesBurned" translatable="false">0kcal</string>
+    <string name="textTemplateSpeedAVG" translatable="false">0km/h</string>
+    <string name="textTemplateTimeMili" translatable="false">00:00:00:00</string>
+
 </resources>

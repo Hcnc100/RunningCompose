@@ -82,6 +82,7 @@ dependencies {
 
     // * mp graph
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
 
     // * coil
     implementation("io.coil-kt:coil-compose:2.0.0")

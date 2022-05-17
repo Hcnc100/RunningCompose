@@ -21,6 +21,7 @@ import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.screens.NavGraph
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.screens.runs.RunsScreens
+import com.nullpointer.runningcompose.ui.screens.statistics.StatisticsScreen
 import com.nullpointer.runningcompose.ui.share.SelectToolbar
 import com.nullpointer.runningcompose.ui.theme.RunningComposeTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -39,7 +40,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    MainScreen(selectViewModel, runsViewModel)
+//                    MainScreen(selectViewModel, runsViewModel)
+                    StatisticsScreen()
                 }
             }
         }

@@ -3,14 +3,10 @@ package com.nullpointer.runningcompose.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.domain.config.ConfigRepoImpl
-import com.nullpointer.runningcompose.domain.config.ConfigRepository
-import com.nullpointer.runningcompose.domain.runs.RunRepoImpl
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import com.nullpointer.runningcompose.models.Run
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,19 +14,23 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class RunsViewModel @Inject constructor(
     private val runsRepository: RunRepository,
-    confRepository: ConfigRepoImpl,
 ) : ViewModel() {
 
-    private val _messageRuns= Channel<Int>()
-    val messageRuns=_messageRuns.receiveAsFlow()
+    private val _messageRuns = Channel<Int>()
+    val messageRuns = _messageRuns.receiveAsFlow()
 
-    val listRuns = confRepository.sortConfig.flatMapLatest {
-        runsRepository.getListForTypeSort(it.sortType)
-    }.catch {
+    val statisticsRuns = runsRepository.totalStatisticRuns.catch {
+        Timber.e("Error to load statatistics $it")
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    val listRuns = runsRepository.listRuns.catch {
         Timber.e("Error when load run $it")
         _messageRuns.trySend(R.string.error_load_runs)
         emit(emptyList())

@@ -1,6 +1,7 @@
 package com.nullpointer.runningcompose.inject
 
 import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
+import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
 import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSource
 import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSourceImpl
 import com.nullpointer.runningcompose.data.local.room.RunDAO
@@ -24,7 +25,8 @@ object RunModule {
     @Provides
      @Singleton
     fun provideRunRepository(
-        localDataSource: RunsLocalDataSource
-    ): RunRepoImpl = RunRepoImpl(localDataSource)
+        localDataSource: RunsLocalDataSource,
+        configLocalDataSource: ConfigLocalDataSource
+    ): RunRepoImpl = RunRepoImpl(localDataSource,configLocalDataSource)
 
 }

@@ -1,19 +1,31 @@
 package com.nullpointer.runningcompose.domain.runs
 
+import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
 import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSource
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.SortType
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class RunRepoImpl(
     private val runsLocalDataSource: RunsLocalDataSource,
+    configLocalDataSource: ConfigLocalDataSource,
 ) : RunRepository {
 
-    override val totalAVGSpeed: Flow<Float?> = runsLocalDataSource.totalAVGSpeed
-    override val totalCaloriesBurden: Flow<Float> = runsLocalDataSource.totalCaloriesBurden
-    override val totalDistance: Flow<Float> = runsLocalDataSource.totalDistance
-    override val totalTimeRun: Flow<Long> = runsLocalDataSource.totalTimeRun
 
+    override val listRuns: Flow<List<Run>> = configLocalDataSource.sortConfig.flatMapLatest {
+        runsLocalDataSource.getListForTypeSort(it.sortType)
+            .map { list -> if (it.isReverse) list.reversed() else list }
+    }
+
+    override val totalStatisticRuns: Flow<StatisticsRun> =
+        runsLocalDataSource.totalStatisticRuns
 
     override suspend fun deleterListRuns(listIds: List<Long>) =
         runsLocalDataSource.deleterListRuns(listIds)
@@ -21,9 +33,7 @@ class RunRepoImpl(
     override suspend fun deleterRun(run: Run) =
         runsLocalDataSource.deleterRun(run)
 
-    override suspend fun getListForTypeSort(sort: SortType): Flow<List<Run>> =
-        runsLocalDataSource.getListForTypeSort(sort)
-
     override suspend fun insertNewRun(run: Run) =
         runsLocalDataSource.insertNewRun(run)
+
 }
