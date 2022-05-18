@@ -23,8 +23,10 @@ import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
 import com.nullpointer.runningcompose.ui.share.mpGraph.MpGraphAndroid
+import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
+@Destination
 fun StatisticsScreen(
     runsViewModel: RunsViewModel = hiltViewModel(),
 ) {
