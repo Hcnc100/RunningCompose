@@ -13,11 +13,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleConfig
 
 @Composable
 fun InfoUserConfig(
     orientation: Int,
+    configUserConfig: UserConfig?,
     actionGoEditInfo: () -> Unit,
 ) {
 
@@ -28,11 +30,11 @@ fun InfoUserConfig(
                 Column {
                     TextShowOnlyInfo(
                         textLabel = stringResource(R.string.label_name_user),
-                        textShow = "Pepe")
+                        textShow = configUserConfig?.name.toString())
                     Spacer(modifier = Modifier.height(10.dp))
                     TextShowOnlyInfo(
                         textLabel = stringResource(R.string.label_weight_user),
-                        textShow = "80 Kg")
+                        textShow = configUserConfig?.weight.toString())
                 }
             }
             else -> {

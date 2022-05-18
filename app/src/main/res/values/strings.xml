@@ -86,4 +86,10 @@
     <string name="title_others_config">Otras configuraciones</string>
     <string name="title_metrics">metricas</string>
 
+    <!-- edit info screen -->
+    <string name="error_empty_name">El nombre no puede estar vacio</string>
+    <string name="error_max_lenght_name">El nombre no puede ser muy largo</string>
+    <string name="error_range_weight">Debe dar un peso correcto</string>
+    <string name="update_data_success">Los datos fueron actualizados</string>
+
 </resources>
