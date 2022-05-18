@@ -57,6 +57,18 @@
     <string name="textTemplateCaloriesBurned" translatable="false">0kcal</string>
     <string name="textTemplateSpeedAVG" translatable="false">0km/h</string>
     <string name="textTemplateTimeMili" translatable="false">00:00:00:00</string>
+
+    <!-- settings screen -->
     <string name="describe_icon_drop_menu">Despliega el menu de opciones</string>
+    <string name="title_config_map">Configuracion del mapa</string>
+    <string name="title_weight_map_line">Grosor de la linea</string>
+    <string name="title_map_style">Estilo del mapa</string>
+    <string name="title_info_personal">Informacion Personal</string>
+    <string name="label_name_user">Nombre</string>
+    <string name="label_weight_user">Peso</string>
+    <string name="description_icon_edit_info">Icono de editar la informacion del usuario</string>
+    <string name="text_edit_info_user">Editar informacion</string>
+    <string name="meters">m/ms/cal</string>
+    <string name="kilo">km/kmh/kcal</string>
 
 </resources>
