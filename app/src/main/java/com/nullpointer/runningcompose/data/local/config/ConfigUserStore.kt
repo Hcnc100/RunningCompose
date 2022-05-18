@@ -8,6 +8,7 @@ import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
+import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -26,6 +27,7 @@ class ConfigUserStore(
 
         private const val KEY_MAP_STYLE = "KEY_MAP_STYLE"
         private const val KEY_WEIGHT_MAP = "KEY_MAP_WEIGHT"
+        private const val KEY_METRICS_TYPE = "KEY_METRICS_TYPE"
     }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_PREF_USER)
@@ -38,6 +40,7 @@ class ConfigUserStore(
 
     private val keyMapStyle = stringPreferencesKey(KEY_MAP_STYLE)
     private val keyMapWeight = intPreferencesKey(KEY_WEIGHT_MAP)
+    private val keyMetricType = stringPreferencesKey(KEY_METRICS_TYPE)
 
     suspend fun changeSortConf(
         sortType: SortType? = null,
@@ -71,15 +74,18 @@ class ConfigUserStore(
     suspend fun changeMapConfig(
         style: MapStyle? = null,
         weight: Int? = null,
+        metrics: MetricType? = null,
     ) = context.dataStore.edit { pref ->
         style?.let { pref[keyMapStyle] = it.name }
         weight?.let { pref[keyMapWeight] = it }
+        metrics?.let { pref[keyMetricType] = it.name }
     }
 
     fun getMapConfig() = context.dataStore.data.map { pref ->
         MapConfig(
-            pref[keyMapStyle]?.let { MapStyle.valueOf(it) } ?: MapStyle.LITE,
-            weight = pref[keyMapWeight] ?: 5
+            style = pref[keyMapStyle]?.let { MapStyle.valueOf(it) } ?: MapStyle.LITE,
+            weight = pref[keyMapWeight] ?: 5,
+            metrics = pref[keyMetricType]?.let { MetricType.valueOf(it) } ?: MetricType.Meters
         )
     }
 

@@ -18,6 +18,7 @@ import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleCo
 @Composable
 fun InfoUserConfig(
     orientation: Int,
+    actionGoEditInfo: () -> Unit,
 ) {
 
     Column {
@@ -48,7 +49,8 @@ fun InfoUserConfig(
                 }
             }
         }
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+        Button(onClick = actionGoEditInfo,
+            modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Row {
                 Icon(painter = painterResource(id = R.drawable.ic_edit),
                     contentDescription = stringResource(R.string.description_icon_edit_info))

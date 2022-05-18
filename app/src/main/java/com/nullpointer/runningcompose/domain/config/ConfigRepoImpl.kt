@@ -5,6 +5,7 @@ import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
+import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
 
@@ -19,8 +20,8 @@ class ConfigRepoImpl(
         configLocalDataSource.changeUserConfig(nameUser, weight)
     }
 
-    override suspend fun changeMapConfig(style: MapStyle?, weight: Int?) {
-        configLocalDataSource.changeMapConfig(style, weight)
+    override suspend fun changeMapConfig(style: MapStyle?, weight: Int?, metricType: MetricType?) {
+        configLocalDataSource.changeMapConfig(style, weight, metricType)
     }
 
     override suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?) {

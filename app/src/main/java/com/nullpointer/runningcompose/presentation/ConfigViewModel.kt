@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.types.MapStyle
+import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -41,23 +42,24 @@ class ConfigViewModel @Inject constructor(
     )
 
     fun changeUserConfig(
-        name:String?=null,
-        weight:Float?=null
+        name: String? = null,
+        weight: Float? = null,
     ) = viewModelScope.launch(Dispatchers.IO) {
         configRepo.changeUserConfig(name, weight)
     }
 
     fun changeMapConfig(
-        style: MapStyle?=null,
-        weight:Int?=null
-    ) = viewModelScope.launch(Dispatchers.IO){
-        configRepo.changeMapConfig(style, weight)
+        style: MapStyle? = null,
+        weight: Int? = null,
+        metricType: MetricType? = null,
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        configRepo.changeMapConfig(style, weight, metricType)
     }
 
     fun changeSortConfig(
-        sortType: SortType?=null,
-        isReverse:Boolean?=null,
-    )=viewModelScope.launch(Dispatchers.IO){
+        sortType: SortType? = null,
+        isReverse: Boolean? = null,
+    ) = viewModelScope.launch(Dispatchers.IO) {
         configRepo.changeSortConfig(sortType, isReverse)
     }
 

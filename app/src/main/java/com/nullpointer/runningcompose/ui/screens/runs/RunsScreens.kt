@@ -62,7 +62,8 @@ fun RunsScreens(
     Scaffold(
         scaffoldState = scaffoldState,
         floatingActionButton = {
-            ButtonToggleAddRemove(isVisible = !stateList.isScrollInProgress,
+            ButtonToggleAddRemove(
+                isVisible = !stateList.isScrollInProgress,
                 isSelectedEnable = selectViewModel.isSelectEnable,
                 descriptionButtonAdd = stringResource(R.string.description_button_add_run),
                 actionAdd = { runsViewModel.insertNewRun(Run.generateFake()) },
@@ -75,6 +76,7 @@ fun RunsScreens(
         }
     ) {
         ListRuns(
+            listState = stateList,
             listRuns = listRuns,
             actionClick = { navigator.navigate(DetailsRunDestination.invoke(it)) },
             actionSelect = selectViewModel::changeSelect,

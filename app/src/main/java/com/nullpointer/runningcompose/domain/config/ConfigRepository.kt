@@ -4,6 +4,7 @@ import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
+import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
 
@@ -13,6 +14,6 @@ interface ConfigRepository {
     val sortConfig: Flow<SortConfig>
 
     suspend fun changeUserConfig(nameUser: String?, weight: Float?)
-    suspend fun changeMapConfig(style: MapStyle?, weight: Int?)
+    suspend fun changeMapConfig(style: MapStyle?, weight: Int?,metricType: MetricType?)
     suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
 }

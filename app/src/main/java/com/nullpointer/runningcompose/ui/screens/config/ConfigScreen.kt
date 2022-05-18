@@ -16,20 +16,29 @@ import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfi
 import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
 import com.nullpointer.runningcompose.ui.screens.config.components.MetricConfig
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Destination
 @Composable
 fun ConfigScreen(
     configViewModel: ConfigViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
 ) {
     val configMap by configViewModel.mapConfig.collectAsState()
     val orientation = LocalConfiguration.current.orientation
 
     Scaffold {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            InfoUserConfig(orientation)
-            MapSettings(orientation, configMap)
-            MetricConfig()
+            InfoUserConfig(orientation = orientation, actionGoEditInfo = {})
+            MapSettings(
+                orientation = orientation,
+                configMap = configMap,
+                changeWeight = { configViewModel.changeMapConfig(weight = it) },
+                changeStyleMap = { configViewModel.changeMapConfig(style = it) }
+            )
+            MetricConfig(
+                configMap = configMap,
+                changeMetric = { configViewModel.changeMapConfig(metricType = it) })
         }
     }
 }

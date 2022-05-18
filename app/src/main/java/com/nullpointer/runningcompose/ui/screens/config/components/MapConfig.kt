@@ -25,16 +25,22 @@ import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleCo
 
 
 @Composable
-fun MapSettings(orientation: Int, configMap: MapConfig?) {
+fun MapSettings(
+    orientation: Int,
+    configMap: MapConfig?,
+    changeWeight: (Int) -> Unit,
+    changeStyleMap: (MapStyle) -> Unit,
+) {
     Column {
         TitleConfig(text = stringResource(R.string.title_config_map))
         when (orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
                 MapFromConfig()
                 configMap?.let { mapConfig ->
-                    SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = {})
+                    SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = changeStyleMap)
                     Spacer(modifier = Modifier.height(10.dp))
-                    SelectMapWeight(currentWeightMap = mapConfig.weight, changeWeight = {})
+                    SelectMapWeight(currentWeightMap = mapConfig.weight,
+                        changeWeight = changeWeight)
                 }
             }
             else -> {
@@ -45,9 +51,11 @@ fun MapSettings(orientation: Int, configMap: MapConfig?) {
                         modifier = Modifier.weight(.5f),
                     ) {
                         configMap?.let { mapConfig ->
-                            SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = {})
+                            SelectMapStyle(currentStyle = mapConfig.style,
+                                changeStyleMap = changeStyleMap)
                             Spacer(modifier = Modifier.height(10.dp))
-                            SelectMapWeight(currentWeightMap = mapConfig.weight, changeWeight = {})
+                            SelectMapWeight(currentWeightMap = mapConfig.weight,
+                                changeWeight = changeWeight)
                         }
                     }
                 }

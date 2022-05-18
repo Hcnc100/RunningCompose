@@ -83,5 +83,7 @@
     <string name="title_screen_runs">Recorridos</string>
     <string name="title_screen_statistics">Estadisticas</string>
     <string name="title_screen_config">Configuracion</string>
+    <string name="title_others_config">Otras configuraciones</string>
+    <string name="title_metrics">metricas</string>
 
 </resources>

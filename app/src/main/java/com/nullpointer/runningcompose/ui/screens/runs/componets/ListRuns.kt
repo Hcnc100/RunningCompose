@@ -2,6 +2,7 @@ package com.nullpointer.runningcompose.ui.screens.runs.componets
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -14,6 +15,7 @@ import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
 @Composable
 fun ListRuns(
     listRuns: List<Run>?,
+    listState: LazyListState,
     actionClick: (Run) -> Unit,
     actionSelect: (Run) -> Unit,
     isSelectEnable: Boolean,
@@ -29,7 +31,10 @@ fun ListRuns(
                 textEmpty = stringResource(R.string.message_empty_runs))
         }
         else -> {
-            LazyVerticalGrid(cells = GridCells.Adaptive(250.dp)) {
+            LazyVerticalGrid(
+                cells = GridCells.Adaptive(250.dp),
+                state = listState
+            ) {
                 items(listRuns.size) { index ->
                     ItemRun(
                         itemRun = listRuns[index],
