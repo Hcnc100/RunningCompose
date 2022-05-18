@@ -1,6 +1,7 @@
 package com.nullpointer.runningcompose.ui.screens.statistics.componets
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -18,13 +19,13 @@ fun GraphRuns(
     list: List<Run>,
     modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier = modifier) {
         Text(
             stringResource(R.string.title_graph_statisctis),
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center)
-        MpGraphAndroid(list = list, modifier = modifier)
+        MpGraphAndroid(list = list, modifier = Modifier.fillMaxSize())
     }
 }
