@@ -34,7 +34,7 @@ class EditInfoViewModel @Inject constructor(
 
     var nameUser by SavableComposeState(savedStateHandle, KEY_NAME_USER, "")
         private set
-    var weightUser by SavableComposeState(savedStateHandle, KEY_WEIGHT_USER, 0F)
+    var weightUser by SavableComposeState(savedStateHandle, KEY_WEIGHT_USER, "")
         private set
     var errorNamed by SavableComposeState(savedStateHandle, KEY_WEIGHT_USER, -1)
         private set
@@ -54,7 +54,7 @@ class EditInfoViewModel @Inject constructor(
             val userData = withContext(Dispatchers.IO) { configRepository.userConfig.first() }
             isDataComplete = userData != null
             nameUser = userData?.name.toString()
-            weightUser = userData?.weight ?: 80F
+            weightUser = userData?.weight?.toString() ?: "80.0"
         }
     }
 
@@ -68,19 +68,20 @@ class EditInfoViewModel @Inject constructor(
     }
 
     fun changeWeight(newWeight: String) {
-        weightUser = newWeight.toFloatOrNull() ?: (MIN_WEIGHT - 1)
-        errorWeight =
-            if (weightUser in (MIN_WEIGHT..MAX_WEIGHT)) -1 else R.string.error_range_weight
+        weightUser = newWeight
+        val weightValue=weightUser.toFloatOrNull() ?: -1F
+        errorWeight = when  {
+            (weightValue !in MIN_WEIGHT..MAX_WEIGHT) -> R.string.error_range_weight
+            else -> -1
+        }
     }
 
-    fun updateDataUser(){
-        if (errorWeight == -1 && errorNamed == -1) {
-            viewModelScope.launch(Dispatchers.IO) {
-                configRepository.changeUserConfig(nameUser, weightUser)
-                withContext(Dispatchers.IO) {
-                    _messageEditInfo.trySend(R.string.update_data_success)
-                }
-            }
+    fun validateDataUser(): Boolean {
+        return if (errorWeight == -1 && errorNamed == -1) {
+            true
+        } else {
+            _messageEditInfo.trySend(R.string.error_validate_data)
+            false
         }
     }
 }

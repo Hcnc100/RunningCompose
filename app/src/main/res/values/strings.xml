@@ -91,5 +91,6 @@
     <string name="error_max_lenght_name">El nombre no puede ser muy largo</string>
     <string name="error_range_weight">Debe dar un peso correcto</string>
     <string name="update_data_success">Los datos fueron actualizados</string>
+    <string name="error_validate_data">verifique sus datos</string>
 
 </resources>

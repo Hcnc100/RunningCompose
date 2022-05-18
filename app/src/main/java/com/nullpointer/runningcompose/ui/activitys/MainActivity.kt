@@ -19,6 +19,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavigation
@@ -41,6 +42,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val selectViewModel: SelectViewModel by viewModels()
     private val runsViewModel: RunsViewModel by viewModels()
+    private val configViewModel: ConfigViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +51,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    MainScreen(selectViewModel, runsViewModel)
-////                    StatisticsScreen()
-//                    ConfigScreen()
+                    MainScreen(selectViewModel, runsViewModel, configViewModel)
                 }
             }
         }
@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(
     selectViewModel: SelectViewModel,
     runsViewModel: RunsViewModel,
+    configViewModel: ConfigViewModel,
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -74,18 +75,18 @@ fun MainScreen(
 
     Scaffold(
         topBar = {
-            if(isHomeRoute)
-            SelectToolbar(titleDefault = stringResource(id = R.string.app_name),
-                titleSelection = context.resources.getQuantityString(
-                    R.plurals.selected_items,
-                    selectViewModel.sizeSelected,
-                    selectViewModel.sizeSelected),
-                numberSelection = selectViewModel.sizeSelected,
-                actionClear = selectViewModel::clearSelect)
+            if (isHomeRoute)
+                SelectToolbar(titleDefault = stringResource(id = R.string.app_name),
+                    titleSelection = context.resources.getQuantityString(
+                        R.plurals.selected_items,
+                        selectViewModel.sizeSelected,
+                        selectViewModel.sizeSelected),
+                    numberSelection = selectViewModel.sizeSelected,
+                    actionClear = selectViewModel::clearSelect)
         },
         bottomBar = {
-            if(isHomeRoute)
-            BottomBar(navController, selectViewModel::clearSelect)
+            if (isHomeRoute)
+                BottomBar(navController, selectViewModel::clearSelect)
         }
     ) {
         DestinationsNavHost(
@@ -95,6 +96,7 @@ fun MainScreen(
             dependenciesContainerBuilder = {
                 dependency(selectViewModel)
                 dependency(runsViewModel)
+                dependency(configViewModel)
             })
     }
 }

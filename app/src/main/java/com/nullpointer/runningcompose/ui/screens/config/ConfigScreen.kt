@@ -22,7 +22,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun ConfigScreen(
-    configViewModel: ConfigViewModel = hiltViewModel(),
+    configViewModel: ConfigViewModel,
     navigator: DestinationsNavigator,
 ) {
     val configMap by configViewModel.mapConfig.collectAsState()
