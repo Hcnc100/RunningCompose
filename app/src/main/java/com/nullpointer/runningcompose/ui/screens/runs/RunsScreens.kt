@@ -11,6 +11,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestinat
 import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ItemRun
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ItemRunFake
+import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
 import com.nullpointer.runningcompose.ui.share.ButtonToggleAddRemove
 import com.nullpointer.runningcompose.ui.share.FabAnimation
 import com.ramcosta.composedestinations.annotation.Destination
@@ -41,7 +43,7 @@ fun RunsScreens(
     val messageRuns = runsViewModel.messageRuns
     val scaffoldState = rememberScaffoldState()
     val stateList = rememberLazyListState()
-    val listRunsState = runsViewModel.listRuns.collectAsState()
+    val listRuns by runsViewModel.listRuns.collectAsState()
     val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
@@ -72,7 +74,8 @@ fun RunsScreens(
             )
         }
     ) {
-        ListRuns(listRuns = listRunsState.value,
+        ListRuns(
+            listRuns = listRuns,
             actionClick = { navigator.navigate(DetailsRunDestination.invoke(it)) },
             actionSelect = selectViewModel::changeSelect,
             isSelectEnable = selectViewModel.isSelectEnable)
@@ -80,38 +83,4 @@ fun RunsScreens(
 
     BackHandler(selectViewModel.isSelectEnable,
         selectViewModel::clearSelect)
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun ListRuns(
-    listRuns: List<Run>?,
-    actionClick: (Run) -> Unit,
-    actionSelect: (Run) -> Unit,
-    isSelectEnable: Boolean,
-) {
-    when {
-        listRuns == null -> {
-            LazyVerticalGrid(cells = GridCells.Adaptive(250.dp)) {
-                items(10) { ItemRunFake() }
-            }
-        }
-        listRuns.isEmpty() -> {
-            EmptyScreen(animation = R.raw.empty1,
-                textEmpty = stringResource(R.string.message_empty_runs))
-        }
-        else -> {
-            LazyVerticalGrid(cells = GridCells.Adaptive(250.dp)) {
-                items(listRuns.size) { index ->
-                    ItemRun(
-                        itemRun = listRuns[index],
-                        actionClick = actionClick,
-                        actionSelect = actionSelect,
-                        isSelectEnable = isSelectEnable,
-                    )
-                }
-            }
-        }
-    }
-
 }

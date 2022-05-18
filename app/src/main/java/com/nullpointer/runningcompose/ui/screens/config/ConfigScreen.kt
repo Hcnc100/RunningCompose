@@ -6,6 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -21,14 +22,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun ConfigScreen(
     configViewModel: ConfigViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
-    val configMap = configViewModel.mapConfig.collectAsState()
+    val configMap by configViewModel.mapConfig.collectAsState()
     val orientation = LocalConfiguration.current.orientation
 
     Scaffold {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             InfoUserConfig(orientation)
-            MapSettings(orientation, configMap.value)
+            MapSettings(orientation, configMap)
             MetricConfig()
         }
     }

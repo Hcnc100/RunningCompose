@@ -40,6 +40,10 @@ class RunsViewModel @Inject constructor(
         null
     )
 
+    val isStatisticsLoad = combine(listRuns,statisticsRuns){listRuns,statistics->
+        statistics==null || listRuns==null
+    }
+
     fun insertNewRun(newRun: Run) = viewModelScope.launch(Dispatchers.IO) {
         runsRepository.insertNewRun(newRun)
     }

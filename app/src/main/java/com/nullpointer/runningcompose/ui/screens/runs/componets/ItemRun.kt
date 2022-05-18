@@ -99,7 +99,7 @@ fun InfoRun(
 }
 
 @Composable
-fun TextMiniTitle(
+private fun TextMiniTitle(
     text: String,
     isMiniTitle: Boolean,
 ) {
