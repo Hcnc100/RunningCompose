@@ -1,6 +1,8 @@
 package com.nullpointer.runningcompose.data.local.config
 
 import android.content.Context
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
@@ -28,6 +30,7 @@ class ConfigUserStore(
         private const val KEY_MAP_STYLE = "KEY_MAP_STYLE"
         private const val KEY_WEIGHT_MAP = "KEY_MAP_WEIGHT"
         private const val KEY_METRICS_TYPE = "KEY_METRICS_TYPE"
+        private const val KEY_COLOR_MAP = "KEY_COLOR_MAP"
     }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_PREF_USER)
@@ -41,6 +44,7 @@ class ConfigUserStore(
     private val keyMapStyle = stringPreferencesKey(KEY_MAP_STYLE)
     private val keyMapWeight = intPreferencesKey(KEY_WEIGHT_MAP)
     private val keyMetricType = stringPreferencesKey(KEY_METRICS_TYPE)
+    private val keyMapColor = intPreferencesKey(KEY_COLOR_MAP)
 
     suspend fun changeSortConf(
         sortType: SortType? = null,
@@ -75,17 +79,20 @@ class ConfigUserStore(
         style: MapStyle? = null,
         weight: Int? = null,
         metrics: MetricType? = null,
+        color: Color? = null,
     ) = context.dataStore.edit { pref ->
         style?.let { pref[keyMapStyle] = it.name }
         weight?.let { pref[keyMapWeight] = it }
         metrics?.let { pref[keyMetricType] = it.name }
+        color?.let { pref[keyMapColor] = it.toArgb() }
     }
 
     fun getMapConfig() = context.dataStore.data.map { pref ->
         MapConfig(
             style = pref[keyMapStyle]?.let { MapStyle.valueOf(it) } ?: MapStyle.LITE,
             weight = pref[keyMapWeight] ?: 5,
-            metrics = pref[keyMetricType]?.let { MetricType.valueOf(it) } ?: MetricType.Meters
+            metrics = pref[keyMetricType]?.let { MetricType.valueOf(it) } ?: MetricType.Meters,
+            color = pref[keyMapColor]?.let { Color(it) } ?: Color.Black
         )
     }
 

@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.domain.config
 
+import androidx.compose.ui.graphics.Color
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.config.UserConfig
@@ -14,6 +15,6 @@ interface ConfigRepository {
     val sortConfig: Flow<SortConfig>
 
     suspend fun changeUserConfig(nameUser: String?, weight: Float?)
-    suspend fun changeMapConfig(style: MapStyle?, weight: Int?,metricType: MetricType?)
+    suspend fun changeMapConfig(style: MapStyle?, weight: Int?,metricType: MetricType?,color: Color?)
     suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
 }

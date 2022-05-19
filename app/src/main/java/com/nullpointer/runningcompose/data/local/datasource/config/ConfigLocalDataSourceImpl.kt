@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.data.local.datasource.config
 
+import androidx.compose.ui.graphics.Color
 import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
@@ -20,8 +21,13 @@ class ConfigLocalDataSourceImpl(
         configUserStore.changeUserConf(nameUser, weight)
     }
 
-    override suspend fun changeMapConfig(style: MapStyle?, weight: Int?, metricType: MetricType?) {
-        configUserStore.changeMapConfig(style, weight, metricType)
+    override suspend fun changeMapConfig(
+        style: MapStyle?,
+        weight: Int?,
+        metricType: MetricType?,
+        color: Color?,
+    ) {
+        configUserStore.changeMapConfig(style, weight, metricType, color)
     }
 
     override suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?) {

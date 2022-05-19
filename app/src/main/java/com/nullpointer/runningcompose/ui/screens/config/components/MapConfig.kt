@@ -1,12 +1,22 @@
 package com.nullpointer.runningcompose.ui.screens.config.components
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -27,6 +37,7 @@ fun MapSettings(
     configMap: MapConfig?,
     changeWeight: (Int) -> Unit,
     changeStyleMap: (MapStyle) -> Unit,
+    changeColorMap: (Color) -> Unit,
 ) {
     Column {
         TitleConfig(text = stringResource(R.string.title_config_map))
@@ -38,6 +49,9 @@ fun MapSettings(
                     Spacer(modifier = Modifier.height(10.dp))
                     SelectMapWeight(currentWeightMap = mapConfig.weight,
                         changeWeight = changeWeight)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
+                    SelectMapColor(mapConfig.color, changeColorMap)
                 }
             }
             else -> {
@@ -53,6 +67,8 @@ fun MapSettings(
                             Spacer(modifier = Modifier.height(10.dp))
                             SelectMapWeight(currentWeightMap = mapConfig.weight,
                                 changeWeight = changeWeight)
+                            Spacer(modifier = Modifier.height(10.dp))
+                            SelectMapColor(mapConfig.color, changeColorMap)
                         }
                     }
                 }
@@ -61,71 +77,6 @@ fun MapSettings(
     }
 }
 
-@Composable
-private fun MapFromConfig(
-    mapConfig: MapConfig,
-    modifier: Modifier = Modifier,
-) {
-    val context = LocalContext.current
-    val uiSettings by remember {
-        mutableStateOf(MapUiSettings(
-            myLocationButtonEnabled = false,
-            compassEnabled = false,
-            indoorLevelPickerEnabled = false,
-            mapToolbarEnabled = false,
-            rotationGesturesEnabled = false,
-            scrollGesturesEnabled = false,
-            scrollGesturesEnabledDuringRotateOrZoom = false,
-            tiltGesturesEnabled = false,
-            zoomControlsEnabled = false,
-            zoomGesturesEnabled = false
-        ))
-    }
-    var properties by remember {
-        mutableStateOf(
-            MapProperties(
-                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
-                    mapConfig.style.styleRawRes),
-            )
-        )
-    }
-    val listPoints by remember {
-        mutableStateOf(listOf(
-            LatLng(53.3477, -6.2597),
-            LatLng(51.5008, -0.1224),
-            LatLng(48.8567, 2.3508),
-            LatLng(52.5166, 13.3833),
-        ))
-    }
-    val bounds by remember {
-        mutableStateOf(LatLngBounds.builder().let {
-            listPoints.forEach(it::include)
-            it.build()
-        })
-    }
-    val cameraPositionState = rememberCameraPositionState()
-    LaunchedEffect(key1 = mapConfig) {
-        properties = properties.copy(
-            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
-                mapConfig.style.styleRawRes)
-        )
-    }
-
-    GoogleMap(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(2f)
-            .padding(vertical = 10.dp, horizontal = 20.dp),
-        cameraPositionState = cameraPositionState,
-        properties = properties,
-        uiSettings = uiSettings,
-        onMapLoaded = {
-            cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(bounds, 10))
-        }
-    ) {
-        Polyline(points = listPoints, width = mapConfig.weight.toFloat())
-    }
-}
 
 @Composable
 private fun SelectMapWeight(
@@ -152,6 +103,45 @@ private fun SelectMapStyle(
         listItems = listMaps,
         listNamed = listMaps.map { stringResource(id = it.string) },
         onChange = changeStyleMap)
+}
+
+@Composable
+fun SelectMapColor(
+    currentColor: Color,
+    changeColor: (Color) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val (isDialogShow, changeVisibleDialog) = rememberSaveable {
+        mutableStateOf(false)
+    }
+    Row(modifier = modifier
+        .padding(horizontal = 10.dp)
+        .height(50.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center) {
+        Text(text = "Color de la linea",
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .weight(.5f)
+        )
+        Spacer(modifier = Modifier.width(15.dp))
+        Box(modifier = Modifier
+            .weight(.5f)
+            .fillMaxHeight()
+            .border(
+                width = 2.dp,
+                color = if (isSystemInDarkTheme()) Color.LightGray else Color.DarkGray,
+                shape = RoundedCornerShape(5.dp))
+            .padding(2.dp)
+            .background(currentColor)
+            .clickable {
+                changeVisibleDialog(true)
+            })
+    }
+    if (isDialogShow)
+        DialogColorPicker(
+            hiddenDialog = { changeVisibleDialog(false) },
+            changeColor = changeColor)
 }
 
 

@@ -41,7 +41,8 @@ fun ConfigScreen(
                 orientation = orientation,
                 configMap = configMap,
                 changeWeight = { configViewModel.changeMapConfig(weight = it) },
-                changeStyleMap = { configViewModel.changeMapConfig(style = it) }
+                changeStyleMap = { configViewModel.changeMapConfig(style = it) },
+                changeColorMap = { configViewModel.changeMapConfig(color = it) }
             )
             MetricConfig(
                 configMap = configMap,

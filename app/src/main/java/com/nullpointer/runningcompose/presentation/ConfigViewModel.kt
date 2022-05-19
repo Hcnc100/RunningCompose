@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.presentation
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
@@ -52,8 +53,9 @@ class ConfigViewModel @Inject constructor(
         style: MapStyle? = null,
         weight: Int? = null,
         metricType: MetricType? = null,
+        color: Color? = null,
     ) = viewModelScope.launch(Dispatchers.IO) {
-        configRepo.changeMapConfig(style, weight, metricType)
+        configRepo.changeMapConfig(style, weight, metricType,color)
     }
 
     fun changeSortConfig(

@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.domain.config
 
+import androidx.compose.ui.graphics.Color
 import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
@@ -16,15 +17,19 @@ class ConfigRepoImpl(
     override val mapConfig: Flow<MapConfig> = configLocalDataSource.mapConfig
     override val sortConfig: Flow<SortConfig> = configLocalDataSource.sortConfig
 
-    override suspend fun changeUserConfig(nameUser: String?, weight: Float?) {
+    override suspend fun changeUserConfig(nameUser: String?, weight: Float?) =
         configLocalDataSource.changeUserConfig(nameUser, weight)
-    }
 
-    override suspend fun changeMapConfig(style: MapStyle?, weight: Int?, metricType: MetricType?) {
-        configLocalDataSource.changeMapConfig(style, weight, metricType)
-    }
 
-    override suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?) {
+    override suspend fun changeMapConfig(
+        style: MapStyle?,
+        weight: Int?,
+        metricType: MetricType?,
+        color: Color?,
+    ) = configLocalDataSource.changeMapConfig(style, weight, metricType, color)
+
+
+    override suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?) =
         configLocalDataSource.changeSortConfig(sortType, isReverse)
-    }
+
 }
