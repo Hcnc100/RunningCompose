@@ -8,6 +8,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -18,7 +19,7 @@ class SharedLocationManager constructor(
     externalScope: CoroutineScope,
 ) {
 
-    companion object{
+    companion object {
         private const val LOCATION_UPDATE_INTERVAL = 5000L
         private const val FASTEST_LOCATION_INTERVAL = 2000L
     }
@@ -32,13 +33,11 @@ class SharedLocationManager constructor(
 
 
     @SuppressLint("MissingPermission")
-    private val _locationUpdates = callbackFlow {
-        val listLocations = mutableListOf<Location>()
+    private val _lastLocation = callbackFlow {
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
-                Timber.d("New location: ${result.lastLocation.toString()}")
-                listLocations.add(result.lastLocation)
-                trySend(listLocations.toList())
+                Timber.d("New location: ${result.lastLocation.toText()}")
+                trySend(result.lastLocation.toLatLng())
             }
         }
         Timber.d("Starting location updates")
@@ -61,8 +60,32 @@ class SharedLocationManager constructor(
         started = SharingStarted.WhileSubscribed()
     )
 
+    @SuppressLint("MissingPermission")
+    private val _locationUpdates = flow {
+        Timber.d("Start listetener list locations")
+        val listLocations= mutableListOf<LatLng>()
+        _lastLocation.collect{
+            listLocations.add(it)
+            emit(listLocations)
+        }
+    }
 
-    fun locationFlow(): Flow<List<Location>> {
+
+    fun lastLocationFlow(): Flow<LatLng> {
+        return _lastLocation
+    }
+
+    fun listLocationFlow(): Flow<List<LatLng>> {
         return _locationUpdates
     }
+
+
+}
+
+private fun Location.toText(): String {
+    return "lat:${this.latitude} log${this.longitude}"
+}
+
+private fun Location.toLatLng(): LatLng {
+    return LatLng(this.latitude, this.longitude)
 }
