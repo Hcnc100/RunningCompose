@@ -18,7 +18,7 @@ data class Run(
     val listPolyLineEncode:List<String>,
     val timestamp:Long=System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
-    val id:Long?=null
+    val id:Long=0
 ) : Parcelable{
 
     @IgnoredOnParcel

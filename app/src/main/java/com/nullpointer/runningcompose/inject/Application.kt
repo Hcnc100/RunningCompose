@@ -6,10 +6,15 @@ import com.orhanobut.logger.FormatStrategy
 import com.orhanobut.logger.Logger
 import com.orhanobut.logger.PrettyFormatStrategy
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import timber.log.Timber
 
 @HiltAndroidApp
 class Application : Application() {
+
+    @OptIn(DelicateCoroutinesApi::class)
+    val applicationScope = GlobalScope
 
     override fun onCreate() {
         super.onCreate()
