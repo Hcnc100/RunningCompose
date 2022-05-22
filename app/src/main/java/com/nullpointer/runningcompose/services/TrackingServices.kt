@@ -1,6 +1,5 @@
 package com.nullpointer.runningcompose.services
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -79,8 +78,6 @@ class TrackingServices : LifecycleService() {
     private var timerRun = Timer()
     private lateinit var notificationServices: NotificationServices
 
-    private val jobTimer: Job? = null
-
     override fun onCreate() {
         super.onCreate()
         locationRepository
@@ -94,6 +91,7 @@ class TrackingServices : LifecycleService() {
             .onCompletion {
                 listPoints.value = emptyList()
                 timerRun = Timer()
+                timeInMillis.value = 0
                 Timber.d("LOaction cancelled")
             }
             .launchIn(lifecycleScope)
@@ -115,9 +113,10 @@ class TrackingServices : LifecycleService() {
                         PAUSE
                     } else {
                         notificationServices.updateAction(true)
+                        // ! only start services when resume services
+                        timerRun.startTimer()
                         TRACKING
                     }
-                    timerRun.startTimer()
                 }
                 STOP_COMMAND -> {
                     Timber.d("Finish services")
@@ -183,7 +182,7 @@ class TrackingServices : LifecycleService() {
 
             currentNotification.clearActionsNotification()
 
-            val textAction = if (isTracking) "Pause" else "Resumen"
+            val textAction = if (isTracking) R.string.text_action_pause else R.string.textActionResumen
 
             val actionIntent = Intent(
                 context,
@@ -191,7 +190,7 @@ class TrackingServices : LifecycleService() {
             ).apply { action = PAUSE_OR_RESUME_COMMAND }
 
             val pendingIntent = PendingIntent.getService(
-                this@TrackingServices,
+                context,
                 1,
                 actionIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
@@ -199,7 +198,7 @@ class TrackingServices : LifecycleService() {
 
             currentNotification.addAction(
                 R.drawable.ic_pause,
-                textAction,
+                context.getString(textAction),
                 pendingIntent
             )
 
@@ -213,7 +212,7 @@ class TrackingServices : LifecycleService() {
 
         fun updateTimeRunNotification(timeRun: Long) {
             currentNotification.setContentText(
-                timeRun.toFullFormatTime(false)
+                (timeRun * 1000L).toFullFormatTime(false)
             )
             notifyManager.notify(NOTIFICATION_ID, currentNotification.build())
         }
@@ -223,34 +222,41 @@ class TrackingServices : LifecycleService() {
 
     private inner class Timer {
 
-        // * var to save the timestamp in milliseconds (for update text where show full time)
-        private var lastTimestampInMillis = 0L
+        //save the current time in seconds, but as long
+        private var lastSecondTimestamp = 0L
 
-        // * var to save the timestamp without milliseconds (for update text in the notification)
-        private var lastTimestampInSeconds = 0L
+        //saved the last time for the timer
+        private var lastTimestamp = 0L
 
-        // * var to save all timestamp in milliseconds
-        private var allTimeRun = 0L
+        //save all time for the timer
+        private var timeRun = 0L
+
+        private var timeRunInSeconds = 0L
 
         fun startTimer() {
             val timeStart = System.currentTimeMillis()
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.Main) {
+                //while is tracking
                 while (stateServices == TRACKING) {
-                    // * calculate the time elapsed since the start of the timer
-                    lastTimestampInMillis = System.currentTimeMillis() - timeStart
-
-                    timeInMillis.value = lastTimestampInMillis + allTimeRun
-
-                    if (lastTimestampInMillis >= lastTimestampInSeconds + 1000L) {
-                        lastTimestampInSeconds += 1000L
-                        notificationServices.updateTimeRunNotification(lastTimestampInSeconds)
+                    //save the last time stamp that is the current time minus the time start
+                    lastTimestamp = System.currentTimeMillis() - timeStart
+                    //update the time in millis
+                    timeInMillis.value = timeRun + lastTimestamp
+                    //if the time in millis is greater than the last time in seconds +1000
+                    //so will add one to the current time in seconds
+                    if (timeInMillis.value >= lastSecondTimestamp + 1000L) {
+                        //update the time in seconds
+                        timeRunInSeconds += 1
+                        notificationServices.updateTimeRunNotification(timeRunInSeconds)
+                        //update the current time
+                        lastSecondTimestamp += 1000L
                     }
-
+                    //sleep the process
                     delay(TIMER_DELAY_TIMER)
                 }
-                // * update all time run
-                allTimeRun += lastTimestampInMillis
             }
+            //update the all time run
+            timeRun += lastTimestamp
         }
     }
 }

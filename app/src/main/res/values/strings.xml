@@ -92,5 +92,7 @@
     <string name="error_range_weight">Debe dar un peso correcto</string>
     <string name="update_data_success">Los datos fueron actualizados</string>
     <string name="error_validate_data">verifique sus datos</string>
+    <string name="text_action_pause">Pause</string>
+    <string name="textActionResumen">Resumen</string>
 
 </resources>
