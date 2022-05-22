@@ -60,26 +60,9 @@ class SharedLocationManager constructor(
         started = SharingStarted.WhileSubscribed()
     )
 
-    @SuppressLint("MissingPermission")
-    private val _locationUpdates = flow {
-        Timber.d("Start listetener list locations")
-        val listLocations= mutableListOf<LatLng>()
-        _lastLocation.collect{
-            listLocations.add(it)
-            emit(listLocations)
-        }
-    }
-
-
     fun lastLocationFlow(): Flow<LatLng> {
         return _lastLocation
     }
-
-    fun listLocationFlow(): Flow<List<LatLng>> {
-        return _locationUpdates
-    }
-
-
 }
 
 private fun Location.toText(): String {

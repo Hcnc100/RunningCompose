@@ -8,8 +8,6 @@ import kotlinx.coroutines.flow.Flow
 class LocationRepoImpl(
     locationDataSource: LocationDataSource,
 ) : LocationRepository {
-    override val listLocations: Flow<List<LatLng>> =
-        locationDataSource.listLocations
     override val lastLocation: Flow<LatLng> =
         locationDataSource.lastLocation
 }

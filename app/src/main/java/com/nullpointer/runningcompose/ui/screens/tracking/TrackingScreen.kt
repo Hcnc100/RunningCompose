@@ -1,15 +1,15 @@
 package com.nullpointer.runningcompose.ui.screens.tracking
 
-import android.location.Location
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
@@ -18,14 +18,14 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.models.types.TrackingState
+import com.nullpointer.runningcompose.models.types.TrackingState.*
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.LocationViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.takeWhile
 import timber.log.Timber
 
 @Destination
@@ -43,7 +43,7 @@ fun TrackingScreen(
     val listPositions by TrackingServices.showListPont.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
-        TrackingServices.showListPont.collect{
+        TrackingServices.showListPont.collect {
             Timber.d("Lista recibida $it")
         }
     }
@@ -67,29 +67,67 @@ fun TrackingScreen(
         topBar = {
             ToolbarBack(title = "Seguimiento", actionBack = navigator::popBackStack)
         },
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                if(TrackingServices.isServicesLive){
-                    TrackingServices.finishServices(context)
-                }else{
-                    TrackingServices.initServices(context)
-                }
-            }) {
-                Icon(painterResource(id = R.drawable.ic_clear), contentDescription = "")
-            }
-        }
     ) {
+        Box {
 
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            properties = properties
-        ) {
-            if (listPositions.isNotEmpty())
-                Polyline(points = listPositions,
-                    width = configMap?.weight?.toFloat() ?: 10F,
-                    color = configMap?.color ?: Color.Black)
+            Column {
+
+                GoogleMap(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(.8f),
+                    cameraPositionState = cameraPositionState,
+                    properties = properties
+                ) {
+                    if (listPositions.isNotEmpty())
+                        Polyline(points = listPositions,
+                            width = configMap?.weight?.toFloat() ?: 10F,
+                            color = configMap?.color ?: Color.Black)
+                }
+
+                Row(modifier = Modifier
+                    .background(Color.Gray)
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp), horizontalArrangement = Arrangement.Center) {
+                    when (TrackingServices.stateServices) {
+                        WAITING -> FloatingActionButton(onClick = {
+                            TrackingServices.startServices(context)
+                        }) {
+                            Icon(painter = painterResource(id = R.drawable.ic_play),
+                                contentDescription = "")
+                        }
+                        TRACKING -> FloatingActionButton(onClick = {
+                            TrackingServices.pauseOrResumeServices(context)
+                        }) {
+                            Icon(painter = painterResource(id = R.drawable.ic_pause),
+                                contentDescription = "")
+                        }
+                        PAUSE -> FloatingActionButton(onClick = {
+                            TrackingServices.pauseOrResumeServices(context)
+                        }) {
+                            Icon(painter = painterResource(id = R.drawable.ic_play),
+                                contentDescription = "")
+                        }
+                    }
+                    if (TrackingServices.stateServices != WAITING) {
+                        Spacer(modifier = Modifier.width(30.dp))
+                        FloatingActionButton(onClick = { TrackingServices.finishServices(context) }) {
+                            Icon(painter = painterResource(id = R.drawable.ic_stop),
+                                contentDescription = "")
+                        }
+                    }
+                }
+            }
+
+            Text("00:00:00:00",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .background(MaterialTheme.colors.primary)
+                    .padding(vertical = 5.dp, horizontal = 10.dp))
         }
+
+
     }
 }
 

@@ -14,8 +14,5 @@ import javax.inject.Inject
 class LocationViewModel @Inject constructor(
     locationRepository: LocationRepository,
 ) : ViewModel() {
-
-    val listLocations:Flow<List<LatLng>> = locationRepository.listLocations
-
-    val lastLocation= locationRepository.lastLocation
+    val lastLocation = locationRepository.lastLocation
 }
