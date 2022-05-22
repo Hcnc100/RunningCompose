@@ -2,6 +2,7 @@ package com.nullpointer.runningcompose.core.utils
 
 import android.content.Context
 import android.text.format.DateFormat
+import androidx.core.app.NotificationCompat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -56,4 +57,12 @@ fun Long.toFullFormatTime(includeMillis: Boolean): String {
             "${if (minutes < 10) "0" else ""}$minutes:" +
             "${if (seconds < 10) "0" else ""}$seconds:" +
             "${if (milliseconds < 10) "0" else ""}$milliseconds"
+}
+
+//get fields actions and remove all using empty array
+fun NotificationCompat.Builder.clearActionsNotification() {
+    javaClass.getDeclaredField("mActions").apply {
+        isAccessible = true
+        set(this@clearActionsNotification, ArrayList<NotificationCompat.Action>())
+    }
 }

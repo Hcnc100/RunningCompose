@@ -56,7 +56,7 @@ class SharedLocationManager constructor(
         }
     }.shareIn(
         externalScope,
-        replay = 0,
+        replay = 1,
         started = SharingStarted.WhileSubscribed()
     )
 

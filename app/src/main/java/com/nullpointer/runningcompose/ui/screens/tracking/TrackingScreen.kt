@@ -18,17 +18,23 @@ import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.toFullFormatTime
 import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.models.types.TrackingState.*
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.LocationViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
+import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import timber.log.Timber
 
-@Destination
+@Destination(
+    deepLinks = [
+        DeepLink(uriPattern = "https://www.running-compose.com/tracking")
+    ]
+)
 @Composable
 fun TrackingScreen(
     navigator: DestinationsNavigator,
@@ -41,6 +47,7 @@ fun TrackingScreen(
     val lastLocation by locationViewModel.lastLocation.collectAsState(initial = null)
     val cameraPositionState = rememberCameraPositionState()
     val listPositions by TrackingServices.showListPont.collectAsState()
+    val timeRun by TrackingServices.showTimeInMillis.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         TrackingServices.showListPont.collect {
@@ -119,7 +126,7 @@ fun TrackingScreen(
                 }
             }
 
-            Text("00:00:00:00",
+            Text(timeRun.toFullFormatTime(true),
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
