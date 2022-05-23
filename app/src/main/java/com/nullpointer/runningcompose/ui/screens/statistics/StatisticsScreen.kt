@@ -42,7 +42,7 @@ fun StatisticsScreen(
             }
         }
         listRuns!!.isEmpty() -> {
-            EmptyScreen(animation = R.raw.empty1,
+            EmptyScreen(animation = R.raw.empty2,
                 textEmpty = stringResource(R.string.message_empty_statisctis))
         }
         else -> {

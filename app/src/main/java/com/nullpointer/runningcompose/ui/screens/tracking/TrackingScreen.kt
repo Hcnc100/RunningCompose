@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +25,9 @@ import com.nullpointer.runningcompose.models.types.TrackingState.*
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.LocationViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogCancel
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
+import com.nullpointer.runningcompose.ui.share.ToolbarBackWithAction
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -48,6 +51,7 @@ fun TrackingScreen(
     val cameraPositionState = rememberCameraPositionState()
     val listPositions by TrackingServices.showListPont.collectAsState()
     val timeRun by TrackingServices.showTimeInMillis.collectAsState()
+    val (isShowDialog, changeDialogState) = rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(key1 = Unit) {
         TrackingServices.showListPont.collect {
@@ -72,7 +76,11 @@ fun TrackingScreen(
     }
     Scaffold(
         topBar = {
-            ToolbarBack(title = "Seguimiento", actionBack = navigator::popBackStack)
+            ToolbarBackWithAction(title = "Seguimiento",
+                actionBack = navigator::popBackStack,
+                actionCancel = if (TrackingServices.stateServices != WAITING) {
+                    { changeDialogState(true) }
+                } else null)
         },
     ) {
         Box {
@@ -134,6 +142,15 @@ fun TrackingScreen(
                     .padding(vertical = 5.dp, horizontal = 10.dp))
         }
 
+
+        if (isShowDialog)
+            DialogCancel(
+                acceptAction = {
+                    TrackingServices.finishServices(context)
+                    navigator.popBackStack()
+                },
+                actionCancel = { changeDialogState(false) }
+            )
 
     }
 }

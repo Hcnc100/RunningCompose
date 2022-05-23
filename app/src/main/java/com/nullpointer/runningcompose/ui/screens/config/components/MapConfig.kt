@@ -39,6 +39,10 @@ fun MapSettings(
     changeStyleMap: (MapStyle) -> Unit,
     changeColorMap: (Color) -> Unit,
 ) {
+    val (isDialogShow, changeVisibleDialog) = rememberSaveable {
+        mutableStateOf(false)
+    }
+
     Column {
         TitleConfig(text = stringResource(R.string.title_config_map))
         when (orientation) {
@@ -51,7 +55,10 @@ fun MapSettings(
                         changeWeight = changeWeight)
                     Spacer(modifier = Modifier.height(10.dp))
                     Spacer(modifier = Modifier.height(10.dp))
-                    SelectMapColor(mapConfig.color, changeColorMap)
+                    SelectMapColor(
+                        currentColor = mapConfig.color,
+                        showDialogColor = { changeVisibleDialog(true) }
+                    )
                 }
             }
             else -> {
@@ -68,13 +75,20 @@ fun MapSettings(
                             SelectMapWeight(currentWeightMap = mapConfig.weight,
                                 changeWeight = changeWeight)
                             Spacer(modifier = Modifier.height(10.dp))
-                            SelectMapColor(mapConfig.color, changeColorMap)
+                            SelectMapColor(
+                                currentColor = mapConfig.color,
+                                showDialogColor = { changeVisibleDialog(true) }
+                            )
                         }
                     }
                 }
             }
         }
     }
+    if (isDialogShow)
+        DialogColorPicker(
+            hiddenDialog = { changeVisibleDialog(false) },
+            changeColor = changeColorMap)
 }
 
 
@@ -108,12 +122,10 @@ private fun SelectMapStyle(
 @Composable
 fun SelectMapColor(
     currentColor: Color,
-    changeColor: (Color) -> Unit,
     modifier: Modifier = Modifier,
+    showDialogColor: () -> Unit,
 ) {
-    val (isDialogShow, changeVisibleDialog) = rememberSaveable {
-        mutableStateOf(false)
-    }
+
     Row(modifier = modifier
         .padding(horizontal = 10.dp)
         .height(50.dp),
@@ -135,13 +147,11 @@ fun SelectMapColor(
             .padding(2.dp)
             .background(currentColor)
             .clickable {
-                changeVisibleDialog(true)
-            })
+                showDialogColor()
+            }
+        )
     }
-    if (isDialogShow)
-        DialogColorPicker(
-            hiddenDialog = { changeVisibleDialog(false) },
-            changeColor = changeColor)
+
 }
 
 

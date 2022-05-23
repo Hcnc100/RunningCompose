@@ -45,3 +45,27 @@ fun ToolbarBack(title: String, actionBack: (() -> Unit)? = null) {
             }
         })
 }
+
+@Composable
+fun ToolbarBackWithAction(
+    title: String,
+    actionBack: () -> Unit,
+    actionCancel: (() -> Unit)? = null,
+) {
+    TopAppBar(title = { Text(title) },
+        navigationIcon = {
+            IconButton(onClick = actionBack) {
+                Icon(painterResource(id = R.drawable.ic_arrow_back),
+                    stringResource(id = R.string.description_arrow_back))
+            }
+        },
+        actions = {
+            actionCancel?.let {actionCancel->
+                IconButton(onClick = actionCancel) {
+                    Icon(painterResource(id = R.drawable.ic_clear),
+                        contentDescription = stringResource(R.string.description_cancel_run))
+                }
+            }
+        }
+    )
+}
