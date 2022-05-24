@@ -14,7 +14,7 @@ import com.nullpointer.runningcompose.models.config.MapConfig
 fun MapComponent(
     cameraPositionState: CameraPositionState,
     properties: MapProperties,
-    listPositions: List<LatLng>,
+    listPositions: List<List<LatLng>>,
     modifier: Modifier = Modifier,
     configMap: MapConfig? = null,
 ) {
@@ -23,9 +23,13 @@ fun MapComponent(
         cameraPositionState = cameraPositionState,
         properties = properties
     ) {
-        if (listPositions.isNotEmpty())
-            Polyline(points = listPositions,
-                width = configMap?.weight?.toFloat() ?: 10F,
-                color = configMap?.color ?: Color.Black)
+        if (listPositions.isNotEmpty()) {
+            listPositions.forEach { list ->
+                if (list.isNotEmpty())
+                    Polyline(points = list,
+                        width = configMap?.weight?.toFloat() ?: 10F,
+                        color = configMap?.color ?: Color.Black)
+            }
+        }
     }
 }

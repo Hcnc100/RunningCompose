@@ -51,7 +51,8 @@ class TrackingServices : LifecycleService() {
         var stateServices by mutableStateOf(WAITING)
             private set
 
-        private val listPoints = MutableStateFlow<List<LatLng>>(emptyList())
+        private val listPoints =
+            MutableStateFlow<MutableList<MutableList<LatLng>>>(mutableListOf(mutableListOf()))
         val showListPont = listPoints.asStateFlow()
 
         private val timeInMillis = MutableStateFlow(0L)
@@ -74,9 +75,9 @@ class TrackingServices : LifecycleService() {
     @Inject
     lateinit var locationRepository: LocationRepository
 
-    private var timerRun = Timer()
+    private val timerRun = Timer()
 
-    private val  notificationServices by lazy {
+    private val notificationServices by lazy {
         NotificationServices()
     }
 
@@ -87,12 +88,14 @@ class TrackingServices : LifecycleService() {
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .filter { stateServices == TRACKING }
             .onEach {
-                Timber.d("LOcation send to tackin services")
-                listPoints.value = listPoints.value + it
+                listPoints.value = listPoints.value.apply {
+                    last().add(it)
+                }
+                Timber.d("LOcation send to tackin services ${listPoints.value}")
             }
             .onCompletion {
-                listPoints.value = emptyList()
-                timerRun = Timer()
+                timerRun.resetValues()
+                listPoints.value = mutableListOf(mutableListOf())
                 timeInMillis.value = 0
                 Timber.d("LOaction cancelled")
             }
@@ -111,6 +114,9 @@ class TrackingServices : LifecycleService() {
                 PAUSE_OR_RESUME_COMMAND -> {
                     stateServices = if (stateServices == TRACKING) {
                         notificationServices.updateAction(false)
+                        listPoints.value = listPoints.value.apply {
+                            add(mutableListOf())
+                        }
                         PAUSE
                     } else {
                         notificationServices.updateAction(true)
@@ -133,12 +139,13 @@ class TrackingServices : LifecycleService() {
 
     private inner class NotificationServices {
 
-        private val notifyManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        private val notifyManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         private val context get() = this@TrackingServices
-        private val currentNotification by lazy{
+        private val currentNotification by lazy {
             createBaseNotification()
         }
-        private val pendingIntentAction by lazy{
+        private val pendingIntentAction by lazy {
             createPendingIntentAction()
         }
 
@@ -198,7 +205,8 @@ class TrackingServices : LifecycleService() {
 
         fun updateAction(isTracking: Boolean) {
             currentNotification.clearActionsNotification()
-            val textAction = if (isTracking) R.string.text_action_pause else R.string.textActionResumen
+            val textAction =
+                if (isTracking) R.string.text_action_pause else R.string.textActionResumen
             currentNotification.addAction(
                 R.drawable.ic_pause,
                 context.getString(textAction),
@@ -260,6 +268,13 @@ class TrackingServices : LifecycleService() {
             }
             //update the all time run
             timeRun += lastTimestamp
+        }
+
+        fun resetValues() {
+            lastSecondTimestamp = 0L
+            lastTimestamp = 0L
+            timeRun = 0L
+            timeRunInSeconds = 0L
         }
     }
 }

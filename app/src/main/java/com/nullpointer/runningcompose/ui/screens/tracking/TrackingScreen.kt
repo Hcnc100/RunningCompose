@@ -84,7 +84,9 @@ fun TrackingScreen(
 
         MapAndTimeComponent(
             cameraPositionState = cameraPositionState,
-            properties = properties)
+            properties = properties,
+            mapConfig = configMap
+        )
 
         if (isShowDialog)
             DialogCancel(
@@ -101,6 +103,7 @@ fun TrackingScreen(
 fun MapAndTimeComponent(
     cameraPositionState: CameraPositionState,
     properties: MapProperties,
+    mapConfig: MapConfig?
 ) {
     val listPositions by TrackingServices.showListPont.collectAsState()
     val timeRun by TrackingServices.showTimeInMillis.collectAsState()
@@ -112,6 +115,7 @@ fun MapAndTimeComponent(
                 MapComponent(cameraPositionState = cameraPositionState,
                     properties = properties,
                     listPositions = listPositions,
+                    configMap = mapConfig,
                     modifier = Modifier.fillMaxSize())
 
                 Text(text = timeRun.toFullFormatTime(true),
@@ -139,6 +143,7 @@ fun MapAndTimeComponent(
                     cameraPositionState = cameraPositionState,
                     properties = properties,
                     listPositions = listPositions,
+                    configMap = mapConfig,
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(.7f))
