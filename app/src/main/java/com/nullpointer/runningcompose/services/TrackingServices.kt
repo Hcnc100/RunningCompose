@@ -25,7 +25,6 @@ import com.nullpointer.runningcompose.models.types.TrackingState.*
 import com.nullpointer.runningcompose.ui.activitys.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -76,7 +75,10 @@ class TrackingServices : LifecycleService() {
     lateinit var locationRepository: LocationRepository
 
     private var timerRun = Timer()
-    private lateinit var notificationServices: NotificationServices
+
+    private val  notificationServices by lazy {
+        NotificationServices()
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -102,7 +104,6 @@ class TrackingServices : LifecycleService() {
             when (it) {
                 START_COMMAND -> {
                     Timber.d("Services init")
-                    notificationServices = NotificationServices()
                     stateServices = TRACKING
                     notificationServices.startRunServices()
                     timerRun.startTimer()
@@ -132,16 +133,19 @@ class TrackingServices : LifecycleService() {
 
     private inner class NotificationServices {
 
-        private val notifyManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        private val notifyManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         private val context get() = this@TrackingServices
-        private val currentNotification: NotificationCompat.Builder
+        private val currentNotification by lazy{
+            createBaseNotification()
+        }
+        private val pendingIntentAction by lazy{
+            createPendingIntentAction()
+        }
 
         init {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 createChannelNotification()
             }
-            currentNotification = createBaseNotification()
         }
 
         private fun createChannelNotification() {
@@ -153,7 +157,31 @@ class TrackingServices : LifecycleService() {
             notifyManager.createNotificationChannel(channel)
         }
 
-        private fun getPendingIntentCompose(): PendingIntent? {
+        private fun createPendingIntentAction(): PendingIntent? {
+            val actionIntent = Intent(
+                context,
+                TrackingServices::class.java
+            ).apply { action = PAUSE_OR_RESUME_COMMAND }
+
+            return PendingIntent.getService(
+                context,
+                1,
+                actionIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        private fun createBaseNotification(): NotificationCompat.Builder {
+            return NotificationCompat
+                .Builder(context, NOTIFICATION_CHANNEL_ID)
+                .setAutoCancel(false)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentText(context.getString(R.string.app_name))
+                .setContentText("00:00:00:00")
+                .setContentIntent(createPendingIntentCompose())
+        }
+
+        private fun createPendingIntentCompose(): PendingIntent? {
             // * create deep link
             // * this go to post for notification
             val deepLinkIntent = Intent(Intent.ACTION_VIEW,
@@ -168,38 +196,13 @@ class TrackingServices : LifecycleService() {
             return deepLinkPendingIntent
         }
 
-        private fun createBaseNotification(): NotificationCompat.Builder {
-            return NotificationCompat
-                .Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setAutoCancel(false)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentText(context.getString(R.string.app_name))
-                .setContentText("00:00:00:00")
-                .setContentIntent(getPendingIntentCompose())
-        }
-
         fun updateAction(isTracking: Boolean) {
-
             currentNotification.clearActionsNotification()
-
             val textAction = if (isTracking) R.string.text_action_pause else R.string.textActionResumen
-
-            val actionIntent = Intent(
-                context,
-                TrackingServices::class.java
-            ).apply { action = PAUSE_OR_RESUME_COMMAND }
-
-            val pendingIntent = PendingIntent.getService(
-                context,
-                1,
-                actionIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
             currentNotification.addAction(
                 R.drawable.ic_pause,
                 context.getString(textAction),
-                pendingIntent
+                pendingIntentAction
             )
 
             notifyManager.notify(NOTIFICATION_ID, currentNotification.build())
