@@ -51,12 +51,14 @@ class TrackingServices : LifecycleService() {
         var stateServices by mutableStateOf(WAITING)
             private set
 
-        private val listPoints =
-            MutableStateFlow<MutableList<MutableList<LatLng>>>(mutableListOf(mutableListOf()))
-        val showListPont = listPoints.asStateFlow()
+        private val listPoints:MutableList<MutableList<LatLng>> = mutableListOf(mutableListOf())
+        val showListPoints: List<List<LatLng>> = listPoints
+
+        private val counterPoints = MutableStateFlow(0)
+        val showCounterPoint = counterPoints.asStateFlow()
 
         private val timeInMillis = MutableStateFlow(0L)
-        val showTimeInMillis = timeInMillis
+        val showTimeInMillis = timeInMillis.asStateFlow()
 
 
         private fun sendCommand(context: Context, command: String) {
@@ -88,14 +90,13 @@ class TrackingServices : LifecycleService() {
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .filter { stateServices == TRACKING }
             .onEach {
-                listPoints.value = listPoints.value.apply {
-                    last().add(it)
-                }
-                Timber.d("LOcation send to tackin services ${listPoints.value}")
+                counterPoints.value = counterPoints.value + 1
+                listPoints.last().add(it)
+                Timber.d("LOcation send to tackin services ${listPoints}")
             }
             .onCompletion {
                 timerRun.resetValues()
-                listPoints.value = mutableListOf(mutableListOf())
+                listPoints.clear()
                 timeInMillis.value = 0
                 Timber.d("LOaction cancelled")
             }
@@ -114,9 +115,7 @@ class TrackingServices : LifecycleService() {
                 PAUSE_OR_RESUME_COMMAND -> {
                     stateServices = if (stateServices == TRACKING) {
                         notificationServices.updateAction(false)
-                        listPoints.value = listPoints.value.apply {
-                            add(mutableListOf())
-                        }
+                        listPoints.add(mutableListOf())
                         PAUSE
                     } else {
                         notificationServices.updateAction(true)

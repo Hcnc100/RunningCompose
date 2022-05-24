@@ -21,12 +21,18 @@ fun MapComponent(
     GoogleMap(
         modifier = modifier,
         cameraPositionState = cameraPositionState,
-        properties = properties
+        properties = properties,
+        onMapLoaded = {
+
+        }
     ) {
         if (listPositions.isNotEmpty()) {
             listPositions.forEach { list ->
-                if (list.isNotEmpty())
-                    Polyline(points = list,
+                // ! this is the only way to update the list of points
+                // * this is for the list is considerate the same list (although a new point is added)
+                // * for is the same object
+                if (list.size > 1)
+                    Polyline(points = ArrayList(list),
                         width = configMap?.weight?.toFloat() ?: 10F,
                         color = configMap?.color ?: Color.Black)
             }

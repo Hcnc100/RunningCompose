@@ -48,12 +48,14 @@ fun TrackingScreen(
     var properties by remember { mutableStateOf(MapProperties()) }
     val lastLocation by locationViewModel.lastLocation.collectAsState(initial = null)
     val cameraPositionState = rememberCameraPositionState()
-
     val (isShowDialog, changeDialogState) = rememberSaveable { mutableStateOf(false) }
+    var listPoints by remember { mutableStateOf<List<List<LatLng>>>(emptyList()) }
 
     LaunchedEffect(key1 = Unit) {
-        TrackingServices.showListPont.collect {
-            Timber.d("Lista recibida $it")
+        TrackingServices.showCounterPoint.collect {
+            listPoints = TrackingServices.showListPoints
+            Timber.e("actualizacion recibida $it")
+            Timber.d("list points $listPoints")
         }
     }
 
@@ -85,7 +87,8 @@ fun TrackingScreen(
         MapAndTimeComponent(
             cameraPositionState = cameraPositionState,
             properties = properties,
-            mapConfig = configMap
+            mapConfig = configMap,
+            listPoints = listPoints
         )
 
         if (isShowDialog)
@@ -103,9 +106,9 @@ fun TrackingScreen(
 fun MapAndTimeComponent(
     cameraPositionState: CameraPositionState,
     properties: MapProperties,
-    mapConfig: MapConfig?
+    mapConfig: MapConfig?,
+    listPoints:List<List<LatLng>>
 ) {
-    val listPositions by TrackingServices.showListPont.collectAsState()
     val timeRun by TrackingServices.showTimeInMillis.collectAsState()
 
     when (LocalConfiguration.current.orientation) {
@@ -114,7 +117,7 @@ fun MapAndTimeComponent(
             Box {
                 MapComponent(cameraPositionState = cameraPositionState,
                     properties = properties,
-                    listPositions = listPositions,
+                    listPositions = listPoints,
                     configMap = mapConfig,
                     modifier = Modifier.fillMaxSize())
 
@@ -142,7 +145,7 @@ fun MapAndTimeComponent(
                 MapComponent(
                     cameraPositionState = cameraPositionState,
                     properties = properties,
-                    listPositions = listPositions,
+                    listPositions = listPoints,
                     configMap = mapConfig,
                     modifier = Modifier
                         .fillMaxWidth()
