@@ -97,6 +97,7 @@ class TrackingServices : LifecycleService() {
             .onCompletion {
                 timerRun.resetValues()
                 listPoints.clear()
+                listPoints.add(mutableListOf())
                 timeInMillis.value = 0
                 Timber.d("LOaction cancelled")
             }
