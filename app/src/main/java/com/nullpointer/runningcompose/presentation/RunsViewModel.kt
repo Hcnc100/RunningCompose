@@ -2,9 +2,12 @@ package com.nullpointer.runningcompose.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.PolyUtil
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.config.MapConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -40,13 +43,27 @@ class RunsViewModel @Inject constructor(
         null
     )
 
-    val isStatisticsLoad = combine(listRuns,statisticsRuns){listRuns,statistics->
-        statistics==null || listRuns==null
+    val isStatisticsLoad = combine(listRuns, statisticsRuns) { listRuns, statistics ->
+        statistics == null || listRuns == null
     }
 
     fun insertNewRun(newRun: Run) = viewModelScope.launch(Dispatchers.IO) {
         runsRepository.insertNewRun(newRun)
     }
+
+    fun insertNewRun(timeRun: Long, listPoints: List<List<LatLng>>, configMap: MapConfig) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val listPointsEncode = listPoints.map { PolyUtil.encode(it) }
+            val run = Run(
+                avgSpeed = 0F,
+                distance = 0F,
+                timeRunInMillis = timeRun,
+                0F,
+                listPolyLineEncode = listPointsEncode,
+                configMap = configMap
+            )
+            runsRepository.insertNewRun(run)
+        }
 
     fun deleterRun(run: Run) = viewModelScope.launch(Dispatchers.IO) {
         runsRepository.deleterRun(run)

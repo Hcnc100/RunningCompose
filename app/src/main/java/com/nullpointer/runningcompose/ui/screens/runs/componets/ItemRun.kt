@@ -9,7 +9,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -21,6 +21,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.google.android.gms.common.util.MapUtils
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.maps.android.PolyUtil
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
 import com.nullpointer.runningcompose.models.Run
@@ -34,6 +41,7 @@ fun ItemRun(
     actionClick: (Run) -> Unit,
     actionSelect: (Run) -> Unit,
 ) {
+
     Card(
         modifier = Modifier
             .padding(3.dp)
@@ -47,17 +55,22 @@ fun ItemRun(
         Row(modifier = Modifier
             .padding(10.dp)
             .height(150.dp)) {
-            AsyncImage(
-                model = "https://picsum.photos/200/300",
-                placeholder = painterResource(id = R.drawable.ic_run),
-                error = painterResource(id = R.drawable.ic_error_img),
-                contentDescription = stringResource(R.string.description_current_run_img),
-                contentScale = ContentScale.Crop,
+            MapRunItem(
+                mapConfig = itemRun.configMap,
+                routeEncode = itemRun.listPolyLineEncode,
                 modifier = Modifier
                     .weight(.5f)
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(10.dp))
-            )
+                    .clip(RoundedCornerShape(10.dp)
+                    ))
+//            AsyncImage(
+//                model = "https://picsum.photos/200/300",
+//                placeholder = painterResource(id = R.drawable.ic_run),
+//                error = painterResource(id = R.drawable.ic_error_img),
+//                contentDescription = stringResource(R.string.description_current_run_img),
+//                contentScale = ContentScale.Crop,
+//                )
+//            )
             Spacer(modifier = Modifier.width(20.dp))
             InfoRun(itemRun = itemRun,
                 modifier = Modifier.weight(.5f),
@@ -78,7 +91,7 @@ fun InfoRun(
     Row(modifier = modifier
         .padding(vertical = 10.dp)
         .fillMaxWidth(),
-        horizontalArrangement = if(isMiniTitle) Arrangement.SpaceBetween else Arrangement.SpaceEvenly) {
+        horizontalArrangement = if (isMiniTitle) Arrangement.SpaceBetween else Arrangement.SpaceEvenly) {
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
             TextMiniTitle(text = stringResource(R.string.item_title_date), isMiniTitle)
             TextMiniTitle(text = stringResource(R.string.item_title_hour), isMiniTitle)
@@ -89,8 +102,10 @@ fun InfoRun(
         }
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
             TextMiniTitle(text = itemRun.timestamp.toDateFormat(), isMiniTitle)
-            TextMiniTitle(text = itemRun.timestamp.toDateOnlyTime(LocalContext.current), isMiniTitle)
-            TextMiniTitle(text = itemRun.timeRunInMillis.toFullFormatTime(dataComplete), isMiniTitle)
+            TextMiniTitle(text = itemRun.timestamp.toDateOnlyTime(LocalContext.current),
+                isMiniTitle)
+            TextMiniTitle(text = itemRun.timeRunInMillis.toFullFormatTime(dataComplete),
+                isMiniTitle)
             TextMiniTitle(text = itemRun.distance.toMeters(true), isMiniTitle)
             TextMiniTitle(text = itemRun.avgSpeed.toAVGSpeed(true), isMiniTitle)
             TextMiniTitle(text = itemRun.caloriesBurned.toCaloriesBurned(true), isMiniTitle)

@@ -25,6 +25,7 @@ fun ConfigScreen(
 ) {
     val configMap by configViewModel.mapConfig.collectAsState()
     val configUser by configViewModel.userConfig.collectAsState()
+    val metricsMap by configViewModel.metrics.collectAsState()
     val orientation = LocalConfiguration.current.orientation
 
     Scaffold {
@@ -43,8 +44,8 @@ fun ConfigScreen(
                 changeColorMap = { configViewModel.changeMapConfig(color = it) }
             )
             MetricConfig(
-                configMap = configMap,
-                changeMetric = { configViewModel.changeMapConfig(metricType = it) })
+                metrics = metricsMap,
+                changeMetric = { configViewModel.changeMetrics(it) })
         }
     }
 }

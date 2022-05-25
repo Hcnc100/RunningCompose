@@ -78,21 +78,28 @@ class ConfigUserStore(
     suspend fun changeMapConfig(
         style: MapStyle? = null,
         weight: Int? = null,
-        metrics: MetricType? = null,
         color: Color? = null,
     ) = context.dataStore.edit { pref ->
         style?.let { pref[keyMapStyle] = it.name }
         weight?.let { pref[keyMapWeight] = it }
-        metrics?.let { pref[keyMetricType] = it.name }
         color?.let { pref[keyMapColor] = it.toArgb() }
+    }
+
+    suspend fun changeMetrics(
+        metrics: MetricType
+    ) = context.dataStore.edit { pref->
+        pref[keyMetricType] = metrics.name
+    }
+
+    fun getMetrics()= context.dataStore.data.map { pref->
+          pref[keyMetricType]?.let { MetricType.valueOf(it) } ?: MetricType.Meters
     }
 
     fun getMapConfig() = context.dataStore.data.map { pref ->
         MapConfig(
             style = pref[keyMapStyle]?.let { MapStyle.valueOf(it) } ?: MapStyle.LITE,
             weight = pref[keyMapWeight] ?: 5,
-            metrics = pref[keyMetricType]?.let { MetricType.valueOf(it) } ?: MetricType.Meters,
-            color = pref[keyMapColor]?.let { Color(it) } ?: Color.Black
+            colorValue = pref[keyMapColor] ?: Color.Black.toArgb()
         )
     }
 

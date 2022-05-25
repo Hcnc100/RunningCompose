@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -20,19 +21,12 @@ fun MapFromConfig(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val uiSettings by remember {
-        mutableStateOf(MapUiSettings(
-            myLocationButtonEnabled = false,
-            compassEnabled = false,
-            indoorLevelPickerEnabled = false,
-            mapToolbarEnabled = false,
-            rotationGesturesEnabled = false,
-            scrollGesturesEnabled = false,
-            scrollGesturesEnabledDuringRotateOrZoom = false,
-            tiltGesturesEnabled = false,
+    val uiSettings = remember {
+        MapUiSettings(
             zoomControlsEnabled = false,
-            zoomGesturesEnabled = false
-        ))
+            mapToolbarEnabled = false,
+            myLocationButtonEnabled = false
+        )
     }
     var properties by remember {
         mutableStateOf(
@@ -49,11 +43,11 @@ fun MapFromConfig(
         LatLng(52.5166, 13.3833),
     )
 
-    val bounds by remember {
-        mutableStateOf(LatLngBounds.builder().let {
+    val bounds = remember {
+       LatLngBounds.builder().let {
             listPoints.forEach(it::include)
             it.build()
-        })
+        }
     }
     val cameraPositionState = rememberCameraPositionState()
     LaunchedEffect(key1 = mapConfig) {
@@ -63,6 +57,7 @@ fun MapFromConfig(
         )
     }
 
+
     GoogleMap(
         modifier = modifier
             .fillMaxWidth()
@@ -71,7 +66,11 @@ fun MapFromConfig(
         cameraPositionState = cameraPositionState,
         properties = properties,
         uiSettings = uiSettings,
+        googleMapOptionsFactory = {
+            GoogleMapOptions().liteMode(true)
+        },
         onMapLoaded = {
+            bounds.center
             cameraPositionState.move(CameraUpdateFactory.newLatLngBounds(bounds, 10))
         }
     ) {

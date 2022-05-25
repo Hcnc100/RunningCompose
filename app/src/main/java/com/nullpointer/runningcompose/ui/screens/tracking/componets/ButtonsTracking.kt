@@ -35,9 +35,10 @@ fun ButtonPlayTracking() {
 }
 
 @Composable
-fun ButtonPauseTracking() {
-    val context = LocalContext.current
-    FloatingActionButton(onClick = { TrackingServices.finishServices(context) }) {
+fun ButtonPauseTracking(
+    actionSave:()->Unit
+) {
+    FloatingActionButton(onClick =  actionSave) {
         Icon(painter = painterResource(id = R.drawable.ic_stop),
             contentDescription = "")
     }

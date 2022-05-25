@@ -21,6 +21,7 @@ import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.types.TrackingState.*
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.LocationViewModel
+import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonPauseTracking
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonPlayTracking
@@ -42,6 +43,7 @@ fun TrackingScreen(
     navigator: DestinationsNavigator,
     configViewModel: ConfigViewModel,
     locationViewModel: LocationViewModel = hiltViewModel(),
+    runsViewModel: RunsViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val configMap by configViewModel.mapConfig.collectAsState()
@@ -88,7 +90,17 @@ fun TrackingScreen(
             cameraPositionState = cameraPositionState,
             properties = properties,
             mapConfig = configMap,
-            listPoints = listPoints
+            listPoints = listPoints,
+            actionSaveRun = {
+                TrackingServices.pauseOrResumeServices(context)
+                runsViewModel.insertNewRun(
+                    timeRun = TrackingServices.showTimeInMillis.value,
+                    listPoints = TrackingServices.showListPoints,
+                    configMap = configMap!!
+                )
+                TrackingServices.finishServices(context)
+                navigator.popBackStack()
+            }
         )
 
         if (isShowDialog)
@@ -107,7 +119,8 @@ fun MapAndTimeComponent(
     cameraPositionState: CameraPositionState,
     properties: MapProperties,
     mapConfig: MapConfig?,
-    listPoints:List<List<LatLng>>
+    listPoints: List<List<LatLng>>,
+    actionSaveRun: () -> Unit,
 ) {
     val timeRun by TrackingServices.showTimeInMillis.collectAsState()
 
@@ -135,7 +148,7 @@ fun MapAndTimeComponent(
                     ButtonPlayTracking()
                     if (TrackingServices.stateServices != WAITING) {
                         Spacer(modifier = Modifier.height(30.dp))
-                        ButtonPauseTracking()
+                        ButtonPauseTracking(actionSave = actionSaveRun)
                     }
                 }
             }
@@ -165,7 +178,7 @@ fun MapAndTimeComponent(
                         ButtonPlayTracking()
                         if (TrackingServices.stateServices != WAITING) {
                             Spacer(modifier = Modifier.width(30.dp))
-                            ButtonPauseTracking()
+                            ButtonPauseTracking(actionSave = actionSaveRun)
                         }
                     }
                 }

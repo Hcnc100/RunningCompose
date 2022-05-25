@@ -16,6 +16,7 @@ class ConfigRepoImpl(
     override val userConfig: Flow<UserConfig?> = configLocalDataSource.userConfig
     override val mapConfig: Flow<MapConfig> = configLocalDataSource.mapConfig
     override val sortConfig: Flow<SortConfig> = configLocalDataSource.sortConfig
+    override val metricsConfig: Flow<MetricType> = configLocalDataSource.metricsConfig
 
     override suspend fun changeUserConfig(nameUser: String?, weight: Float?) =
         configLocalDataSource.changeUserConfig(nameUser, weight)
@@ -24,9 +25,11 @@ class ConfigRepoImpl(
     override suspend fun changeMapConfig(
         style: MapStyle?,
         weight: Int?,
-        metricType: MetricType?,
         color: Color?,
-    ) = configLocalDataSource.changeMapConfig(style, weight, metricType, color)
+    ) = configLocalDataSource.changeMapConfig(style, weight, color)
+
+    override suspend fun changeMetricConfig(metricType: MetricType) =
+        configLocalDataSource.changeMetricsConfig(metricType)
 
 
     override suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?) =

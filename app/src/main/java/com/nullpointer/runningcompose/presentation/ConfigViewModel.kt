@@ -42,6 +42,16 @@ class ConfigViewModel @Inject constructor(
         null
     )
 
+    val metrics = configRepo.metricsConfig.flowOn(
+        Dispatchers.IO
+    ).catch {
+        Timber.e("Error to load metrics config")
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
     fun changeUserConfig(
         name: String? = null,
         weight: Float? = null,
@@ -52,10 +62,16 @@ class ConfigViewModel @Inject constructor(
     fun changeMapConfig(
         style: MapStyle? = null,
         weight: Int? = null,
-        metricType: MetricType? = null,
         color: Color? = null,
     ) = viewModelScope.launch(Dispatchers.IO) {
-        configRepo.changeMapConfig(style, weight, metricType,color)
+        configRepo.changeMapConfig(style, weight, color)
+    }
+
+
+    fun changeMetrics(
+        metrics: MetricType,
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        configRepo.changeMetricConfig(metrics)
     }
 
     fun changeSortConfig(

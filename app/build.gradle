@@ -125,7 +125,7 @@ dependencies {
     implementation 'com.github.Shouheng88:compressor:1.6.0'
 
     // * splash screen
-    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
+    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
 
     // * shimmer effect
     implementation 'com.valentinilk.shimmer:compose-shimmer:1.0.2'
@@ -153,4 +153,6 @@ dependencies {
     // * select color picker
     implementation "com.github.skydoves:colorpicker-compose:1.0.0"
 
+    // * polyUtils
+    implementation 'com.google.maps.android:android-maps-utils:2.2.3'
 }

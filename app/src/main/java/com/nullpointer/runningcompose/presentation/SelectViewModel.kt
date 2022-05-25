@@ -27,7 +27,7 @@ class SelectViewModel @Inject constructor(
     val sizeSelected get() = listSelect.size
 
     fun changeSelect(runSelect:Run){
-        listSelect=if(listSelect.contains(runSelect.id!!)){
+        listSelect=if(listSelect.contains(runSelect.id)){
             runSelect.isSelected=false
             listRunsSelect.remove(runSelect)
             listSelect-runSelect.id
@@ -39,7 +39,7 @@ class SelectViewModel @Inject constructor(
     }
 
     fun restoreSelect(listRuns:List<Run>){
-        listRuns.filter { listSelect.contains(it.id!!) }.onEach {
+        listRuns.filter { listSelect.contains(it.id) }.onEach {
             it.isSelected=true
         }.let {
             listRunsSelect.addAll(listRuns)
