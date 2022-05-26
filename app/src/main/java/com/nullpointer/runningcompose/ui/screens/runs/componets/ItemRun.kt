@@ -66,18 +66,22 @@ fun ItemRun(
 //                    )
 //            )
             // * waiting to take snapshot for maps compose
-            AsyncImage(
-                model = "https://picsum.photos/seed/${itemRun.id}/200/300",
-                placeholder = painterResource(id = R.drawable.ic_run),
-                error = painterResource(id = R.drawable.ic_error_img),
-                contentDescription = stringResource(R.string.description_current_run_img),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .weight(.5f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(10.dp)
-                    )
-            )
+            Box(modifier = Modifier
+                .weight(.5f)
+                .fillMaxHeight()
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colors.primary)) {
+
+                AsyncImage(
+                    model =  R.drawable.ic_run,
+                    placeholder = painterResource(id = R.drawable.ic_run),
+                    error = painterResource(id = R.drawable.ic_error_img),
+                    contentDescription = stringResource(R.string.description_current_run_img),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize().padding(20.dp)
+                )
+            }
+
 
             Spacer(modifier = Modifier.width(20.dp))
             InfoRun(itemRun = itemRun,
