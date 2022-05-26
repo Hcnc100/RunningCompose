@@ -18,7 +18,7 @@ enum class HomeNavigation(
 ) {
     RunsScreen(
         R.string.title_screen_runs,
-        R.drawable.ic_run,
+        R.drawable.ic_run_nav,
         RunsScreensDestination
     ),
     StatisticsScreen(

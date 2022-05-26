@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,9 +56,11 @@ fun InfoUserConfig(
             modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Row {
                 Icon(painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = stringResource(R.string.description_icon_edit_info))
+                    contentDescription = stringResource(R.string.description_icon_edit_info),
+                    tint = Color.White.copy(alpha = .8f))
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = stringResource(R.string.text_edit_info_user))
+                Text(text = stringResource(R.string.text_edit_info_user),
+                    color = Color.White.copy(alpha = .8f))
             }
         }
     }
