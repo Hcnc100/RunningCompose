@@ -95,8 +95,7 @@ fun TrackingScreen(
                 TrackingServices.pauseOrResumeServices(context)
                 runsViewModel.insertNewRun(
                     timeRun = TrackingServices.showTimeInMillis.value,
-                    listPoints = TrackingServices.showListPoints,
-                    configMap = configMap!!
+                    listPoints = TrackingServices.showListPoints
                 )
                 TrackingServices.finishServices(context)
                 navigator.popBackStack()

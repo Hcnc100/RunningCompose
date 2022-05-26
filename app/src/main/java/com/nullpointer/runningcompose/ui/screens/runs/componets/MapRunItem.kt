@@ -1,25 +1,38 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.compose.*
+import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.config.MapConfig
 
 @Composable
 fun MapRunItem(
-    routeEncode: List<String>,
-    mapConfig: MapConfig,
+    itemRun: Run,
     modifier: Modifier = Modifier,
+    showCenterButton: Boolean,
 ) {
 
-    val camera= rememberCameraPositionState()
+    val camera = rememberCameraPositionState()
 
     val context = LocalContext.current
     val uiSettings = remember {
@@ -31,13 +44,15 @@ fun MapRunItem(
     }
     val properties = remember {
         MapProperties(
-            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
-                mapConfig.style.styleRawRes),
+            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
+                context,
+                itemRun.configMap.style.styleRawRes
+            ),
         )
     }
 
     val listPointsDecode = remember {
-        routeEncode.map {
+        itemRun.listPolyLineEncode.map {
             PolyUtil.decode(it)
         }
     }
@@ -51,23 +66,37 @@ fun MapRunItem(
         }
     }
 
-    GoogleMap(
-        cameraPositionState = camera,
-        uiSettings = uiSettings,
-        modifier = modifier,
-        properties = properties,
-        googleMapOptionsFactory = {
-            GoogleMapOptions().liteMode(true)
-        },
-        onMapLoaded = {
-            camera.move(CameraUpdateFactory.newLatLngBounds(bounds,10))
+    Card(shape = RoundedCornerShape(10.dp), modifier = modifier) {
+        Box {
+            GoogleMap(
+                cameraPositionState = camera,
+                uiSettings = uiSettings,
+                modifier = Modifier.fillMaxSize(),
+                properties = properties,
+                onMapLoaded = {
+                    camera.move(CameraUpdateFactory.newLatLngBounds(bounds, 10))
+                }
+            ) {
+                listPointsDecode.forEach {
+                    Polyline(
+                        points = it,
+                        color = itemRun.configMap.color,
+                        width = itemRun.configMap.weight.toFloat())
+                }
+            }
+            if (showCenterButton)
+                FloatingActionButton(onClick = {
+                    camera.move(CameraUpdateFactory.newLatLngBounds(bounds,
+                        10))
+                }, modifier = Modifier
+                    .padding(10.dp)
+                    .size(40.dp)
+                    .align(Alignment.BottomEnd)) {
+                    Icon(painter = painterResource(id = R.drawable.ic_location),
+                        contentDescription = "")
+                }
         }
-    ) {
-        listPointsDecode.forEach {
-            Polyline(
-                points = it,
-                color = mapConfig.color,
-                width = mapConfig.weight.toFloat())
-        }
+
     }
+
 }

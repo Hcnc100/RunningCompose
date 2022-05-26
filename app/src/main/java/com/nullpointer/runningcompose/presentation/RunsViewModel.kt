@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.Utility
+import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.config.MapConfig
@@ -14,12 +16,14 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 
 @HiltViewModel
 class RunsViewModel @Inject constructor(
     private val runsRepository: RunRepository,
+    private val configRepository: ConfigRepository,
 ) : ViewModel() {
 
     private val _messageRuns = Channel<Int>()
@@ -51,19 +55,33 @@ class RunsViewModel @Inject constructor(
         runsRepository.insertNewRun(newRun)
     }
 
-    fun insertNewRun(timeRun: Long, listPoints: List<List<LatLng>>, configMap: MapConfig) =
-        viewModelScope.launch(Dispatchers.IO) {
-            val listPointsEncode = listPoints.map { PolyUtil.encode(it) }
-            val run = Run(
-                avgSpeed = 0F,
-                distance = 0F,
-                timeRunInMillis = timeRun,
-                0F,
-                listPolyLineEncode = listPointsEncode,
-                configMap = configMap
-            )
-            runsRepository.insertNewRun(run)
+    fun insertNewRun(
+        timeRun: Long,
+        listPoints: List<List<LatLng>>,
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        val weightUser = configRepository.userConfig.first()?.weight ?: 80F
+        val mapConfig = configRepository.mapConfig.first()
+        var distanceInMeters = 0f
+        val listPolylineEncode = listPoints.map {
+            distanceInMeters += Utility.calculatePolylineLength(it)
+            PolyUtil.encode(it)
         }
+        val avgSpeedInMS = distanceInMeters / (timeRun / 1000f)
+
+        //Se estima que el costo energético de cada kilómetro que corres,
+        // es de 1 kcal (1000 calorías) por cada kilogramo de peso corporal del corredo
+
+        val caloriesBurned = distanceInMeters * (weightUser / 1000f)
+        val run = Run(
+            avgSpeed = avgSpeedInMS,
+            distance = distanceInMeters,
+            timeRunInMillis = timeRun,
+            caloriesBurned = caloriesBurned,
+            listPolyLineEncode = listPolylineEncode,
+            configMap = mapConfig
+        )
+        runsRepository.insertNewRun(run)
+    }
 
     fun deleterRun(run: Run) = viewModelScope.launch(Dispatchers.IO) {
         runsRepository.deleterRun(run)

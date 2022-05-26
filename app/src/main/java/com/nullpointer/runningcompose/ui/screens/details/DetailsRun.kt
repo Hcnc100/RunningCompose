@@ -1,9 +1,8 @@
 package com.nullpointer.runningcompose.ui.screens.details
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Scaffold
@@ -14,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.ui.screens.runs.componets.InfoRun
+import com.nullpointer.runningcompose.ui.screens.runs.componets.MapRunItem
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -30,14 +30,26 @@ fun DetailsRun(
                 actionBack = navigator::popBackStack)
         }
     ) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        ) {
-            Card(modifier = Modifier.padding(10.dp)) {
+        Column {
+
+            MapRunItem(
+                itemsRun,
+                showCenterButton = true,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .weight(7f)
+            )
+            Card(modifier = Modifier
+                .padding(10.dp)
+                .weight(3f), shape = RoundedCornerShape(10.dp)) {
                 InfoRun(
                     itemRun = itemsRun,
                     dataComplete = true,
-                    modifier = Modifier.padding(10.dp),
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .fillMaxHeight()
+                        .verticalScroll(rememberScrollState()),
                     isMiniTitle = false)
             }
         }

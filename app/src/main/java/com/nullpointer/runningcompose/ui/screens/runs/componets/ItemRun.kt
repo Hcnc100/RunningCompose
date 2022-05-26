@@ -55,22 +55,30 @@ fun ItemRun(
         Row(modifier = Modifier
             .padding(10.dp)
             .height(150.dp)) {
-            MapRunItem(
-                mapConfig = itemRun.configMap,
-                routeEncode = itemRun.listPolyLineEncode,
+
+            // ! this is not perfomance
+//            MapRunItem(
+//                itemRun = itemRun,
+//                modifier = Modifier
+//                    .weight(.5f)
+//                    .fillMaxHeight()
+//                    .clip(RoundedCornerShape(10.dp)
+//                    )
+//            )
+            // * waiting to take snapshot for maps compose
+            AsyncImage(
+                model = "https://picsum.photos/seed/${itemRun.id}/200/300",
+                placeholder = painterResource(id = R.drawable.ic_run),
+                error = painterResource(id = R.drawable.ic_error_img),
+                contentDescription = stringResource(R.string.description_current_run_img),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .weight(.5f)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(10.dp)
-                    ))
-//            AsyncImage(
-//                model = "https://picsum.photos/200/300",
-//                placeholder = painterResource(id = R.drawable.ic_run),
-//                error = painterResource(id = R.drawable.ic_error_img),
-//                contentDescription = stringResource(R.string.description_current_run_img),
-//                contentScale = ContentScale.Crop,
-//                )
-//            )
+                    )
+            )
+
             Spacer(modifier = Modifier.width(20.dp))
             InfoRun(itemRun = itemRun,
                 modifier = Modifier.weight(.5f),
