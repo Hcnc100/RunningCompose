@@ -28,6 +28,7 @@ import com.nullpointer.runningcompose.ui.screens.NavGraph
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.screens.config.ConfigScreen
 import com.nullpointer.runningcompose.ui.screens.destinations.Destination
+import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
 import com.nullpointer.runningcompose.ui.screens.navDestination
 import com.nullpointer.runningcompose.ui.screens.runs.RunsScreens
 import com.nullpointer.runningcompose.ui.screens.startDestination
@@ -38,18 +39,30 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigateTo
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val selectViewModel: SelectViewModel by viewModels()
     private val runsViewModel: RunsViewModel by viewModels()
     private val configViewModel: ConfigViewModel by viewModels()
+    private var isLoading = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+        installSplashScreen().apply {
+            setKeepOnScreenCondition {
+                isLoading
+            }
+        }
         setContent {
             RunningComposeTheme {
+
+                LaunchedEffect(key1 = Unit) {
+                    val isAuth = configViewModel.isAuth.first { it != null }
+                    isLoading = false
+                }
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
@@ -91,15 +104,23 @@ fun MainScreen(
                 BottomBar(navController, selectViewModel::clearSelect)
         }
     ) {
-        DestinationsNavHost(
-            modifier = Modifier.padding(it),
-            navGraph = NavGraphs.root,
-            navController = navController,
-            dependenciesContainerBuilder = {
-                dependency(selectViewModel)
-                dependency(runsViewModel)
-                dependency(configViewModel)
-            })
+
+        val isAuth by configViewModel.isAuth.collectAsState()
+
+        if (isAuth != null) {
+            val root = if (isAuth as Boolean) NavGraphs.root.startRoute else EditInfoScreenDestination
+
+            DestinationsNavHost(
+                startRoute = root,
+                modifier = Modifier.padding(it),
+                navGraph = NavGraphs.root,
+                navController = navController,
+                dependenciesContainerBuilder = {
+                    dependency(selectViewModel)
+                    dependency(runsViewModel)
+                    dependency(configViewModel)
+                })
+        }
     }
 }
 

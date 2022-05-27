@@ -53,8 +53,8 @@ class EditInfoViewModel @Inject constructor(
         viewModelScope.launch {
             val userData = withContext(Dispatchers.IO) { configRepository.userConfig.first() }
             isDataComplete = userData != null
-            nameUser = userData?.name.toString()
-            weightUser = userData?.weight?.toString() ?: "80.0"
+            nameUser = userData?.name?:""
+            weightUser = userData?.weight?.toString() ?: ""
         }
     }
 

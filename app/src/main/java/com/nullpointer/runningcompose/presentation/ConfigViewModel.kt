@@ -9,10 +9,7 @@ import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,6 +48,17 @@ class ConfigViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         null
     )
+
+    val isAuth= flow {
+        configRepo.userConfig.collect{
+            emit(it!=null)
+        }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
 
     fun changeUserConfig(
         name: String? = null,
