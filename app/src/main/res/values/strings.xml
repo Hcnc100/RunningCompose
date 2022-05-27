@@ -95,5 +95,6 @@
     <string name="text_action_pause">Pause</string>
     <string name="textActionResumen">Resumen</string>
     <string name="description_cancel_run">Cancela el recorrido actual</string>
+    <string name="message_permission_tooltip"><![CDATA[Si no aparece el dialogo de ajustes, puedes pulsar en \" &#9881 \" para abrir los ajustes y modificar los permisos desder ahi]]></string>
 
 </resources>

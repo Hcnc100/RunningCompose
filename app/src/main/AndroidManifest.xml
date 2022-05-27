@@ -4,7 +4,6 @@
     package="com.nullpointer.runningcompose">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
@@ -34,9 +33,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <service android:name=".services.TrackingServices"
+        <service
+            android:name=".services.TrackingServices"
             android:exported="false"
-            />
+            android:foregroundServiceType="location" />
     </application>
 
 </manifest>

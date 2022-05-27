@@ -52,17 +52,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             RunningComposeTheme {
 
-                var isAuth by remember { mutableStateOf<Boolean?>(null) }
-
                 LaunchedEffect(key1 = Unit) {
-                    isAuth = configViewModel.isAuth.first { it != null }
+                   configViewModel.isAuth.first { it != null }
                     isLoading = false
                 }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    MainScreen(selectViewModel, runsViewModel, configViewModel, isAuth)
+                    MainScreen(selectViewModel, runsViewModel, configViewModel)
                 }
             }
         }
@@ -74,7 +72,6 @@ fun MainScreen(
     selectViewModel: SelectViewModel,
     runsViewModel: RunsViewModel,
     configViewModel: ConfigViewModel,
-    isAuth: Boolean?,
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -102,9 +99,10 @@ fun MainScreen(
         }
     ) {
 
+        val isAuth by configViewModel.isAuth.collectAsState()
 
         if (isAuth != null) {
-            val startRoute = if (isAuth) RunsScreensDestination else EditInfoScreenDestination
+            val startRoute = if (isAuth as Boolean) NavGraphs.root.startRoute else EditInfoScreenDestination
             DestinationsNavHost(
                 startRoute = startRoute,
                 modifier = Modifier.padding(it),

@@ -155,4 +155,7 @@ dependencies {
 
     // * polyUtils
     implementation 'com.google.maps.android:android-maps-utils:2.2.3'
+
+    // * permissions
+    implementation "com.google.accompanist:accompanist-permissions:0.24.9-beta"
 }

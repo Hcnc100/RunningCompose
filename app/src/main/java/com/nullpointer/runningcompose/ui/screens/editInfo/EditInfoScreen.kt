@@ -17,8 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavOptionsBuilder
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestination
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
@@ -59,7 +61,11 @@ fun EditInfoScreen(
                             name = editInfoViewModel.nameUser,
                             weight = editInfoViewModel.weightUser.toFloat()
                         )
-                        navigator.popBackStack()
+                        if (editInfoViewModel.isDataComplete) {
+                            navigator.popBackStack()
+                        } else {
+                            navigator.navigate(RunsScreensDestination, false)
+                        }
                     }
                 }
             ) {
