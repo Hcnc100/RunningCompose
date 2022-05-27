@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -24,15 +23,10 @@ import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavigation
-import com.nullpointer.runningcompose.ui.screens.NavGraph
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
-import com.nullpointer.runningcompose.ui.screens.config.ConfigScreen
-import com.nullpointer.runningcompose.ui.screens.destinations.Destination
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
+import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestination
 import com.nullpointer.runningcompose.ui.screens.navDestination
-import com.nullpointer.runningcompose.ui.screens.runs.RunsScreens
-import com.nullpointer.runningcompose.ui.screens.startDestination
-import com.nullpointer.runningcompose.ui.screens.statistics.StatisticsScreen
 import com.nullpointer.runningcompose.ui.share.SelectToolbar
 import com.nullpointer.runningcompose.ui.theme.RunningComposeTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -58,15 +52,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             RunningComposeTheme {
 
+                var isAuth by remember { mutableStateOf<Boolean?>(null) }
+
                 LaunchedEffect(key1 = Unit) {
-                    val isAuth = configViewModel.isAuth.first { it != null }
+                    isAuth = configViewModel.isAuth.first { it != null }
                     isLoading = false
                 }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
-                    MainScreen(selectViewModel, runsViewModel, configViewModel)
+                    MainScreen(selectViewModel, runsViewModel, configViewModel, isAuth)
                 }
             }
         }
@@ -78,6 +74,7 @@ fun MainScreen(
     selectViewModel: SelectViewModel,
     runsViewModel: RunsViewModel,
     configViewModel: ConfigViewModel,
+    isAuth: Boolean?,
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -105,13 +102,11 @@ fun MainScreen(
         }
     ) {
 
-        val isAuth by configViewModel.isAuth.collectAsState()
 
         if (isAuth != null) {
-            val root = if (isAuth as Boolean) NavGraphs.root.startRoute else EditInfoScreenDestination
-
+            val startRoute = if (isAuth) RunsScreensDestination else EditInfoScreenDestination
             DestinationsNavHost(
-                startRoute = root,
+                startRoute = startRoute,
                 modifier = Modifier.padding(it),
                 navGraph = NavGraphs.root,
                 navController = navController,
