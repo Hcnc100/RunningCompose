@@ -120,7 +120,7 @@ class TrackingServices : LifecycleService() {
                         notificationServices.updateAction(false)
                         // ! when pause tracking so add new empty list
                         // * the user can pause this services and this points may not be
-                        //* consecutive
+                        // * consecutive
                         listPoints.add(mutableListOf())
                         PAUSE
                     } else {

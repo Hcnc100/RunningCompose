@@ -45,18 +45,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
+            // * maintain the splash screen until determinate if is auth
             setKeepOnScreenCondition {
                 isLoading
             }
         }
         setContent {
             RunningComposeTheme {
-
                 LaunchedEffect(key1 = Unit) {
-                   configViewModel.isAuth.first { it != null }
+                    configViewModel.isAuth.first { it != null }
                     isLoading = false
                 }
-
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background) {
@@ -75,7 +74,6 @@ fun MainScreen(
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
-
     var isHomeRoute by remember { mutableStateOf(false) }
 
     navController.addOnDestinationChangedListener { _, navDestination: NavDestination, _ ->
@@ -100,7 +98,8 @@ fun MainScreen(
     ) {
 
         val isAuth by configViewModel.isAuth.collectAsState()
-
+        // * this is necessary for change the first screen
+        // * when the user authenticate (complete data)
         if (isAuth != null) {
             val startRoute = if (isAuth as Boolean) NavGraphs.root.startRoute else EditInfoScreenDestination
             DestinationsNavHost(
