@@ -205,7 +205,7 @@ class TrackingServices : LifecycleService() {
 
         fun updateAction(isTracking: Boolean) {
             currentNotification.clearActionsNotification()
-            val textAction = if (isTracking) R.string.text_action_pause else R.string.textActionResumen
+            val textAction = if (isTracking) R.string.text_action_pause else R.string.text_action_resume
             currentNotification.addAction(
                 R.drawable.ic_pause,
                 context.getString(textAction),

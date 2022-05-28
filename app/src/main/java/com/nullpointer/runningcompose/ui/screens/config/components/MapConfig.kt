@@ -7,34 +7,26 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.maps.android.compose.*
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.ui.screens.config.components.share.SelectOptionConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleConfig
-import timber.log.Timber
 
 
 @Composable
 fun MapSettings(
     orientation: Int,
-    configMap: MapConfig?,
+    mapConfig: MapConfig,
     changeWeight: (Int) -> Unit,
     changeStyleMap: (MapStyle) -> Unit,
     changeColorMap: (Color) -> Unit,
@@ -47,39 +39,35 @@ fun MapSettings(
         TitleConfig(text = stringResource(R.string.title_config_map))
         when (orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
-                configMap?.let { mapConfig ->
-                    MapFromConfig(mapConfig = configMap)
-                    SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = changeStyleMap)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    SelectMapWeight(currentWeightMap = mapConfig.weight,
-                        changeWeight = changeWeight)
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Spacer(modifier = Modifier.height(10.dp))
-                    SelectMapColor(
-                        currentColor = mapConfig.color,
-                        showDialogColor = { changeVisibleDialog(true) }
-                    )
-                }
+                MapFromConfig(mapConfig = mapConfig)
+                SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = changeStyleMap)
+                Spacer(modifier = Modifier.height(10.dp))
+                SelectMapWeight(currentWeightMap = mapConfig.weight,
+                    changeWeight = changeWeight)
+                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+                SelectMapColor(
+                    currentColor = mapConfig.color,
+                    showDialogColor = { changeVisibleDialog(true) }
+                )
             }
             else -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    configMap?.let { mapConfig ->
-                        MapFromConfig(mapConfig = configMap, modifier = Modifier.weight(.5f))
-                        Column(
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.weight(.5f),
-                        ) {
-                            SelectMapStyle(currentStyle = mapConfig.style,
-                                changeStyleMap = changeStyleMap)
-                            Spacer(modifier = Modifier.height(10.dp))
-                            SelectMapWeight(currentWeightMap = mapConfig.weight,
-                                changeWeight = changeWeight)
-                            Spacer(modifier = Modifier.height(10.dp))
-                            SelectMapColor(
-                                currentColor = mapConfig.color,
-                                showDialogColor = { changeVisibleDialog(true) }
-                            )
-                        }
+                    MapFromConfig(mapConfig = mapConfig, modifier = Modifier.weight(.5f))
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.weight(.5f),
+                    ) {
+                        SelectMapStyle(currentStyle = mapConfig.style,
+                            changeStyleMap = changeStyleMap)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        SelectMapWeight(currentWeightMap = mapConfig.weight,
+                            changeWeight = changeWeight)
+                        Spacer(modifier = Modifier.height(10.dp))
+                        SelectMapColor(
+                            currentColor = mapConfig.color,
+                            showDialogColor = { changeVisibleDialog(true) }
+                        )
                     }
                 }
             }
@@ -131,7 +119,7 @@ fun SelectMapColor(
         .height(50.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
-        Text(text = "Color de la linea",
+        Text(text = stringResource(R.string.title_color_line),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .weight(.5f)

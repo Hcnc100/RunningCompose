@@ -47,16 +47,6 @@ fun ItemRun(
         Row(modifier = Modifier
             .padding(10.dp)
             .height(150.dp)) {
-
-            // ! this is not perfomance
-//            MapRunItem(
-//                itemRun = itemRun,
-//                modifier = Modifier
-//                    .weight(.5f)
-//                    .fillMaxHeight()
-//                    .clip(RoundedCornerShape(10.dp)
-//                    )
-//            )
             // * waiting to take snapshot for maps compose
             Box(modifier = Modifier
                 .weight(.5f)
@@ -65,12 +55,14 @@ fun ItemRun(
                 .background(MaterialTheme.colors.primary)) {
 
                 AsyncImage(
-                    model =  R.drawable.ic_run,
+                    model = R.drawable.ic_run,
                     placeholder = painterResource(id = R.drawable.ic_run),
                     error = painterResource(id = R.drawable.ic_error_img),
                     contentDescription = stringResource(R.string.description_current_run_img),
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize().padding(20.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp)
                 )
             }
 

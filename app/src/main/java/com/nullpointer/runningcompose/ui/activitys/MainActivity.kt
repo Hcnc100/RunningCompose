@@ -25,7 +25,6 @@ import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavigation
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
-import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestination
 import com.nullpointer.runningcompose.ui.screens.navDestination
 import com.nullpointer.runningcompose.ui.share.SelectToolbar
 import com.nullpointer.runningcompose.ui.theme.RunningComposeTheme

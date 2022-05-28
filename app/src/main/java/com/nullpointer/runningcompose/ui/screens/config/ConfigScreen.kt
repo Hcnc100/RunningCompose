@@ -23,29 +23,35 @@ fun ConfigScreen(
     configViewModel: ConfigViewModel,
     navigator: DestinationsNavigator,
 ) {
-    val configMap by configViewModel.mapConfig.collectAsState()
-    val configUser by configViewModel.userConfig.collectAsState()
+    val mapConfig by configViewModel.mapConfig.collectAsState()
+    val userConfig by configViewModel.userConfig.collectAsState()
     val metricsMap by configViewModel.metrics.collectAsState()
     val orientation = LocalConfiguration.current.orientation
 
     Scaffold {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            InfoUserConfig(
-                orientation = orientation,
-                configUserConfig = configUser,
-                actionGoEditInfo = {
-                    navigator.navigate(EditInfoScreenDestination)
-                })
-            MapSettings(
-                orientation = orientation,
-                configMap = configMap,
-                changeWeight = { configViewModel.changeMapConfig(weight = it) },
-                changeStyleMap = { configViewModel.changeMapConfig(style = it) },
-                changeColorMap = { configViewModel.changeMapConfig(color = it) }
-            )
-            MetricConfig(
-                metrics = metricsMap,
-                changeMetric = { configViewModel.changeMetrics(it) })
+            userConfig?.let { it1 ->
+                InfoUserConfig(
+                    orientation = orientation,
+                    userConfig = it1,
+                    actionGoEditInfo = {
+                        navigator.navigate(EditInfoScreenDestination)
+                    })
+            }
+            mapConfig?.let { mapConfig ->
+                MapSettings(
+                    orientation = orientation,
+                    mapConfig = mapConfig,
+                    changeWeight = { configViewModel.changeMapConfig(weight = it) },
+                    changeStyleMap = { configViewModel.changeMapConfig(style = it) },
+                    changeColorMap = { configViewModel.changeMapConfig(color = it) }
+                )
+            }
+            metricsMap?.let { metricType ->
+                MetricConfig(
+                    metrics = metricType,
+                    changeMetric = { configViewModel.changeMetrics(it) })
+            }
         }
     }
 }

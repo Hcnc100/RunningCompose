@@ -86,15 +86,30 @@
     <string name="title_others_config">Otras configuraciones</string>
     <string name="title_metrics">metricas</string>
 
+
+    <!-- general actions -->
+    <string name="action_accept">Aceptar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="text_action_pause">Pausar</string>
+    <string name="text_action_resume">Raanudar</string>
+
+    <!-- dialog select color -->
+    <string name="title_select_color">Selecciona un color</string>
+
     <!-- edit info screen -->
     <string name="error_empty_name">El nombre no puede estar vacio</string>
-    <string name="error_max_lenght_name">El nombre no puede ser muy largo</string>
+    <string name="error_max_length_name">El nombre no puede ser muy largo</string>
     <string name="error_range_weight">Debe dar un peso correcto</string>
     <string name="update_data_success">Los datos fueron actualizados</string>
     <string name="error_validate_data">verifique sus datos</string>
-    <string name="text_action_pause">Pause</string>
-    <string name="textActionResumen">Resumen</string>
     <string name="description_cancel_run">Cancela el recorrido actual</string>
-    <string name="message_permission_tooltip"><![CDATA[Si no aparece el dialogo de ajustes, puedes pulsar en \" &#9881 \" para abrir los ajustes y modificar los permisos desder ahi]]></string>
+    <string name="message_permission_tooltip">Si no aparece el dialogo de ajustes, puedes pulsar en \" &amp;#9881 \" para abrir los ajustes y modificar los permisos desder ahi</string>
+    <string name="title_color_line">Color de la linea</string>
+    <string name="title_edit_data">Edita tus datos</string>
+    <string name="title_complete_data">Completa tus datos</string>
+    <string name="description_icon_save_info">Boton para guardar los datos</string>
+    <string name="label_name_info_user">Nombre</string>
+    <string name="label_weight_info_user">Peso</string>
+
 
 </resources>

@@ -62,7 +62,7 @@ class EditInfoViewModel @Inject constructor(
         nameUser = newName
         errorNamed = when {
             nameUser.isEmpty() -> R.string.error_empty_name
-            nameUser.length > MAX_LENGTH_NAME -> R.string.error_max_lenght_name
+            nameUser.length > MAX_LENGTH_NAME -> R.string.error_max_length_name
             else -> -1
         }
     }

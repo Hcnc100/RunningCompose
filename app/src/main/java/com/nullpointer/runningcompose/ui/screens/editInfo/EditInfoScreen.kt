@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavOptionsBuilder
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestination
@@ -49,9 +48,10 @@ fun EditInfoScreen(
         topBar = {
             if (editInfoViewModel.isDataComplete)
                 ToolbarBack(
-                    title = "Edita tus datos",
+                    title = stringResource(R.string.title_edit_data),
                     actionBack = navigator::popBackStack)
-            else ToolbarBack(title = "Completa tus datos")
+            else
+                ToolbarBack(title = stringResource(R.string.title_complete_data))
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -63,13 +63,13 @@ fun EditInfoScreen(
                         )
                         if (editInfoViewModel.isDataComplete) {
                             navigator.popBackStack()
-                        } else {
-                            navigator.navigate(RunsScreensDestination, false)
                         }
                     }
                 }
             ) {
-                Icon(painterResource(id = R.drawable.ic_save), "")
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_save),
+                    contentDescription = stringResource(R.string.description_icon_save_info))
             }
         }
     ) {
@@ -87,7 +87,7 @@ private fun EditInfoName(
     editInfoViewModel: EditInfoViewModel,
 ) {
     EditTextInfo(value = editInfoViewModel.nameUser,
-        label = "Nombre",
+        label = stringResource(R.string.label_name_info_user),
         errorRes = editInfoViewModel.errorNamed,
         lengthValue = editInfoViewModel.nameLength,
         onChange = editInfoViewModel::changeNameUser,
@@ -100,9 +100,8 @@ private fun EditInfoWeight(
     editInfoViewModel: EditInfoViewModel,
 ) {
     EditTextInfo(value = editInfoViewModel.weightUser,
-        label = "Peso",
+        label = stringResource(R.string.label_weight_info_user),
         errorRes = editInfoViewModel.errorWeight,
-        lengthValue = "",
         onChange = editInfoViewModel::changeWeight,
         isOnlyNumber = true
     )
@@ -111,10 +110,10 @@ private fun EditInfoWeight(
 @Composable
 private fun EditTextInfo(
     value: String,
-    label: String,
+    label: String="",
     @StringRes
     errorRes: Int,
-    lengthValue: String,
+    lengthValue: String="",
     isOnlyNumber: Boolean,
     onChange: (String) -> Unit,
 ) {

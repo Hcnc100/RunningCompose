@@ -20,10 +20,9 @@ import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleCo
 @Composable
 fun InfoUserConfig(
     orientation: Int,
-    configUserConfig: UserConfig?,
+    userConfig: UserConfig,
     actionGoEditInfo: () -> Unit,
 ) {
-
     Column {
         TitleConfig(text = stringResource(R.string.title_info_personal))
         when (orientation) {
@@ -31,23 +30,23 @@ fun InfoUserConfig(
                 Column {
                     TextShowOnlyInfo(
                         textLabel = stringResource(R.string.label_name_user),
-                        textShow = configUserConfig?.name.toString())
+                        textShow = userConfig.name)
                     Spacer(modifier = Modifier.height(10.dp))
                     TextShowOnlyInfo(
                         textLabel = stringResource(R.string.label_weight_user),
-                        textShow = configUserConfig?.weight.toString())
+                        textShow = userConfig.weight.toString())
                 }
             }
             else -> {
                 Row {
                     TextShowOnlyInfo(
                         textLabel = stringResource(R.string.label_name_user),
-                        textShow = "Pepe",
+                        textShow = userConfig.name,
                         modifier = Modifier.weight(.5f))
                     Spacer(modifier = Modifier.height(10.dp))
                     TextShowOnlyInfo(
                         textLabel = stringResource(R.string.label_weight_user),
-                        textShow = "80 Kg",
+                        textShow = userConfig.weight.toString(),
                         modifier = Modifier.weight(.5f))
                 }
             }
