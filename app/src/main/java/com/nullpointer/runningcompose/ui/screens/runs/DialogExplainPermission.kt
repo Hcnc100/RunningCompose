@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat.startActivity
@@ -36,18 +37,18 @@ fun DialogExplainPermission(
                 actionAccept()
                 actionHidden()
             }) {
-                Text("Aceptar")
+                Text(stringResource(id = R.string.action_accept))
             }
         },
         dismissButton = {
             OutlinedButton(onClick = actionHidden) {
-                Text("Cancelar")
+                Text(stringResource(id = R.string.action_cancel))
             }
         },
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                Text("Necesita conceder el permiso de localizacion ",
+                Text(stringResource(R.string.need_permissions_tracking),
                     style = MaterialTheme.typography.h6)
 
                 Row(modifier = Modifier.fillMaxWidth(),
@@ -59,12 +60,12 @@ fun DialogExplainPermission(
 
                     }) {
                         Icon(painter = painterResource(id = R.drawable.ic_settings),
-                            contentDescription = "")
+                            contentDescription = stringResource(R.string.description_icon_open_settings))
                     }
                     Box {
                         IconButton(onClick = { expanded = !expanded }) {
                             Icon(painter = painterResource(id = R.drawable.ic_help),
-                                contentDescription = "")
+                                contentDescription = stringResource(R.string.description_permissions_help))
                         }
                         ToolTipInfo(
                             isExpanded = expanded,

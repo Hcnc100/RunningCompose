@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
-import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestination
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
@@ -110,7 +109,7 @@ private fun EditInfoWeight(
 @Composable
 private fun EditTextInfo(
     value: String,
-    label: String="",
+    label: String,
     @StringRes
     errorRes: Int,
     lengthValue: String="",

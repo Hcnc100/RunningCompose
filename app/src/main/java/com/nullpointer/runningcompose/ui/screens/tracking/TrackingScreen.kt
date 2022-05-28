@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -23,7 +22,7 @@ import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.LocationViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonPauseTracking
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonStopTracking
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonPlayTracking
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogCancel
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.MapComponent
@@ -147,7 +146,7 @@ fun MapAndTimeComponent(
                     ButtonPlayTracking()
                     if (TrackingServices.stateServices != WAITING) {
                         Spacer(modifier = Modifier.height(30.dp))
-                        ButtonPauseTracking(actionSave = actionSaveRun)
+                        ButtonStopTracking(actionSave = actionSaveRun)
                     }
                 }
             }
@@ -177,7 +176,7 @@ fun MapAndTimeComponent(
                         ButtonPlayTracking()
                         if (TrackingServices.stateServices != WAITING) {
                             Spacer(modifier = Modifier.width(30.dp))
-                            ButtonPauseTracking(actionSave = actionSaveRun)
+                            ButtonStopTracking(actionSave = actionSaveRun)
                         }
                     }
                 }

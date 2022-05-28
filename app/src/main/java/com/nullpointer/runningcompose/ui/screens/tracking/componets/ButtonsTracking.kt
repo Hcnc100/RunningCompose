@@ -5,6 +5,7 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.services.TrackingServices
@@ -17,29 +18,29 @@ fun ButtonPlayTracking() {
             TrackingServices.startServices(context)
         }) {
             Icon(painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = "")
+                contentDescription = stringResource(R.string.description_button_play_tracking))
         }
         TrackingState.TRACKING -> FloatingActionButton(onClick = {
             TrackingServices.pauseOrResumeServices(context)
         }) {
             Icon(painter = painterResource(id = R.drawable.ic_pause),
-                contentDescription = "")
+                contentDescription = stringResource(R.string.description_button_resume_tracking))
         }
         TrackingState.PAUSE -> FloatingActionButton(onClick = {
             TrackingServices.pauseOrResumeServices(context)
         }) {
             Icon(painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = "")
+                contentDescription = stringResource(R.string.description_button_resume))
         }
     }
 }
 
 @Composable
-fun ButtonPauseTracking(
+fun ButtonStopTracking(
     actionSave:()->Unit
 ) {
     FloatingActionButton(onClick =  actionSave) {
         Icon(painter = painterResource(id = R.drawable.ic_stop),
-            contentDescription = "")
+            contentDescription = stringResource(R.string.description_button_stop_and_save_tracking))
     }
 }

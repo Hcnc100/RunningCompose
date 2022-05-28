@@ -27,7 +27,7 @@
     <string name="calories_burned_type_name">Calorias Quemadas</string>
 
     <!-- toolbar -->
-    <string name="description_clear_selection">Deselect items</string>
+    <string name="description_clear_selection">Limpia la seleccion actual</string>
     <string name="description_arrow_back">Regresa a la pantalla anterior</string>
 
     <!-- error run -->
@@ -102,7 +102,6 @@
     <string name="error_range_weight">Debe dar un peso correcto</string>
     <string name="update_data_success">Los datos fueron actualizados</string>
     <string name="error_validate_data">verifique sus datos</string>
-    <string name="description_cancel_run">Cancela el recorrido actual</string>
     <string name="message_permission_tooltip">Si no aparece el dialogo de ajustes, puedes pulsar en \" &amp;#9881 \" para abrir los ajustes y modificar los permisos desder ahi</string>
     <string name="title_color_line">Color de la linea</string>
     <string name="title_edit_data">Edita tus datos</string>
@@ -112,4 +111,21 @@
     <string name="label_weight_info_user">Peso</string>
 
 
+    <!-- dialog permissions tracking -->
+    <string name="need_permissions_tracking">Necesita conceder el permiso de localizacion</string>
+    <string name="description_icon_open_settings">Botton para abrir las configuraciones de la app</string>
+    <string name="description_permissions_help">Botton para resaltaar un cuadro de ayuda, relacionado con los permisos</string>
+
+
+    <!-- details screen-->
+    <string name="description_location_center">Botton para centrar la camara  el recorrido</string>
+
+    <!-- tracking screen -->
+    <string name="description_button_play_tracking">Boton para iniciar el seguimoiento del recorrdido</string>
+    <string name="description_button_resume_tracking">BOtton para pausar el seguimiento</string>
+    <string name="description_button_resume">Bottopn para reanudar el seguimiento pausado</string>
+    <string name="description_button_stop_and_save_tracking">Botton para detener el seguimeitno y guardar los datos actuales</string>
+    <string name="title_dialog_cancel_tracking">¿Deseas cancelar el recorrido?</string>
+    <string name="message_info_cancel_tracking">El recorrido actual y sus datos seran descartados</string>
+    <string name="description_cancel_run">Cancela el recorrido actual y borra los datos</string>
 </resources>

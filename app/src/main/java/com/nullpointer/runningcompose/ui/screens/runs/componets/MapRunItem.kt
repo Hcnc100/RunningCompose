@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLngBounds
@@ -86,12 +87,13 @@ fun MapRunItem(
                 FloatingActionButton(onClick = {
                     camera.move(CameraUpdateFactory.newLatLngBounds(bounds,
                         10))
-                }, modifier = Modifier
-                    .padding(10.dp)
-                    .size(40.dp)
-                    .align(Alignment.BottomEnd)) {
+                },
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .size(40.dp)
+                        .align(Alignment.BottomEnd)) {
                     Icon(painter = painterResource(id = R.drawable.ic_location),
-                        contentDescription = "")
+                        contentDescription = stringResource(R.string.description_location_center))
                 }
         }
 

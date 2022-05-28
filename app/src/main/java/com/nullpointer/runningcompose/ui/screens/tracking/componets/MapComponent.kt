@@ -29,9 +29,6 @@ fun MapComponent(
         cameraPositionState = cameraPositionState,
         properties = properties,
         uiSettings = mapUiSettings,
-//        googleMapOptionsFactory = {
-//            GoogleMapOptions().liteMode(true)
-//        }
     ) {
         if (listPositions.isNotEmpty()) {
             listPositions.forEach { list ->
