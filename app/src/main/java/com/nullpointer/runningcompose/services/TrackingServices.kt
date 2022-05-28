@@ -51,7 +51,7 @@ class TrackingServices : LifecycleService() {
         var stateServices by mutableStateOf(WAITING)
             private set
 
-        private val listPoints:MutableList<MutableList<LatLng>> = mutableListOf(mutableListOf())
+        private val listPoints: MutableList<MutableList<LatLng>> = mutableListOf(mutableListOf())
         val showListPoints: List<List<LatLng>> = listPoints
 
         private val counterPoints = MutableStateFlow(0)
@@ -79,6 +79,8 @@ class TrackingServices : LifecycleService() {
 
     private val timerRun = Timer()
 
+    // * this no init immediately for error
+    // * waiting init this services
     private val notificationServices by lazy {
         NotificationServices()
     }
@@ -88,27 +90,27 @@ class TrackingServices : LifecycleService() {
         locationRepository
             .lastLocation
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+            // ! only send location when the tracking is running
             .filter { stateServices == TRACKING }
+            // ! this var notify new location
+            // ? no send the listPoints
             .onEach {
                 counterPoints.value = counterPoints.value + 1
                 listPoints.last().add(it)
-                Timber.d("LOcation send to tackin services ${listPoints}")
             }
+            // ! when finish the services, reset static values
             .onCompletion {
                 timerRun.resetValues()
                 listPoints.clear()
                 listPoints.add(mutableListOf())
                 timeInMillis.value = 0
-                Timber.d("LOaction cancelled")
-            }
-            .launchIn(lifecycleScope)
+            }.launchIn(lifecycleScope)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.action?.let {
             when (it) {
                 START_COMMAND -> {
-                    Timber.d("Services init")
                     stateServices = TRACKING
                     notificationServices.startRunServices()
                     timerRun.startTimer()
@@ -116,6 +118,9 @@ class TrackingServices : LifecycleService() {
                 PAUSE_OR_RESUME_COMMAND -> {
                     stateServices = if (stateServices == TRACKING) {
                         notificationServices.updateAction(false)
+                        // ! when pause tracking so add new empty list
+                        // * the user can pause this services and this points may not be
+                        //* consecutive
                         listPoints.add(mutableListOf())
                         PAUSE
                     } else {
@@ -126,7 +131,7 @@ class TrackingServices : LifecycleService() {
                     }
                 }
                 STOP_COMMAND -> {
-                    Timber.d("Finish services")
+                    // * reset state services to waiting
                     stateServices = WAITING
                     stopForeground(true)
                     stopSelf()
@@ -139,15 +144,10 @@ class TrackingServices : LifecycleService() {
 
     private inner class NotificationServices {
 
-        private val notifyManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        private val notifyManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         private val context get() = this@TrackingServices
-        private val currentNotification by lazy {
-            createBaseNotification()
-        }
-        private val pendingIntentAction by lazy {
-            createPendingIntentAction()
-        }
+        private val currentNotification by lazy { createBaseNotification() }
+        private val pendingIntentAction by lazy { createPendingIntentAction() }
 
         init {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -205,8 +205,7 @@ class TrackingServices : LifecycleService() {
 
         fun updateAction(isTracking: Boolean) {
             currentNotification.clearActionsNotification()
-            val textAction =
-                if (isTracking) R.string.text_action_pause else R.string.textActionResumen
+            val textAction = if (isTracking) R.string.text_action_pause else R.string.textActionResumen
             currentNotification.addAction(
                 R.drawable.ic_pause,
                 context.getString(textAction),
@@ -222,7 +221,9 @@ class TrackingServices : LifecycleService() {
         }
 
         fun updateTimeRunNotification(timeRun: Long) {
+            // * update time from notification with the seconds
             currentNotification.setContentText(
+                // ? the time run passed as parameter is in seconds so, convert to milliseconds
                 (timeRun * 1000L).toFullFormatTime(false)
             )
             notifyManager.notify(NOTIFICATION_ID, currentNotification.build())

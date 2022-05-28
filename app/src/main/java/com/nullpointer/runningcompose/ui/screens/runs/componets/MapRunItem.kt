@@ -16,14 +16,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.compose.*
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
-import com.nullpointer.runningcompose.models.config.MapConfig
 
 @Composable
 fun MapRunItem(
@@ -46,7 +44,7 @@ fun MapRunItem(
         MapProperties(
             mapStyleOptions = MapStyleOptions.loadRawResourceStyle(
                 context,
-                itemRun.configMap.style.styleRawRes
+                itemRun.mapConfig.style.styleRawRes
             ),
         )
     }
@@ -80,8 +78,8 @@ fun MapRunItem(
                 listPointsDecode.forEach {
                     Polyline(
                         points = it,
-                        color = itemRun.configMap.color,
-                        width = itemRun.configMap.weight.toFloat())
+                        color = itemRun.mapConfig.color,
+                        width = itemRun.mapConfig.weight.toFloat())
                 }
             }
             if (showCenterButton)

@@ -72,7 +72,7 @@ fun updateValuesGraph(
 
     // * create all entry
     val listAllMeasure = list.mapIndexed { index, simpleMeasure ->
-        BarEntry(index.toFloat(), simpleMeasure.avgSpeed)
+        BarEntry(index.toFloat(), simpleMeasure.avgSpeedInMeters)
     }
     // * create dataset
     val dataSet = BarDataSet(listAllMeasure, "Seguimientos").apply {

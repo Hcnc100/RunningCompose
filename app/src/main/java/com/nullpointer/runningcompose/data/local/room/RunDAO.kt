@@ -16,10 +16,10 @@ interface RunDAO {
     @Query("SELECT * FROM run_table ORDER BY caloriesBurned DESC")
     fun getListRunsByCaloriesBurned(): Flow<List<Run>>
 
-    @Query("SELECT * FROM run_table ORDER BY distance DESC")
+    @Query("SELECT * FROM run_table ORDER BY distanceInMeters DESC")
     fun getListRunsByDistance(): Flow<List<Run>>
 
-    @Query("SELECT * FROM run_table ORDER BY avgSpeed DESC")
+    @Query("SELECT * FROM run_table ORDER BY avgSpeedInMeters DESC")
     fun getListRunsByAvgSpeed(): Flow<List<Run>>
 
     @Query("SELECT * FROM run_table ORDER BY timeRunInMillis DESC")
@@ -40,9 +40,9 @@ interface RunDAO {
     @Query("SELECT TOTAL(caloriesBurned) FROM run_table")
     fun getTotalCaloriesBurned(): Flow<Float>
 
-    @Query("SELECT TOTAL(distance) FROM run_table")
+    @Query("SELECT TOTAL(distanceInMeters) FROM run_table")
     fun getTotalDistance(): Flow<Float>
 
-    @Query("SELECT AVG(avgSpeed) FROM run_table")
+    @Query("SELECT AVG(avgSpeedInMeters) FROM run_table")
     fun getTotalAVGSpeed(): Flow<Float?>
 }

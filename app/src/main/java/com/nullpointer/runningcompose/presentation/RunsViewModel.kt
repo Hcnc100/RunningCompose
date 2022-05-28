@@ -9,14 +9,12 @@ import com.nullpointer.runningcompose.core.utils.Utility
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import com.nullpointer.runningcompose.models.Run
-import com.nullpointer.runningcompose.models.config.MapConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 
@@ -59,26 +57,30 @@ class RunsViewModel @Inject constructor(
         timeRun: Long,
         listPoints: List<List<LatLng>>,
     ) = viewModelScope.launch(Dispatchers.IO) {
-        val weightUser = configRepository.userConfig.first()?.weight ?: 80F
+        // * need weight user for calculate calories burned
+
+        // ? Se estima que el costo energético de cada kilómetro que corres,
+        // ? es de 1 kcal (1000 calorías) por cada kilogramo de peso corporal del corredo
+
+        val weightUser = configRepository.userConfig.first()!!.weight
         val mapConfig = configRepository.mapConfig.first()
+
         var distanceInMeters = 0f
-        val listPolylineEncode = listPoints.map {
+        val listPolylineEncode = listPoints.onEach {
             distanceInMeters += Utility.calculatePolylineLength(it)
+        }.map {
             PolyUtil.encode(it)
         }
         val avgSpeedInMS = distanceInMeters / (timeRun / 1000f)
 
-        //Se estima que el costo energético de cada kilómetro que corres,
-        // es de 1 kcal (1000 calorías) por cada kilogramo de peso corporal del corredo
-
         val caloriesBurned = distanceInMeters * (weightUser / 1000f)
         val run = Run(
-            avgSpeed = avgSpeedInMS,
-            distance = distanceInMeters,
+            avgSpeedInMeters = avgSpeedInMS,
+            distanceInMeters = distanceInMeters,
             timeRunInMillis = timeRun,
             caloriesBurned = caloriesBurned,
             listPolyLineEncode = listPolylineEncode,
-            configMap = mapConfig
+            mapConfig = mapConfig
         )
         runsRepository.insertNewRun(run)
     }

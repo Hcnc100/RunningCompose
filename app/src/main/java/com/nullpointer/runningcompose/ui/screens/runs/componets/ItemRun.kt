@@ -6,7 +6,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -21,13 +20,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.google.android.gms.common.util.MapUtils
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.maps.android.PolyUtil
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapUiSettings
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
 import com.nullpointer.runningcompose.models.Run
@@ -118,8 +110,8 @@ fun InfoRun(
                 isMiniTitle)
             TextMiniTitle(text = itemRun.timeRunInMillis.toFullFormatTime(dataComplete),
                 isMiniTitle)
-            TextMiniTitle(text = itemRun.distance.toMeters(true), isMiniTitle)
-            TextMiniTitle(text = itemRun.avgSpeed.toAVGSpeed(true), isMiniTitle)
+            TextMiniTitle(text = itemRun.distanceInMeters.toMeters(true), isMiniTitle)
+            TextMiniTitle(text = itemRun.avgSpeedInMeters.toAVGSpeed(true), isMiniTitle)
             TextMiniTitle(text = itemRun.caloriesBurned.toCaloriesBurned(true), isMiniTitle)
         }
     }
