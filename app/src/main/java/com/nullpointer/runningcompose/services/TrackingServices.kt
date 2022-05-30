@@ -174,7 +174,7 @@ class TrackingServices : LifecycleService() {
                 context,
                 1,
                 actionIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
         }
 
@@ -198,7 +198,7 @@ class TrackingServices : LifecycleService() {
             // * create pending intent compose
             val deepLinkPendingIntent = TaskStackBuilder.create(context).run {
                 addNextIntentWithParentStack(deepLinkIntent)
-                getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE)
             }
             return deepLinkPendingIntent
         }

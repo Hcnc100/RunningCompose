@@ -1,6 +1,5 @@
 package com.nullpointer.runningcompose.ui.screens.runs
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Scaffold
@@ -11,9 +10,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
@@ -31,6 +30,7 @@ import kotlinx.coroutines.flow.first
 fun RunsScreens(
     runsViewModel: RunsViewModel,
     selectViewModel: SelectViewModel,
+    configViewModel: ConfigViewModel,
     navigator: DestinationsNavigator,
 ) {
     val locationPermissionState = rememberPermissionState(
@@ -40,10 +40,12 @@ fun RunsScreens(
     val scaffoldState = rememberScaffoldState()
     val stateList = rememberLazyGridState()
     val listRuns by runsViewModel.listRuns.collectAsState()
+    val sortConfig by configViewModel.sortConfig.collectAsState()
     val context = LocalContext.current
     val (showDialogPermission, changeVisibilityDialog) = rememberSaveable {
         mutableStateOf(false)
     }
+    val metricType by configViewModel.metrics.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         messageRuns.filter { it != -1 }.collect {
@@ -86,9 +88,16 @@ fun RunsScreens(
         ListRuns(
             listState = stateList,
             listRuns = listRuns,
-            actionClick = { navigator.navigate(DetailsRunDestination.invoke(it)) },
+            actionClick = { navigator.navigate(DetailsRunDestination.invoke(it, metricType)) },
             actionSelect = selectViewModel::changeSelect,
-            isSelectEnable = selectViewModel.isSelectEnable)
+            isSelectEnable = selectViewModel.isSelectEnable,
+            metricType = metricType,
+            sortConfig = sortConfig,
+            changeSort = { sortConfig, isReverse ->
+                configViewModel.changeSortConfig(sortConfig,isReverse)
+                selectViewModel.clearSelect()
+            },
+        )
     }
 
     if (showDialogPermission)

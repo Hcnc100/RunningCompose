@@ -23,6 +23,7 @@ import coil.compose.AsyncImage
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.types.MetricType
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -32,17 +33,19 @@ fun ItemRun(
     isSelectEnable: Boolean,
     actionClick: (Run) -> Unit,
     actionSelect: (Run) -> Unit,
+    metricType: MetricType,
+    modifier: Modifier=Modifier
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(3.dp)
             .combinedClickable(
                 onClick = { if (isSelectEnable) actionSelect(itemRun) else actionClick(itemRun) },
                 onLongClick = { actionSelect(itemRun) }
             ),
         shape = RoundedCornerShape(10.dp),
-        backgroundColor = if (itemRun.isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        backgroundColor = if (itemRun.isSelected) MaterialTheme.colors.secondary else MaterialTheme.colors.surface
     ) {
         Row(modifier = Modifier
             .padding(10.dp)
@@ -71,7 +74,9 @@ fun ItemRun(
             InfoRun(itemRun = itemRun,
                 modifier = Modifier.weight(.5f),
                 dataComplete = false,
-                isMiniTitle = true)
+                isMiniTitle = true,
+                metricType = metricType
+            )
         }
     }
 }
@@ -83,6 +88,7 @@ fun InfoRun(
     modifier: Modifier = Modifier,
     dataComplete: Boolean,
     isMiniTitle: Boolean,
+    metricType: MetricType,
 ) {
     Row(modifier = modifier
         .padding(vertical = 10.dp)
@@ -98,13 +104,11 @@ fun InfoRun(
         }
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
             TextMiniTitle(text = itemRun.timestamp.toDateFormat(), isMiniTitle)
-            TextMiniTitle(text = itemRun.timestamp.toDateOnlyTime(LocalContext.current),
-                isMiniTitle)
-            TextMiniTitle(text = itemRun.timeRunInMillis.toFullFormatTime(dataComplete),
-                isMiniTitle)
-            TextMiniTitle(text = itemRun.distanceInMeters.toMeters(true), isMiniTitle)
-            TextMiniTitle(text = itemRun.avgSpeedInMeters.toAVGSpeed(true), isMiniTitle)
-            TextMiniTitle(text = itemRun.caloriesBurned.toCaloriesBurned(true), isMiniTitle)
+            TextMiniTitle(text = itemRun.timestamp.toDateOnlyTime(LocalContext.current), isMiniTitle)
+            TextMiniTitle(text = itemRun.timeRunInMillis.toFullFormatTime(dataComplete), isMiniTitle)
+            TextMiniTitle(text = itemRun.distanceInMeters.toMeters(metricType), isMiniTitle)
+            TextMiniTitle(text = itemRun.avgSpeedInMeters.toAVGSpeed(metricType), isMiniTitle)
+            TextMiniTitle(text = itemRun.caloriesBurned.toCaloriesBurned(metricType), isMiniTitle)
         }
     }
 }

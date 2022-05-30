@@ -38,6 +38,9 @@
     <string name="description_deleter_select_runs">Elimina los recorridos seleccinados</string>
     <string name="description_current_run_img">Imagen del recorrido actual</string>
     <string name="message_empty_runs">No hay recorrdios guardados</string>
+    <string name="text_order_by">Ordenar por:</string>
+    <string name="description_drop_sort_menu">Despielga el menu de ordenamiento</string>
+    <string name="description_order_sort_asc_or_desc">Icono para cambiar el ordenam,iento de acendene a desendente</string>
 
     <!-- details screen-->
     <string name="title_details">Detalles</string>
@@ -128,4 +131,7 @@
     <string name="title_dialog_cancel_tracking">¿Deseas cancelar el recorrido?</string>
     <string name="message_info_cancel_tracking">El recorrido actual y sus datos seran descartados</string>
     <string name="description_cancel_run">Cancela el recorrido actual y borra los datos</string>
+    <string name="title_tracking_screen">Seguimiento</string>
+    <string name="title_graph">Seguimientos</string>
+
 </resources>

@@ -3,6 +3,8 @@ package com.nullpointer.runningcompose.core.utils
 import android.content.Context
 import android.text.format.DateFormat
 import androidx.core.app.NotificationCompat
+import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.models.types.MetricType.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -14,7 +16,7 @@ fun Long.toFullFormat(context: Context): String {
     return sdf.format(this)
 }
 
-fun Long.toDateOnlyTime(context: Context):String{
+fun Long.toDateOnlyTime(context: Context): String {
     val base = "hh:mm"
     val newPattern = if (DateFormat.is24HourFormat(context)) base else "$base a"
     val sdf = SimpleDateFormat(newPattern, Locale.getDefault())
@@ -27,17 +29,25 @@ fun Long.toDateFormat(): String {
     return sdf.format(this)
 }
 
-fun Float.toMeters(isInMeters: Boolean, precision: Int = 2): String =
-    if (isInMeters) "%.${precision}f m".format(this)
-    else "%.${precision}f km".format(this / 1000f)
+fun Float.toMeters(metricType: MetricType, precision: Int = 2) =
+    when (metricType) {
+        Meters -> "%.${precision}f m".format(this)
+        Kilo -> "%.${precision}f km".format(this / 1000f)
+    }
 
-fun Float.toAVGSpeed(isInMeters: Boolean, precision: Int = 2): String =
-    if (isInMeters) "%.${precision}f m/s".format(this)
-    else "%.${precision}f km/h".format(this * 3.6)
 
-fun Float.toCaloriesBurned(isInMeters: Boolean, precision: Int = 2): String =
-    if (isInMeters) "%.${precision}f cal".format(this)
-    else "%.${precision}f kcal".format(this / 1000)
+fun Float.toAVGSpeed(metricType: MetricType, precision: Int = 2): String =
+    when (metricType) {
+        Meters -> "%.${precision}f m/s".format(this)
+        Kilo -> "%.${precision}f km/h".format(this * 3.6)
+    }
+
+
+fun Float.toCaloriesBurned(metricType: MetricType, precision: Int = 2): String =
+    when (metricType) {
+        Meters -> "%.${precision}f cal".format(this)
+        Kilo -> "%.${precision}f kcal".format(this / 1000)
+    }
 
 fun Long.toFullFormatTime(includeMillis: Boolean): String {
     var milliseconds = this

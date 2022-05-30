@@ -11,13 +11,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.toAVGSpeed
+import com.nullpointer.runningcompose.core.utils.toCaloriesBurned
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
+import com.nullpointer.runningcompose.core.utils.toMeters
 import com.nullpointer.runningcompose.models.StatisticsRun
+import com.nullpointer.runningcompose.models.types.MetricType
 
 @Composable
 fun StatisticsRuns(
     statisticsRun: StatisticsRun,
     modifier: Modifier = Modifier,
+    metricType: MetricType,
 ) {
     Column(modifier = modifier, verticalArrangement = Arrangement.SpaceEvenly) {
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -25,16 +30,16 @@ fun StatisticsRuns(
                 valueInfo = statisticsRun.timeRun.toFullFormatTime(true),
                 modifier = Modifier.weight(.5f))
             TextInfo(titleInfo = stringResource(R.string.title_total_distance),
-                valueInfo = statisticsRun.distance.toString(),
+                valueInfo = statisticsRun.distance.toMeters(metricType),
                 modifier = Modifier.weight(.5f))
         }
         Spacer(modifier = Modifier.height(20.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             TextInfo(titleInfo = stringResource(R.string.title_total_calories_burned),
-                valueInfo = statisticsRun.caloriesBurned.toString(),
+                valueInfo = statisticsRun.caloriesBurned.toCaloriesBurned(metricType),
                 modifier = Modifier.weight(.5f))
             TextInfo(titleInfo = stringResource(R.string.title_toltal_avg_speed),
-                valueInfo = statisticsRun.AVGSpeed.toString(),
+                valueInfo = statisticsRun.AVGSpeed.toAVGSpeed(metricType),
                 modifier = Modifier.weight(.5f))
         }
     }

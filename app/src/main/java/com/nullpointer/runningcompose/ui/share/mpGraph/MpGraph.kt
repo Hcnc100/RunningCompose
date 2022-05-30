@@ -13,12 +13,14 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.types.MetricType
 
 
 @Composable
 fun MpGraphAndroid(
     list: List<Run>,
     modifier: Modifier = Modifier,
+    metricType: MetricType
 ) {
     val textColor = MaterialTheme.colors.onBackground.toArgb()
     AndroidView(
@@ -28,7 +30,8 @@ fun MpGraphAndroid(
                 context = it.context,
                 barChart = it,
                 list = list,
-                colorText = textColor
+                colorText = textColor,
+                metricType=metricType
             )
         },
         modifier = modifier,
@@ -68,6 +71,7 @@ fun updateValuesGraph(
     barChart: BarChart,
     list: List<Run>,
     colorText: Int,
+    metricType: MetricType
 ) = with(barChart) {
 
     // * create all entry
@@ -75,7 +79,7 @@ fun updateValuesGraph(
         BarEntry(index.toFloat(), simpleMeasure.avgSpeedInMeters)
     }
     // * create dataset
-    val dataSet = BarDataSet(listAllMeasure, "Seguimientos").apply {
+    val dataSet = BarDataSet(listAllMeasure, context.getString(R.string.title_graph)).apply {
         valueTextColor = colorText
         colors = ColorTemplate.MATERIAL_COLORS.toList()
         setDrawValues(false)
@@ -84,6 +88,6 @@ fun updateValuesGraph(
     invalidate()
     highlightValue(null)
     data = BarData(dataSet)
-    marker = CustomMarkerView(list,true, context, R.layout.custom_layout_marker_run)
+    marker = CustomMarkerView(list,metricType, context, R.layout.custom_layout_marker_run)
 
 }

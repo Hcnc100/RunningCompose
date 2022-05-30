@@ -12,12 +12,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.share.mpGraph.MpGraphAndroid
 
 @Composable
 fun GraphRuns(
     list: List<Run>,
     modifier: Modifier = Modifier,
+    metricType: MetricType
 ) {
     Column(modifier = modifier) {
         Text(
@@ -26,6 +28,6 @@ fun GraphRuns(
                 .padding(10.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center)
-        MpGraphAndroid(list = list, modifier = Modifier.fillMaxSize())
+        MpGraphAndroid(list = list, modifier = Modifier.fillMaxSize(), metricType = metricType)
     }
 }

@@ -8,15 +8,17 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.*
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.types.MetricType
 
 
 @SuppressLint("ViewConstructor")
 class CustomMarkerView(
     private val listRuns: List<Run>,
-    private val isInMeters:Boolean,
+    private val metricType: MetricType,
     context: Context,
-    layoutId: Int
+    layoutId: Int,
 ) :
     MarkerView(context, layoutId) {
 
@@ -37,12 +39,13 @@ class CustomMarkerView(
             return
         }
         val currentIndex = e.x.toInt()
-        val measure = listRuns[currentIndex]
-        textDate.text = "2012/12/12"
-//        textAvgSpeed.text=it.avgSpeed
-//        textCalories.text=it.caloriesBurned
-//        textDate.text=it.date
-//        textDistance.text=it.distance
-//        textDuration.text=it.duration
+        with(listRuns[currentIndex]) {
+            textDate.text = timestamp.toDateFormat()
+            textAvgSpeed.text = avgSpeedInMeters.toAVGSpeed(metricType)
+            textCalories.text = caloriesBurned.toCaloriesBurned(metricType)
+            textDistance.text = distanceInMeters.toMeters(metricType)
+            textDuration.text = timeRunInMillis.toFullFormatTime(true)
+        }
+
     }
 }

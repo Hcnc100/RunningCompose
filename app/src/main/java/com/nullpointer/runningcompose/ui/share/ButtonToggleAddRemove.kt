@@ -10,13 +10,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.nullpointer.runningcompose.models.types.TrackingState
+import com.nullpointer.runningcompose.services.TrackingServices
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -37,7 +39,7 @@ fun ButtonToggleAddRemove(
     ) {
         FabAnimation(
             isVisible = !isSelectedEnable,
-            icon = Icons.Default.Add,
+            icon = if (TrackingServices.stateServices == TrackingState.WAITING) Icons.Default.Add else Icons.Default.PlayArrow,
             description = descriptionButtonAdd,
             action = actionAdd,
         )
@@ -58,7 +60,7 @@ fun FabAnimation(
     isVisible: Boolean,
     icon: ImageVector,
     description: String,
-    modifier: Modifier= Modifier,
+    modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.secondary,
     isProgress: Boolean = false,
     action: () -> Unit,
@@ -68,7 +70,9 @@ fun FabAnimation(
         enter = scaleIn() + fadeIn(),
         exit = scaleOut() + fadeOut()
     ) {
-        FloatingActionButton(onClick = { action() }, backgroundColor = backgroundColor, modifier = modifier) {
+        FloatingActionButton(onClick = { action() },
+            backgroundColor = backgroundColor,
+            modifier = modifier) {
             Box(contentAlignment = Alignment.Center) {
                 if (isProgress) CircularProgressIndicator(modifier = Modifier.size(50.dp))
                 Icon(imageVector = icon,

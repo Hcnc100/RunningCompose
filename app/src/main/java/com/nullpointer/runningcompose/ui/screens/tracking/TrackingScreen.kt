@@ -10,11 +10,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.compose.*
+import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.types.TrackingState.*
@@ -55,8 +57,6 @@ fun TrackingScreen(
     LaunchedEffect(key1 = Unit) {
         TrackingServices.showCounterPoint.collect {
             listPoints = TrackingServices.showListPoints
-            Timber.e("actualizacion recibida $it")
-            Timber.d("list points $listPoints")
         }
     }
 
@@ -77,7 +77,7 @@ fun TrackingScreen(
     }
     Scaffold(
         topBar = {
-            ToolbarBackWithAction(title = "Seguimiento",
+            ToolbarBackWithAction(title = stringResource(R.string.title_tracking_screen),
                 actionBack = navigator::popBackStack,
                 actionCancel = if (TrackingServices.stateServices != WAITING) {
                     { changeDialogState(true) }

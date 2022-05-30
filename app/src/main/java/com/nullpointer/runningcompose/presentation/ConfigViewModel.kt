@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
+import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
@@ -46,7 +47,17 @@ class ConfigViewModel @Inject constructor(
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        null
+        MetricType.Meters
+    )
+
+    val sortConfig=configRepo.sortConfig.flowOn(
+        Dispatchers.IO
+    ).catch {
+        Timber.e("Error to load metrics config")
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        SortConfig()
     )
 
     val isAuth= flow {
