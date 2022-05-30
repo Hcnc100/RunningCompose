@@ -39,12 +39,11 @@ fun RunsScreens(
     val messageRuns = runsViewModel.messageRuns
     val scaffoldState = rememberScaffoldState()
     val stateList = rememberLazyGridState()
-    val listRuns by runsViewModel.listRuns.collectAsState()
+    val listRuns by runsViewModel.listRunsOrdered.collectAsState()
     val sortConfig by configViewModel.sortConfig.collectAsState()
     val context = LocalContext.current
-    val (showDialogPermission, changeVisibilityDialog) = rememberSaveable {
-        mutableStateOf(false)
-    }
+    val (showDialogPermission, changeVisibilityDialog) = rememberSaveable { mutableStateOf(false) }
+    val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
     val metricType by configViewModel.metrics.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
@@ -55,10 +54,14 @@ fun RunsScreens(
         }
     }
     LaunchedEffect(key1 = Unit) {
-        runsViewModel.listRuns.first { it != null }.let {
+        runsViewModel.listRunsOrdered.first { it != null }.let {
             if (!it.isNullOrEmpty()) selectViewModel.restoreSelect(it)
         }
     }
+//    LaunchedEffect(key1 = locationPermissionState.status) {
+//        val isFirstRequest = configViewModel.isFirstLocationPermission.first()
+//        isFirstDialogRequest = isFirstRequest
+//    }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -93,19 +96,17 @@ fun RunsScreens(
             isSelectEnable = selectViewModel.isSelectEnable,
             metricType = metricType,
             sortConfig = sortConfig,
-            changeSort = { sortConfig, isReverse ->
-                configViewModel.changeSortConfig(sortConfig,isReverse)
-                selectViewModel.clearSelect()
-            },
+            changeSort = configViewModel::changeSortConfig,
         )
     }
 
     if (showDialogPermission)
         DialogExplainPermission(
+            isFirstRequestPermission = isFirstDialogRequest,
+            changeFirstRequest = configViewModel::changeFirstRequestPermission,
             actionHidden = { changeVisibilityDialog(false) },
-            actionAccept = {
-                locationPermissionState.launchPermissionRequest()
-            })
+            actionAccept = locationPermissionState::launchPermissionRequest,
+        )
 
 
     BackHandler(selectViewModel.isSelectEnable,

@@ -14,9 +14,11 @@ interface ConfigRepository {
     val mapConfig: Flow<MapConfig>
     val sortConfig: Flow<SortConfig>
     val metricsConfig:Flow<MetricType>
+    val isFirstPermissionLocation: Flow<Boolean>
 
     suspend fun changeUserConfig(nameUser: String?, weight: Float?)
     suspend fun changeMapConfig(style: MapStyle?, weight: Int?,color: Color?)
     suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
     suspend fun changeMetricConfig(metricType:MetricType)
+    suspend fun changeIsFirstPermissionLocation()
 }

@@ -31,6 +31,8 @@ class ConfigUserStore(
         private const val KEY_WEIGHT_MAP = "KEY_MAP_WEIGHT"
         private const val KEY_METRICS_TYPE = "KEY_METRICS_TYPE"
         private const val KEY_COLOR_MAP = "KEY_COLOR_MAP"
+
+        private const val KEY_FIRST_LOCATION_PERMISSION = "KEY_FIRST_LOCATION_PERMISSION"
     }
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_PREF_USER)
@@ -45,6 +47,8 @@ class ConfigUserStore(
     private val keyMapWeight = intPreferencesKey(KEY_WEIGHT_MAP)
     private val keyMetricType = stringPreferencesKey(KEY_METRICS_TYPE)
     private val keyMapColor = intPreferencesKey(KEY_COLOR_MAP)
+
+    private val keyFirstLocationPermission = booleanPreferencesKey(KEY_FIRST_LOCATION_PERMISSION)
 
     suspend fun changeSortConf(
         sortType: SortType? = null,
@@ -86,13 +90,13 @@ class ConfigUserStore(
     }
 
     suspend fun changeMetrics(
-        metrics: MetricType
-    ) = context.dataStore.edit { pref->
+        metrics: MetricType,
+    ) = context.dataStore.edit { pref ->
         pref[keyMetricType] = metrics.name
     }
 
-    fun getMetrics()= context.dataStore.data.map { pref->
-          pref[keyMetricType]?.let { MetricType.valueOf(it) } ?: MetricType.Meters
+    fun getMetrics() = context.dataStore.data.map { pref ->
+        pref[keyMetricType]?.let { MetricType.valueOf(it) } ?: MetricType.Meters
     }
 
     fun getMapConfig() = context.dataStore.data.map { pref ->
@@ -101,6 +105,14 @@ class ConfigUserStore(
             weight = pref[keyMapWeight] ?: 5,
             colorValue = pref[keyMapColor] ?: Color.Black.toArgb()
         )
+    }
+
+    fun isFirstPermission() = context.dataStore.data.map { pref ->
+        pref[keyFirstLocationPermission] ?: true
+    }
+
+    suspend fun changePermission() = context.dataStore.edit { pref ->
+        pref[keyFirstLocationPermission] = false
     }
 
 }

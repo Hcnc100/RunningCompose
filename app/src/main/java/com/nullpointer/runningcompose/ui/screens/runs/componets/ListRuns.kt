@@ -56,6 +56,7 @@ fun ListRuns(
                 state = listState
             ) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
+                    if(!isSelectEnable)
                     SelectDropMenu(
                         sortConfig = sortConfig, changeSort = changeSort)
                 }

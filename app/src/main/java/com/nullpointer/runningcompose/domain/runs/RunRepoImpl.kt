@@ -19,10 +19,13 @@ class RunRepoImpl(
 ) : RunRepository {
 
 
-    override val listRuns: Flow<List<Run>> = configLocalDataSource.sortConfig.flatMapLatest {
+    override val listRunsOrdered: Flow<List<Run>> = configLocalDataSource.sortConfig.flatMapLatest {
         runsLocalDataSource.getListForTypeSort(it.sortType)
             .map { list -> if (it.isReverse) list.reversed() else list }
     }
+
+    override val listRunsOrderByDate: Flow<List<Run>> =
+        runsLocalDataSource.getListForTypeSort(SortType.DATE)
 
     override val totalStatisticRuns: Flow<StatisticsRun> =
         runsLocalDataSource.totalStatisticRuns

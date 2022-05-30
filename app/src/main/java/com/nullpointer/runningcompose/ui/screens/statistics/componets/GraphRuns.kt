@@ -1,12 +1,13 @@
 package com.nullpointer.runningcompose.ui.screens.statistics.componets
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,15 +20,45 @@ import com.nullpointer.runningcompose.ui.share.mpGraph.MpGraphAndroid
 fun GraphRuns(
     list: List<Run>,
     modifier: Modifier = Modifier,
-    metricType: MetricType
+    metricType: MetricType,
 ) {
     Column(modifier = modifier) {
         Text(
             stringResource(R.string.title_graph_statisctis),
             modifier = Modifier
-                .padding(10.dp)
+                .padding(5.dp)
                 .fillMaxWidth(),
             textAlign = TextAlign.Center)
-        MpGraphAndroid(list = list, modifier = Modifier.fillMaxSize(), metricType = metricType)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                modifier = Modifier
+                    .vertical()
+                    .rotate(-90f)
+                    .padding(1.dp),
+                text = stringResource(R.string.title_distance_run_graph),
+                style = MaterialTheme.typography.caption
+            )
+            MpGraphAndroid(list = list,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(.9f),
+                metricType = metricType)
+        }
+        Text(text = stringResource(R.string.title_runs_order_date_graph),
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.align(Alignment.CenterHorizontally))
+
     }
 }
+
+
+fun Modifier.vertical() =
+    layout { measurable, constraints ->
+        val placeable = measurable.measure(constraints)
+        layout(placeable.height, placeable.width) {
+            placeable.place(
+                x = -(placeable.width / 2 - placeable.height / 2),
+                y = -(placeable.height / 2 - placeable.width / 2)
+            )
+        }
+    }

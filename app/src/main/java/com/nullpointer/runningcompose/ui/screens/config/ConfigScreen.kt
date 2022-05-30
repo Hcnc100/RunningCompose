@@ -38,20 +38,16 @@ fun ConfigScreen(
                         navigator.navigate(EditInfoScreenDestination)
                     })
             }
-            mapConfig?.let { mapConfig ->
-                MapSettings(
-                    orientation = orientation,
-                    mapConfig = mapConfig,
-                    changeWeight = { configViewModel.changeMapConfig(weight = it) },
-                    changeStyleMap = { configViewModel.changeMapConfig(style = it) },
-                    changeColorMap = { configViewModel.changeMapConfig(color = it) }
-                )
-            }
-            metricsMap?.let { metricType ->
-                MetricConfig(
-                    metrics = metricType,
-                    changeMetric = { configViewModel.changeMetrics(it) })
-            }
+            MapSettings(
+                orientation = orientation,
+                mapConfig = mapConfig,
+                changeWeight = { configViewModel.changeMapConfig(weight = it) },
+                changeStyleMap = { configViewModel.changeMapConfig(style = it) },
+                changeColorMap = { configViewModel.changeMapConfig(color = it) }
+            )
+            MetricConfig(
+                metrics = metricsMap,
+                changeMetric = { configViewModel.changeMetrics(it) })
         }
     }
 }

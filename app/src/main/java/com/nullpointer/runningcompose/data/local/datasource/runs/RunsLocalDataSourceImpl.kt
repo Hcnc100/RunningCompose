@@ -37,7 +37,7 @@ class RunsLocalDataSourceImpl(
     override suspend fun deleterRun(run: Run) =
         runDao.deleterRun(run)
 
-    override suspend fun getListForTypeSort(sort: SortType): Flow<List<Run>> =
+    override fun getListForTypeSort(sort: SortType): Flow<List<Run>> =
         when (sort) {
             DATE -> runDao.getListRunsByTimestamp()
             RUNNING_TIME -> runDao.getListRunsByRunTimeRun()

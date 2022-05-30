@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
+import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -27,7 +28,7 @@ class ConfigViewModel @Inject constructor(
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        null
+        MapConfig()
     )
 
     val userConfig = configRepo.userConfig.flowOn(
@@ -69,6 +70,18 @@ class ConfigViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         null
     )
+
+    val isFirstLocationPermission = configRepo.isFirstPermissionLocation.catch {
+        Timber.e("Error in location permission state")
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        true
+    )
+
+    fun changeFirstRequestPermission() = viewModelScope.launch(Dispatchers.IO) {
+        configRepo.changeIsFirstPermissionLocation()
+    }
 
 
     fun changeUserConfig(

@@ -17,6 +17,8 @@ class ConfigLocalDataSourceImpl(
     override val mapConfig: Flow<MapConfig> = configUserStore.getMapConfig()
     override val sortConfig: Flow<SortConfig> = configUserStore.getSortConfig()
     override val metricsConfig: Flow<MetricType> = configUserStore.getMetrics()
+    override val isFirstPermissionLocation: Flow<Boolean> = configUserStore.isFirstPermission()
+
 
     override suspend fun changeUserConfig(nameUser: String?, weight: Float?) {
         configUserStore.changeUserConf(nameUser, weight)
@@ -36,6 +38,10 @@ class ConfigLocalDataSourceImpl(
 
     override suspend fun changeMetricsConfig(metricType: MetricType) {
         configUserStore.changeMetrics(metricType)
+    }
+
+    override suspend fun changeIsFirstPermissionLocation() {
+        configUserStore.changePermission()
     }
 
 }

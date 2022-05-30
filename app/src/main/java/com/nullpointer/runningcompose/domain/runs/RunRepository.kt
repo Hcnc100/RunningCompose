@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.Flow
 interface RunRepository {
 
     val totalStatisticRuns:Flow<StatisticsRun>
-    val listRuns:Flow<List<Run>>
+    val listRunsOrdered:Flow<List<Run>>
+    val listRunsOrderByDate:Flow<List<Run>>
 
     suspend fun deleterListRuns(listIds: List<Long>)
     suspend fun deleterRun(run: Run)

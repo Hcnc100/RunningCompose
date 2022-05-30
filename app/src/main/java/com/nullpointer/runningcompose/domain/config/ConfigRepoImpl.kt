@@ -17,6 +17,7 @@ class ConfigRepoImpl(
     override val mapConfig: Flow<MapConfig> = configLocalDataSource.mapConfig
     override val sortConfig: Flow<SortConfig> = configLocalDataSource.sortConfig
     override val metricsConfig: Flow<MetricType> = configLocalDataSource.metricsConfig
+    override val isFirstPermissionLocation: Flow<Boolean> = configLocalDataSource.isFirstPermissionLocation
 
     override suspend fun changeUserConfig(nameUser: String?, weight: Float?) =
         configLocalDataSource.changeUserConfig(nameUser, weight)
@@ -34,5 +35,8 @@ class ConfigRepoImpl(
 
     override suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?) =
         configLocalDataSource.changeSortConfig(sortType, isReverse)
+
+    override suspend fun changeIsFirstPermissionLocation() =
+        configLocalDataSource.changeIsFirstPermissionLocation()
 
 }

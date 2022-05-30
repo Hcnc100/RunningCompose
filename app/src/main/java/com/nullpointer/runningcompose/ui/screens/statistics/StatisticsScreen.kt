@@ -1,6 +1,7 @@
 package com.nullpointer.runningcompose.ui.screens.statistics
 
 import android.content.res.Configuration
+import android.widget.Space
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
@@ -11,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
@@ -29,7 +30,7 @@ fun StatisticsScreen(
     runsViewModel: RunsViewModel,
     configViewModel: ConfigViewModel,
 ) {
-    val listRuns by runsViewModel.listRuns.collectAsState()
+    val listRuns by runsViewModel.listRunsByDate.collectAsState()
     val stateStatistics by runsViewModel.statisticsRuns.collectAsState()
     val isStatisticsLoad by runsViewModel.isStatisticsLoad.collectAsState(initial = true)
     val metricType by configViewModel.metrics.collectAsState()
@@ -48,7 +49,7 @@ fun StatisticsScreen(
         else -> {
             StatisticsAndGraph(
                 orientation = orientation,
-                listRuns = listRuns!!,
+                listRuns = listRuns!!.reversed(),
                 statistics = stateStatistics!!,
                 metricType = metricType
             )
@@ -73,6 +74,7 @@ private fun StatisticsAndGraph(
                         modifier = Modifier
                             .weight(2F)
                             .fillMaxWidth())
+                    Spacer(modifier = Modifier.height(10.dp))
                     GraphRuns(list = listRuns,
                         metricType = metricType,
                         modifier = Modifier

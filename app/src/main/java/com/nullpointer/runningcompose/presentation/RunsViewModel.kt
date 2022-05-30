@@ -35,7 +35,7 @@ class RunsViewModel @Inject constructor(
         null
     )
 
-    val listRuns = runsRepository.listRuns.catch {
+    val listRunsOrdered = runsRepository.listRunsOrdered.catch {
         Timber.e("Error when load run $it")
         _messageRuns.trySend(R.string.error_load_runs)
         emit(emptyList())
@@ -44,8 +44,17 @@ class RunsViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         null
     )
+    val listRunsByDate=runsRepository.listRunsOrderByDate.catch {
+        Timber.e("Error when load run $it")
+        _messageRuns.trySend(R.string.error_load_runs_by_date)
+        emit(emptyList())
+    }.flowOn(Dispatchers.IO).stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
 
-    val isStatisticsLoad = combine(listRuns, statisticsRuns) { listRuns, statistics ->
+    val isStatisticsLoad = combine(listRunsByDate, statisticsRuns) { listRuns, statistics ->
         statistics == null || listRuns == null
     }
 
