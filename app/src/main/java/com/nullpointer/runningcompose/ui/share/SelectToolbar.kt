@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.nullpointer.runningcompose.R
@@ -22,6 +23,7 @@ fun SelectToolbar(
         title = {
             Text(if (numberSelection == 0) titleDefault else titleSelection)
         },
+        contentColor = Color.White,
         actions = {
             if (numberSelection != 0) {
                 IconButton(onClick = actionClear) {

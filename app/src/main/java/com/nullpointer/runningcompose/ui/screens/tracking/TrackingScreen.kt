@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -134,6 +135,7 @@ fun MapAndTimeComponent(
 
                 Text(text = timeRun.toFullFormatTime(true),
                     style = MaterialTheme.typography.h6,
+                    color = Color.White,
                     modifier = Modifier
                         .background(MaterialTheme.colors.primary)
                         .padding(vertical = 5.dp, horizontal = 10.dp)
@@ -169,8 +171,10 @@ fun MapAndTimeComponent(
                         .background(MaterialTheme.colors.primary)
                         .padding(20.dp),
                 ) {
-                    Text(timeRun.toFullFormatTime(true),
-                        style = MaterialTheme.typography.h3)
+                    Text(
+                        timeRun.toFullFormatTime(true),
+                        style = MaterialTheme.typography.h3, color = Color.White,
+                    )
                     Spacer(modifier = Modifier.height(20.dp))
                     Row {
                         ButtonPlayTracking()
