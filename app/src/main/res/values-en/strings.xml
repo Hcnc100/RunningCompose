@@ -1,0 +1,121 @@
+<resources>
+
+    <!-- selection resource-->
+    <plurals name="selected_items">
+        <item quantity="one">A selected item</item>
+        <item quantity="other">%d items selected</item>
+    </plurals>
+    <plurals name="deleted_items">
+        <item quantity="one">A deleted item</item>
+        <item quantity="other">%d items removed</item>
+    </plurals>
+
+    <!-- type name sort running -->
+    <string name="date_type_name">Date</string>
+    <string name="running_time_type_name">Run time</string>
+    <string name="avg_speed_type_name">Average speed</string>
+    <string name="distance_type_name">Distance</string>
+    <string name="calories_burned_type_name">Calories Burned</string>
+
+    <!-- toolbar -->
+    <string name="description_clear_selection">Clear the current selection</string>
+    <string name="description_arrow_back">Return to the previous screen</string>
+
+    <!-- error run -->
+    <string name="error_load_runs">Error loading runs</string>
+    <string name="error_load_runs_by_date">Error loading runs by date</string>
+
+    <!-- runs screen -->
+    <string name="description_button_add_run">Start the interface of the new run</string>
+    <string name="description_deleter_select_runs">Delete the selected runs</string>
+    <string name="description_current_run_img">Image of the current run</string>
+    <string name="message_empty_runs">There are no saved runs</string>
+    <string name="text_order_by">Sort by:</string>
+    <string name="description_drop_sort_menu">Display the sort menu</string>
+    <string name="description_order_sort_asc_or_desc">Icon to change the order from ascending to descending and vice versa</string>
+
+    <!-- details screen-->
+    <string name="title_details">Details</string>
+
+    <!-- item runs -->
+    <string name="item_title_date">Date:</string>
+    <string name="item_title_hour">Hour:</string>
+    <string name="item_title_duration">Duration:</string>
+    <string name="item_title_distance">Distance:</string>
+    <string name="item_title_speed">Speed:</string>
+    <string name="item_title_calories">Calories:</string>
+
+    <!-- templates -->
+
+    <!-- settings screen -->
+    <string name="describe_icon_drop_menu">Display the options menu</string>
+    <string name="title_config_map">Map Settings</string>
+    <string name="title_weight_map_line">Line width</string>
+    <string name="title_map_style">Map style</string>
+    <string name="title_info_personal">Personal information</string>
+    <string name="label_name_user">Name</string>
+    <string name="label_weight_user">Weight</string>
+    <string name="description_icon_edit_info">Edit user information icon</string>
+    <string name="text_edit_info_user">Edit information</string>
+
+    <!-- statistics screen -->
+    <string name="message_empty_statisctis">There are no statistics to show</string>
+    <string name="title_graph_statisctis">Statistics chart</string>
+    <string name="title_total_time">Total time</string>
+    <string name="title_total_distance">Total distance</string>
+    <string name="title_total_calories_burned">Total Calories Burned</string>
+    <string name="title_toltal_avg_speed">Average speed</string>
+    <string name="title_distance_run_graph">Distance of the runs</string>
+    <string name="title_runs_order_date_graph">Tours sorted by date</string>
+
+    <!-- navigation -->
+    <string name="title_screen_runs">Runs</string>
+    <string name="title_screen_statistics">Statistics</string>
+    <string name="title_screen_config">Settings</string>
+    <string name="title_others_config">Other settings</string>
+    <string name="title_metrics">metrics</string>
+
+
+    <!-- general actions -->
+    <string name="action_accept">Accept</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="text_action_pause">Pause</string>
+    <string name="text_action_resume">Resume</string>
+
+    <!-- dialog select color -->
+    <string name="title_select_color">Select a color</string>
+
+    <!-- edit info screen -->
+    <string name="error_empty_name">The name can not be empty</string>
+    <string name="error_max_length_name">The name cannot be very long</string>
+    <string name="error_range_weight">It must give a correct weight</string>
+    <string name="update_data_success">The data was updated</string>
+    <string name="error_validate_data">Check your data</string>
+    <string name="title_color_line">Line color</string>
+    <string name="title_edit_data">Edit your data</string>
+    <string name="title_complete_data">Complete your data</string>
+    <string name="description_icon_save_info">Button to save the data</string>
+
+
+    <!-- dialog permissions tracking -->
+    <string name="need_permissions_tracking">You need to grant location permission</string>
+    <string name="setting_permissions_tracking">You need to grant the location permission from the settings screen</string>
+    <string name="description_icon_open_settings">Button to open the app settings</string>
+    <string name="description_permissions_help">Button to highlight a help box, related to permissions</string>
+
+
+    <!-- details screen-->
+    <string name="description_location_center">Button to center the camera on the route</string>
+
+    <!-- tracking screen -->
+    <string name="description_button_play_tracking">Button to start track tracking</string>
+    <string name="description_button_resume_tracking">Button to pause tracking</string>
+    <string name="description_button_resume">Button to resume paused tracking</string>
+    <string name="description_button_stop_and_save_tracking">Button to stop tracking and save current data</string>
+    <string name="title_dialog_cancel_tracking">Do you want to cancel the run?</string>
+    <string name="message_info_cancel_tracking">The current runs and its data will be discarded</string>
+    <string name="description_cancel_run">Cancel the current runs and delete the data</string>
+    <string name="title_tracking_screen">Tracking</string>
+    <string name="title_graph">Trackings</string>
+
+</resources>

@@ -19,29 +19,29 @@
     </plurals>
 
     <!-- type name sort running -->
-    <string name="app_name">RunningCompose</string>
+    <string name="app_name" translatable="false">RunningCompose</string>
     <string name="date_type_name">Fecha</string>
     <string name="running_time_type_name">Tiempo del recorrido</string>
     <string name="avg_speed_type_name">Velocidad Media</string>
     <string name="distance_type_name">Distancia</string>
-    <string name="calories_burned_type_name">Calorias Quemadas</string>
+    <string name="calories_burned_type_name">Calorías Quemadas</string>
 
     <!-- toolbar -->
-    <string name="description_clear_selection">Limpia la seleccion actual</string>
+    <string name="description_clear_selection">Limpia la selección actual</string>
     <string name="description_arrow_back">Regresa a la pantalla anterior</string>
 
     <!-- error run -->
-    <string name="error_load_runs">Error al cargar los recorrdos</string>
-    <string name="error_load_runs_by_date">Error al cargar los recorrdos por fecha</string>
+    <string name="error_load_runs">Error al cargar los recorridos</string>
+    <string name="error_load_runs_by_date">Error al cargar los recorridos por fecha</string>
 
     <!-- runs screen -->
     <string name="description_button_add_run">Iniciar la interfaz del nuevo recorrido</string>
-    <string name="description_deleter_select_runs">Elimina los recorridos seleccinados</string>
+    <string name="description_deleter_select_runs">Elimina los recorridos seleccionados</string>
     <string name="description_current_run_img">Imagen del recorrido actual</string>
-    <string name="message_empty_runs">No hay recorrdios guardados</string>
+    <string name="message_empty_runs">No hay recorridos guardados</string>
     <string name="text_order_by">Ordenar por:</string>
-    <string name="description_drop_sort_menu">Despielga el menu de ordenamiento</string>
-    <string name="description_order_sort_asc_or_desc">Icono para cambiar el ordenam,iento de acendene a desendente</string>
+    <string name="description_drop_sort_menu">Despliega el menú de ordenamiento</string>
+    <string name="description_order_sort_asc_or_desc">Icono para cambiar el ordenamiento de ascendente a descendente y viceversa</string>
 
     <!-- details screen-->
     <string name="title_details">Detalles</string>
@@ -49,10 +49,10 @@
     <!-- item runs -->
     <string name="item_title_date">Fecha:</string>
     <string name="item_title_hour">Hora:</string>
-    <string name="item_title_duration">Duracion:</string>
+    <string name="item_title_duration">Duración:</string>
     <string name="item_title_distance">Distancia:</string>
     <string name="item_title_speed">Velocidad:</string>
-    <string name="item_title_calories">Calorias:</string>
+    <string name="item_title_calories">Calorías:</string>
 
     <!-- templates -->
     <string name="textTemplateDate" translatable="false">12.12.12</string>
@@ -63,76 +63,74 @@
     <string name="textTemplateTimeMili" translatable="false">00:00:00:00</string>
 
     <!-- settings screen -->
-    <string name="describe_icon_drop_menu">Despliega el menu de opciones</string>
-    <string name="title_config_map">Configuracion del mapa</string>
-    <string name="title_weight_map_line">Grosor de la linea</string>
+    <string name="describe_icon_drop_menu">Despliega el menú de opciones</string>
+    <string name="title_config_map">Configuración del mapa</string>
+    <string name="title_weight_map_line">Grosor de la línea</string>
     <string name="title_map_style">Estilo del mapa</string>
-    <string name="title_info_personal">Informacion Personal</string>
+    <string name="title_info_personal">Información Personal</string>
     <string name="label_name_user">Nombre</string>
     <string name="label_weight_user">Peso</string>
-    <string name="description_icon_edit_info">Icono de editar la informacion del usuario</string>
-    <string name="text_edit_info_user">Editar informacion</string>
-    <string name="meters">m/ms/cal</string>
-    <string name="kilo">km/kmh/kcal</string>
+    <string name="description_icon_edit_info">Icono de editar la información del usuario</string>
+    <string name="text_edit_info_user">Editar información</string>
+    <string name="meters" translatable="false">m/ms/cal</string>
+    <string name="kilo" translatable="false">km/kmh/kcal</string>
 
     <!-- statistics screen -->
-    <string name="message_empty_statisctis">No hay estadisticas que mostar</string>
-    <string name="title_graph_statisctis">Grafico de estadisticas</string>
+    <string name="message_empty_statisctis">No hay estadísticas que mostrar</string>
+    <string name="title_graph_statisctis">Gráfico de estadísticas</string>
     <string name="title_total_time">Tiempo total</string>
     <string name="title_total_distance">Distancia total</string>
-    <string name="title_total_calories_burned">Calorias Quemadas totales</string>
+    <string name="title_total_calories_burned">Calorías quemadas totales</string>
     <string name="title_toltal_avg_speed">Velocidad media</string>
-    <string name="title_distance_run_graph">Distancia de los recorrido</string>
+    <string name="title_distance_run_graph">Distancia de los recorridos</string>
     <string name="title_runs_order_date_graph">Recorridos ordenados por fecha</string>
 
     <!-- navigation -->
     <string name="title_screen_runs">Recorridos</string>
-    <string name="title_screen_statistics">Estadisticas</string>
-    <string name="title_screen_config">Configuracion</string>
+    <string name="title_screen_statistics">Estadísticas</string>
+    <string name="title_screen_config">Configuración</string>
     <string name="title_others_config">Otras configuraciones</string>
-    <string name="title_metrics">metricas</string>
+    <string name="title_metrics">métricas</string>
 
 
     <!-- general actions -->
     <string name="action_accept">Aceptar</string>
     <string name="action_cancel">Cancelar</string>
     <string name="text_action_pause">Pausar</string>
-    <string name="text_action_resume">Raanudar</string>
+    <string name="text_action_resume">Reanudar</string>
 
     <!-- dialog select color -->
     <string name="title_select_color">Selecciona un color</string>
 
     <!-- edit info screen -->
-    <string name="error_empty_name">El nombre no puede estar vacio</string>
+    <string name="error_empty_name">El nombre no puede estar vacío</string>
     <string name="error_max_length_name">El nombre no puede ser muy largo</string>
     <string name="error_range_weight">Debe dar un peso correcto</string>
     <string name="update_data_success">Los datos fueron actualizados</string>
-    <string name="error_validate_data">verifique sus datos</string>
-    <string name="title_color_line">Color de la linea</string>
+    <string name="error_validate_data">Verifique sus datos</string>
+    <string name="title_color_line">Color de la línea</string>
     <string name="title_edit_data">Edita tus datos</string>
     <string name="title_complete_data">Completa tus datos</string>
-    <string name="description_icon_save_info">Boton para guardar los datos</string>
-    <string name="label_name_info_user">Nombre</string>
-    <string name="label_weight_info_user">Peso</string>
+    <string name="description_icon_save_info">Botón para guardar los datos</string>
 
 
     <!-- dialog permissions tracking -->
-    <string name="need_permissions_tracking">Necesita conceder el permiso de localizacion</string>
-    <string name="setting_permissions_tracking">Necesitas conceder el permiso de localizacion desde la pantalla de ajustes</string>
-    <string name="description_icon_open_settings">Botton para abrir las configuraciones de la app</string>
-    <string name="description_permissions_help">Botton para resaltaar un cuadro de ayuda, relacionado con los permisos</string>
+    <string name="need_permissions_tracking">Necesita conceder el permiso de localización</string>
+    <string name="setting_permissions_tracking">Necesitas conceder el permiso de localización desde la pantalla de ajustes</string>
+    <string name="description_icon_open_settings">Botón para abrir las configuraciones de la app</string>
+    <string name="description_permissions_help">Botón para resaltar un cuadro de ayuda, relacionado con los permisos</string>
 
 
     <!-- details screen-->
-    <string name="description_location_center">Botton para centrar la camara  el recorrido</string>
+    <string name="description_location_center">Botón para centrar la cámara el recorrido</string>
 
     <!-- tracking screen -->
-    <string name="description_button_play_tracking">Boton para iniciar el seguimoiento del recorrdido</string>
-    <string name="description_button_resume_tracking">BOtton para pausar el seguimiento</string>
-    <string name="description_button_resume">Bottopn para reanudar el seguimiento pausado</string>
-    <string name="description_button_stop_and_save_tracking">Botton para detener el seguimeitno y guardar los datos actuales</string>
+    <string name="description_button_play_tracking">Botón para iniciar el seguimiento del recorrido</string>
+    <string name="description_button_resume_tracking">Botón para pausar el seguimiento</string>
+    <string name="description_button_resume">Botón para reanudar el seguimiento pausado</string>
+    <string name="description_button_stop_and_save_tracking">Botón para detener el seguimiento y guardar los datos actuales</string>
     <string name="title_dialog_cancel_tracking">¿Deseas cancelar el recorrido?</string>
-    <string name="message_info_cancel_tracking">El recorrido actual y sus datos seran descartados</string>
+    <string name="message_info_cancel_tracking">El recorrido actual y sus datos serán descartados</string>
     <string name="description_cancel_run">Cancela el recorrido actual y borra los datos</string>
     <string name="title_tracking_screen">Seguimiento</string>
     <string name="title_graph">Seguimientos</string>

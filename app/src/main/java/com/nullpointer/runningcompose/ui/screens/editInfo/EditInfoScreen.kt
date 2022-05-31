@@ -86,7 +86,7 @@ private fun EditInfoName(
     editInfoViewModel: EditInfoViewModel,
 ) {
     EditTextInfo(value = editInfoViewModel.nameUser,
-        label = stringResource(R.string.label_name_info_user),
+        label = stringResource(R.string.label_name_user),
         errorRes = editInfoViewModel.errorNamed,
         lengthValue = editInfoViewModel.nameLength,
         onChange = editInfoViewModel::changeNameUser,
@@ -99,7 +99,7 @@ private fun EditInfoWeight(
     editInfoViewModel: EditInfoViewModel,
 ) {
     EditTextInfo(value = editInfoViewModel.weightUser,
-        label = stringResource(R.string.label_weight_info_user),
+        label = stringResource(R.string.label_weight_user),
         errorRes = editInfoViewModel.errorWeight,
         onChange = editInfoViewModel::changeWeight,
         isOnlyNumber = true
