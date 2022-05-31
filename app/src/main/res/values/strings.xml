@@ -134,5 +134,7 @@
     <string name="description_cancel_run">Cancela el recorrido actual y borra los datos</string>
     <string name="title_tracking_screen">Seguimiento</string>
     <string name="title_graph">Seguimientos</string>
+    <string name="text_asc_order" translatable="false">ASC</string>
+    <string name="text_desc_order" translatable="false">DESC</string>
 
 </resources>
