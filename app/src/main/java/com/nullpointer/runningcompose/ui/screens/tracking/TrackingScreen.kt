@@ -68,7 +68,7 @@ fun TrackingScreen(
     }
 
     LaunchedEffect(key1 = configMap) {
-        configMap?.let {
+        configMap.let {
             properties = properties.copy(
                 mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
                     it.style.styleRawRes)
