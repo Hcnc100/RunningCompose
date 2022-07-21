@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -28,8 +29,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 @HomeNavGraph
 @Destination
 fun StatisticsScreen(
-    runsViewModel: RunsViewModel,
-    configViewModel: ConfigViewModel,
+    runsViewModel: RunsViewModel = shareViewModel(),
+    configViewModel: ConfigViewModel = shareViewModel(),
 ) {
     val listRuns by runsViewModel.listRunsByDate.collectAsState()
     val stateStatistics by runsViewModel.statisticsRuns.collectAsState()

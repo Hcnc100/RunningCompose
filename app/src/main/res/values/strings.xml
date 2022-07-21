@@ -136,5 +136,9 @@
     <string name="title_graph">Seguimientos</string>
     <string name="text_asc_order" translatable="false">ASC</string>
     <string name="text_desc_order" translatable="false">DESC</string>
+    <string name="hint_name_user">Escribe tu nombre</string>
+    <string name="hint_weight_user">Escribe tu peso</string>
+    <string name="error_empty_weight">El peso es requerido</string>
+    <string name="error_max_length_weight">El peso no puede ser tan largo</string>
 
 </resources>

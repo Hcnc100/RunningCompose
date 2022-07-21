@@ -15,6 +15,7 @@ import com.nullpointer.runningcompose.core.states.LoginStatus
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
+import com.nullpointer.runningcompose.ui.screens.destinations.MainScreenDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestination
 import com.nullpointer.runningcompose.ui.states.rememberRootAppState
 import com.nullpointer.runningcompose.ui.theme.RunningComposeTheme
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
                     when (stateAuth) {
                         LoginStatus.Authenticating -> null
-                        LoginStatus.Authenticated -> RunsScreensDestination
+                        LoginStatus.Authenticated -> MainScreenDestination
                         LoginStatus.Unauthenticated -> EditInfoScreenDestination
                     }?.let { startDestination ->
                         loading = false

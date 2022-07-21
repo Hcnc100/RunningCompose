@@ -20,8 +20,8 @@ class ConfigLocalDataSourceImpl(
     override val isFirstPermissionLocation: Flow<Boolean> = configUserStore.isFirstPermission()
 
 
-    override suspend fun changeUserConfig(nameUser: String?, weight: Float?) {
-        configUserStore.changeUserConf(nameUser, weight)
+    override suspend fun changeUserConfig(userConfig: UserConfig) {
+        configUserStore.changeUserConf(userConfig)
     }
 
     override suspend fun changeMapConfig(

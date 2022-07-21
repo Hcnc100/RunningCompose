@@ -7,6 +7,7 @@ import com.nullpointer.runningcompose.core.states.LoginStatus
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
+import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
@@ -87,10 +88,9 @@ class ConfigViewModel @Inject constructor(
 
 
     fun changeUserConfig(
-        name: String? = null,
-        weight: Float? = null,
+        userConfig: UserConfig
     ) = viewModelScope.launch(Dispatchers.IO) {
-        configRepo.changeUserConfig(name, weight)
+        configRepo.changeUserConfig(userConfig)
     }
 
     fun changeMapConfig(

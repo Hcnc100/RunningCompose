@@ -9,7 +9,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfig
@@ -24,8 +26,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun ConfigScreen(
-    configViewModel: ConfigViewModel,
-    navigator: DestinationsNavigator,
+    configViewModel: ConfigViewModel = shareViewModel(),
+    actionRootDestinations: ActionRootDestinations
 ) {
     val mapConfig by configViewModel.mapConfig.collectAsState()
     val userConfig by configViewModel.userConfig.collectAsState()
@@ -39,7 +41,7 @@ fun ConfigScreen(
                     orientation = orientation,
                     userConfig = it1,
                     actionGoEditInfo = {
-//                        navigator.navigate(EditInfoScreenDestination)
+                        actionRootDestinations.changeRoot(EditInfoScreenDestination(isAuth = true))
                     })
             }
             MapSettings(

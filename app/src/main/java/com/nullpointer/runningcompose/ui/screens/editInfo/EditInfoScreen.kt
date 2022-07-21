@@ -1,70 +1,58 @@
 package com.nullpointer.runningcompose.ui.screens.editInfo
 
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
+import com.nullpointer.runningcompose.ui.share.EditableTextSavable
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
+import com.nullpointer.runningcompose.ui.states.SimpleScreenState
+import com.nullpointer.runningcompose.ui.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.flow.filter
 
 @RootNavGraph(start = true)
 @Destination
 @Composable
 fun EditInfoScreen(
+    isAuth: Boolean = false,
     editInfoViewModel: EditInfoViewModel = hiltViewModel(),
-    configViewModel: ConfigViewModel,
-    navigator: DestinationsNavigator,
+    configViewModel: ConfigViewModel  = shareViewModel(),
+    editInfoState: SimpleScreenState = rememberSimpleScreenState(),
+    actionRootDestinations: ActionRootDestinations
 ) {
-    val scaffoldState = rememberScaffoldState()
-    val messageEdit = editInfoViewModel.messageEditInfo
-    val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
-        messageEdit.filter { it != -1 }.collect {
-            scaffoldState.snackbarHostState.showSnackbar(context.getString(it))
-        }
+        editInfoViewModel.messageEditInfo.collect(editInfoState::showSnackMessage)
     }
 
     Scaffold(
-        scaffoldState = scaffoldState,
+        scaffoldState = editInfoState.scaffoldState,
         topBar = {
-            if (editInfoViewModel.isDataComplete)
-                ToolbarBack(
-                    title = stringResource(R.string.title_edit_data),
-                    actionBack = navigator::popBackStack)
-            else
-                ToolbarBack(title = stringResource(R.string.title_complete_data))
+            ToolbarEditInfo(
+                isAuth = isAuth,
+                actionBack = actionRootDestinations::backDestination
+            )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    if (editInfoViewModel.validateDataUser()) {
-                        configViewModel.changeUserConfig(
-                            name = editInfoViewModel.nameUser,
-                            weight = editInfoViewModel.weightUser.toFloat()
-                        )
-                        if (editInfoViewModel.isDataComplete) {
-                            navigator.popBackStack()
-                        }
+                    editInfoState.hiddenKeyBoard()
+                    editInfoViewModel.validateDataUser()?.let {
+                        configViewModel.changeUserConfig(it)
+                        if (isAuth) actionRootDestinations.backDestination()
                     }
                 }
             ) {
@@ -74,63 +62,27 @@ fun EditInfoScreen(
             }
         }
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 20.dp)) {
-            EditInfoName(editInfoViewModel = editInfoViewModel)
-            EditInfoWeight(editInfoViewModel = editInfoViewModel)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp, horizontal = 20.dp)
+        ) {
+            EditableTextSavable(valueProperty = editInfoViewModel.nameUser)
+            Spacer(modifier = Modifier.height(10.dp))
+            EditableTextSavable(valueProperty = editInfoViewModel.weightUser)
         }
     }
 }
 
 @Composable
-private fun EditInfoName(
-    editInfoViewModel: EditInfoViewModel,
-) {
-    EditTextInfo(value = editInfoViewModel.nameUser,
-        label = stringResource(R.string.label_name_user),
-        errorRes = editInfoViewModel.errorNamed,
-        lengthValue = editInfoViewModel.nameLength,
-        onChange = editInfoViewModel::changeNameUser,
-        isOnlyNumber = false
-    )
-}
-
-@Composable
-private fun EditInfoWeight(
-    editInfoViewModel: EditInfoViewModel,
-) {
-    EditTextInfo(value = editInfoViewModel.weightUser,
-        label = stringResource(R.string.label_weight_user),
-        errorRes = editInfoViewModel.errorWeight,
-        onChange = editInfoViewModel::changeWeight,
-        isOnlyNumber = true
-    )
-}
-
-@Composable
-private fun EditTextInfo(
-    value: String,
-    label: String,
-    @StringRes
-    errorRes: Int,
-    lengthValue: String="",
-    isOnlyNumber: Boolean,
-    onChange: (String) -> Unit,
-) {
-    Column(modifier = Modifier.padding(vertical = 20.dp, horizontal = 10.dp)) {
-        OutlinedTextField(
-            value = value,
-            onValueChange = onChange,
-            label = { Text(label) },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = if (isOnlyNumber) KeyboardType.Number else KeyboardType.Text),
-            modifier = Modifier.fillMaxWidth(),
-            isError = errorRes != -1
+private fun ToolbarEditInfo(isAuth: Boolean, actionBack: () -> Unit) {
+    if (isAuth)
+        ToolbarBack(
+            title = stringResource(R.string.title_edit_data),
+            actionBack = actionBack
         )
-        Text(text = if (errorRes == -1) lengthValue else stringResource(id = errorRes),
-            style = MaterialTheme.typography.caption,
-            color = if (errorRes == -1) Color.Unspecified else MaterialTheme.colors.error,
-            modifier = Modifier.align(Alignment.End))
-    }
+    else
+        ToolbarBack(title = stringResource(R.string.title_complete_data))
 }
+
 

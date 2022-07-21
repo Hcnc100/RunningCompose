@@ -34,6 +34,8 @@ fun MainScreen(
             navGraph = NavGraphs.home,
             modifier = Modifier.padding(innerPadding),
             startRoute = NavGraphs.home.startRoute,
+            navController = mainState.navController,
+            engine = mainState.navHostEngine,
             dependenciesContainerBuilder = {
                 dependency(actionRootDestinations)
             }

@@ -12,7 +12,6 @@ import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ConfigUserStore(
@@ -66,11 +65,10 @@ class ConfigUserStore(
     }
 
     suspend fun changeUserConf(
-        nameUser: String? = null,
-        weight: Float? = null,
+        userConfig: UserConfig
     ) = context.dataStore.edit { pref ->
-        nameUser?.let { pref[keyName] = it }
-        weight?.let { pref[keyWeight] = it }
+        pref[keyName] = userConfig.name
+        pref[keyWeight] = userConfig.weight
     }
 
     fun getUserConfig() = context.dataStore.data.map { pref ->

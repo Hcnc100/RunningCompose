@@ -19,8 +19,8 @@ class ConfigRepoImpl(
     override val metricsConfig: Flow<MetricType> = configLocalDataSource.metricsConfig
     override val isFirstPermissionLocation: Flow<Boolean> = configLocalDataSource.isFirstPermissionLocation
 
-    override suspend fun changeUserConfig(nameUser: String?, weight: Float?) =
-        configLocalDataSource.changeUserConfig(nameUser, weight)
+    override suspend fun changeUserConfig(userConfig: UserConfig) =
+        configLocalDataSource.changeUserConfig(userConfig)
 
 
     override suspend fun changeMapConfig(

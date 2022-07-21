@@ -8,10 +8,12 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
@@ -31,9 +33,9 @@ import kotlinx.coroutines.flow.first
 @Destination
 @Composable
 fun RunsScreens(
-    runsViewModel: RunsViewModel,
-    selectViewModel: SelectViewModel,
-    configViewModel: ConfigViewModel,
+    runsViewModel: RunsViewModel = shareViewModel(),
+    selectViewModel: SelectViewModel= shareViewModel(),
+    configViewModel: ConfigViewModel= shareViewModel(),
     navigator: DestinationsNavigator,
 ) {
     val locationPermissionState = rememberPermissionState(

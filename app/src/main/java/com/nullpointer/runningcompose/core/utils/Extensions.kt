@@ -2,7 +2,12 @@ package com.nullpointer.runningcompose.core.utils
 
 import android.content.Context
 import android.text.format.DateFormat
+import androidx.activity.ComponentActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.MetricType.*
 import java.text.SimpleDateFormat
@@ -75,4 +80,10 @@ fun NotificationCompat.Builder.clearActionsNotification() {
         isAccessible = true
         set(this@clearActionsNotification, ArrayList<NotificationCompat.Action>())
     }
+}
+
+@Composable
+inline fun <reified VM : ViewModel> shareViewModel():VM {
+    val activity= LocalContext.current as ComponentActivity
+    return hiltViewModel(activity)
 }
