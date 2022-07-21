@@ -3,9 +3,11 @@ package com.nullpointer.runningcompose.core.utils
 import android.content.Context
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
+import androidx.annotation.PluralsRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
+import androidx.core.location.LocationRequestCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -72,6 +74,9 @@ fun Long.toFullFormatTime(includeMillis: Boolean): String {
             "${if (minutes < 10) "0" else ""}$minutes:" +
             "${if (seconds < 10) "0" else ""}$seconds:" +
             "${if (milliseconds < 10) "0" else ""}$milliseconds"
+}
+fun Context.getPlural(@PluralsRes stringQuality: Int,quality:Int): String {
+    return resources.getQuantityString(stringQuality,quality,quality)
 }
 
 //get fields actions and remove all using empty array

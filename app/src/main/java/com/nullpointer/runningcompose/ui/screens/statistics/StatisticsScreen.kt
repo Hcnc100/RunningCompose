@@ -30,7 +30,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 fun StatisticsScreen(
     runsViewModel: RunsViewModel = shareViewModel(),
-    configViewModel: ConfigViewModel = shareViewModel(),
+    configViewModel: ConfigViewModel,
 ) {
     val listRuns by runsViewModel.listRunsByDate.collectAsState()
     val stateStatistics by runsViewModel.statisticsRuns.collectAsState()

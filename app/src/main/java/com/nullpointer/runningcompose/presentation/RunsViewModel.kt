@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.Utility
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
@@ -35,16 +36,21 @@ class RunsViewModel @Inject constructor(
         null
     )
 
-    val listRunsOrdered = runsRepository.listRunsOrdered.catch {
+    val listRunsOrdered = flow<Resource<List<Run>>> {
+        runsRepository.listRunsOrdered.collect {
+            emit(Resource.Success(it))
+
+        }
+    }.catch {
         Timber.e("Error when load run $it")
         _messageRuns.trySend(R.string.error_load_runs)
-        emit(emptyList())
+        emit(Resource.Failure)
     }.flowOn(Dispatchers.IO).stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        null
+        Resource.Loading
     )
-    val listRunsByDate=runsRepository.listRunsOrderByDate.catch {
+    val listRunsByDate = runsRepository.listRunsOrderByDate.catch {
         Timber.e("Error when load run $it")
         _messageRuns.trySend(R.string.error_load_runs_by_date)
         emit(emptyList())

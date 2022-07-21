@@ -30,5 +30,7 @@ class PropertySavableWeight(
                 RESOURCE_DEFAULT
             }
         }
+
+
     }
 }

@@ -1,31 +1,29 @@
 package com.nullpointer.runningcompose.ui.screens.runs
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberPermissionState
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
+import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.DETAILS
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.SELECT
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
 import com.nullpointer.runningcompose.ui.share.ButtonToggleAddRemove
+import com.nullpointer.runningcompose.ui.states.RunsScreenState
+import com.nullpointer.runningcompose.ui.states.rememberRunsScreenState
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -33,52 +31,45 @@ import kotlinx.coroutines.flow.first
 @Destination
 @Composable
 fun RunsScreens(
+    configViewModel: ConfigViewModel,
+    actionRootDestinations: ActionRootDestinations,
     runsViewModel: RunsViewModel = shareViewModel(),
-    selectViewModel: SelectViewModel= shareViewModel(),
-    configViewModel: ConfigViewModel= shareViewModel(),
-    navigator: DestinationsNavigator,
+    selectViewModel: SelectViewModel,
+    runsState: RunsScreenState = rememberRunsScreenState()
 ) {
-    val locationPermissionState = rememberPermissionState(
-        android.Manifest.permission.ACCESS_FINE_LOCATION
-    )
-    val messageRuns = runsViewModel.messageRuns
-    val scaffoldState = rememberScaffoldState()
-    val stateList = rememberLazyGridState()
     val listRuns by runsViewModel.listRunsOrdered.collectAsState()
     val sortConfig by configViewModel.sortConfig.collectAsState()
-    val context = LocalContext.current
     val (showDialogPermission, changeVisibilityDialog) = rememberSaveable { mutableStateOf(false) }
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
     val metricType by configViewModel.metrics.collectAsState()
 
+
+    BackHandler(
+        selectViewModel.isSelectEnable,
+        selectViewModel::clearSelect
+    )
+
     LaunchedEffect(key1 = Unit) {
-        messageRuns.filter { it != -1 }.collect {
-            scaffoldState.snackbarHostState.showSnackbar(
-                context.getString(it)
-            )
-        }
+        runsViewModel.messageRuns.collect(runsState::showSnackMessage)
     }
     LaunchedEffect(key1 = Unit) {
-        runsViewModel.listRunsOrdered.first { it != null }.let {
-            if (!it.isNullOrEmpty()) selectViewModel.restoreSelect(it)
+        runsViewModel.listRunsOrdered.first { it is Resource.Success }.let {
+            val firstListRuns = it as Resource.Success
+            if (firstListRuns.data.isNotEmpty()) selectViewModel.restoreSelect(firstListRuns.data)
         }
     }
-//    LaunchedEffect(key1 = locationPermissionState.status) {
-//        val isFirstRequest = configViewModel.isFirstLocationPermission.first()
-//        isFirstDialogRequest = isFirstRequest
-//    }
 
     Scaffold(
-        scaffoldState = scaffoldState,
+        scaffoldState = runsState.scaffoldState,
         floatingActionButton = {
             ButtonToggleAddRemove(
-                isVisible = !stateList.isScrollInProgress,
+                isVisible = !runsState.isScrollInProgress,
                 isSelectedEnable = selectViewModel.isSelectEnable,
                 descriptionButtonAdd = stringResource(R.string.description_button_add_run),
                 actionAdd = {
-                    when (locationPermissionState.status) {
+                    when (runsState.permissionState) {
                         PermissionStatus.Granted -> {
-//                            navigator.navigate(TrackingScreenDestination)
+                            actionRootDestinations.changeRoot(TrackingScreenDestination)
                         }
                         is PermissionStatus.Denied -> {
                             changeVisibilityDialog(true)
@@ -94,14 +85,22 @@ fun RunsScreens(
         }
     ) {
         ListRuns(
-            listState = stateList,
+            listState = runsState.lazyGridState,
             listRuns = listRuns,
-            actionClick = { navigator.navigate(DetailsRunDestination.invoke(it, metricType)) },
-            actionSelect = selectViewModel::changeSelect,
             isSelectEnable = selectViewModel.isSelectEnable,
             metricType = metricType,
             sortConfig = sortConfig,
             changeSort = configViewModel::changeSortConfig,
+            actionRun = { action, itemRun ->
+                when (action) {
+                    DETAILS -> {
+                        actionRootDestinations.changeRoot(
+                            DetailsRunDestination.invoke(itemRun, metricType)
+                        )
+                    }
+                    SELECT -> selectViewModel.changeSelect(itemRun)
+                }
+            }
         )
     }
 
@@ -110,10 +109,8 @@ fun RunsScreens(
             isFirstRequestPermission = isFirstDialogRequest,
             changeFirstRequest = configViewModel::changeFirstRequestPermission,
             actionHidden = { changeVisibilityDialog(false) },
-            actionAccept = locationPermissionState::launchPermissionRequest,
+            actionAccept = runsState::showDialogPermission,
         )
 
 
-    BackHandler(selectViewModel.isSelectEnable,
-        selectViewModel::clearSelect)
 }

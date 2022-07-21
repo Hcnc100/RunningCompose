@@ -1,27 +1,43 @@
 package com.nullpointer.runningcompose.ui.share
 
 
+import android.content.Context
+import androidx.annotation.PluralsRes
+import androidx.annotation.StringRes
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.getPlural
 
 
 @Composable
 fun SelectToolbar(
-    titleDefault: String,
-    titleSelection: String,
+    @StringRes
+    titleDefault: Int,
+    @PluralsRes
+    titleSelection: Int,
     numberSelection: Int,
     actionClear: () -> Unit,
+    context: Context = LocalContext.current
 ) {
+
+    val title by derivedStateOf {
+        if (numberSelection == 0)
+            context.getString(titleDefault) else
+                context.getPlural(titleSelection, numberSelection)
+    }
+
+
     TopAppBar(
         backgroundColor = if (numberSelection == 0) MaterialTheme.colors.primarySurface else MaterialTheme.colors.primary,
         title = {
-            Text(if (numberSelection == 0) titleDefault else titleSelection)
+            Text(title)
         },
         contentColor = Color.White,
         actions = {

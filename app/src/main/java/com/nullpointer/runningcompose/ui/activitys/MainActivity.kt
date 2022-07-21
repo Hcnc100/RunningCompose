@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.nullpointer.runningcompose.core.states.LoginStatus
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.MainScreenDestination
@@ -26,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val configViewModel: ConfigViewModel by viewModels()
+    private val selectViewModel: SelectViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,7 @@ class MainActivity : ComponentActivity() {
                             engine = rootAppState.navHostEngine,
                             dependenciesContainerBuilder = {
                                 dependency(configViewModel)
+                                dependency(selectViewModel)
                                 dependency(rootAppState.rootActions)
                             }
                         )

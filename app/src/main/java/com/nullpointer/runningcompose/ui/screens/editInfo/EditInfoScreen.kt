@@ -28,8 +28,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun EditInfoScreen(
     isAuth: Boolean = false,
+    configViewModel: ConfigViewModel,
     editInfoViewModel: EditInfoViewModel = hiltViewModel(),
-    configViewModel: ConfigViewModel  = shareViewModel(),
     editInfoState: SimpleScreenState = rememberSimpleScreenState(),
     actionRootDestinations: ActionRootDestinations
 ) {

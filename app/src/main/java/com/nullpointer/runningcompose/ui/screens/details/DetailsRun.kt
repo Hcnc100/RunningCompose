@@ -14,7 +14,7 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
-import com.nullpointer.runningcompose.ui.screens.runs.componets.InfoRun
+
 import com.nullpointer.runningcompose.ui.screens.runs.componets.MapRunItem
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
@@ -47,16 +47,16 @@ fun DetailsRun(
             Card(modifier = Modifier
                 .padding(10.dp)
                 .weight(3f), shape = RoundedCornerShape(10.dp)) {
-                InfoRun(
-                    itemRun = itemsRun,
-                    dataComplete = true,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .fillMaxHeight()
-                        .verticalScroll(rememberScrollState()),
-                    isMiniTitle = false,
-                    metricType = metricType
-                )
+//                InfoRun(
+//                    itemRun = itemsRun,
+//                    dataComplete = true,
+//                    modifier = Modifier
+//                        .padding(10.dp)
+//                        .fillMaxHeight()
+//                        .verticalScroll(rememberScrollState()),
+//                    isMiniTitle = false,
+//                    metricType = metricType
+//                )
             }
         }
     }
