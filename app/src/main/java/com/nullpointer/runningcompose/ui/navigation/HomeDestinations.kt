@@ -9,7 +9,7 @@ import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestina
 import com.nullpointer.runningcompose.ui.screens.destinations.StatisticsScreenDestination
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
-enum class HomeNavigation(
+enum class HomeDestinations(
     @StringRes
     val titleShow: Int,
     @DrawableRes

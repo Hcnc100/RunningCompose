@@ -3,6 +3,7 @@ package com.nullpointer.runningcompose.presentation
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nullpointer.runningcompose.core.states.LoginStatus
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
@@ -61,14 +62,15 @@ class ConfigViewModel @Inject constructor(
         SortConfig()
     )
 
-    val isAuth= flow {
-        configRepo.userConfig.collect{
-            emit(it!=null)
+    val stateAuth = flow {
+        configRepo.userConfig.collect {
+            val status = if (it != null) LoginStatus.Authenticated else LoginStatus.Unauthenticated
+            emit(status)
         }
-    }.stateIn(
+    }.flowOn(Dispatchers.IO).stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        null
+        LoginStatus.Authenticating
     )
 
     val isFirstLocationPermission = configRepo.isFirstPermissionLocation.catch {
