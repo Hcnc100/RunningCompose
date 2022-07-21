@@ -13,12 +13,14 @@ import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.runs.componets.InfoRun
 import com.nullpointer.runningcompose.ui.screens.runs.componets.MapRunItem
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@RootNavGraph
 @Destination
 @Composable
 fun DetailsRun(

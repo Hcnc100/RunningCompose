@@ -36,8 +36,8 @@ class SharedLocationManager constructor(
     private val _lastLocation = callbackFlow {
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
-                Timber.d("New location: ${result.lastLocation.toText()}")
-                trySend(result.lastLocation.toLatLng())
+                Timber.d("New location: ${result.lastLocation?.toText()}")
+                result.lastLocation?.let { trySend(it.toLatLng()) }
             }
         }
         Timber.d("Starting location updates")

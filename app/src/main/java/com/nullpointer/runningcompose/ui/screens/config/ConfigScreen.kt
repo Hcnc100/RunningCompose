@@ -10,6 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
+import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
 import com.nullpointer.runningcompose.ui.screens.config.components.MetricConfig
@@ -17,6 +19,8 @@ import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDest
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+
+@HomeNavGraph
 @Destination
 @Composable
 fun ConfigScreen(
@@ -35,7 +39,7 @@ fun ConfigScreen(
                     orientation = orientation,
                     userConfig = it1,
                     actionGoEditInfo = {
-                        navigator.navigate(EditInfoScreenDestination)
+//                        navigator.navigate(EditInfoScreenDestination)
                     })
             }
             MapSettings(

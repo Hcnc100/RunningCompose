@@ -19,12 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.filter
 
+@RootNavGraph(start = true)
 @Destination
 @Composable
 fun EditInfoScreen(

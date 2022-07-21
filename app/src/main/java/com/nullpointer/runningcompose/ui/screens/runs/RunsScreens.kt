@@ -15,17 +15,20 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
+import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
 import com.nullpointer.runningcompose.ui.share.ButtonToggleAddRemove
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Destination(start = true)
+@HomeNavGraph(start = true)
+@Destination
 @Composable
 fun RunsScreens(
     runsViewModel: RunsViewModel,
@@ -73,7 +76,7 @@ fun RunsScreens(
                 actionAdd = {
                     when (locationPermissionState.status) {
                         PermissionStatus.Granted -> {
-                            navigator.navigate(TrackingScreenDestination)
+//                            navigator.navigate(TrackingScreenDestination)
                         }
                         is PermissionStatus.Denied -> {
                             changeVisibilityDialog(true)

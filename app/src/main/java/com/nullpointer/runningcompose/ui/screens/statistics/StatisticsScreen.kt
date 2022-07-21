@@ -1,7 +1,6 @@
 package com.nullpointer.runningcompose.ui.screens.statistics
 
 import android.content.res.Configuration
-import android.widget.Space
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
@@ -19,12 +18,14 @@ import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
+import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
+@HomeNavGraph
 @Destination
 fun StatisticsScreen(
     runsViewModel: RunsViewModel,
