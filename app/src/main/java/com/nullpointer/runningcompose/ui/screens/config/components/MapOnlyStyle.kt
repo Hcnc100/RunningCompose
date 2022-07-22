@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -16,17 +15,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle.Event.*
 import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.ktx.addPolyline
-import com.google.maps.android.ktx.awaitMap
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.config.MapConfig
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @Composable
@@ -34,7 +30,6 @@ fun MapFromConfig(
     mapConfig: MapConfig,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
-    scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val mapViewState = rememberMapWithLifecycle()
     val listPoints = remember {
@@ -53,23 +48,24 @@ fun MapFromConfig(
             .height(220.dp)
             .padding(vertical = 10.dp),
         factory = {
-            mapViewState
+            mapViewState.apply {
+                // ! this call only one, when map is created, this for config
+                getMapAsync {
+                    it.uiSettings.setAllGesturesEnabled(false)
+                    it.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+                }
+            }
         },
         update = { mapView ->
-            scope.launch {
-                with(mapView.awaitMap()) {
-                    uiSettings.isZoomControlsEnabled = false
-                    uiSettings.setAllGesturesEnabled(false)
-                    clear()
-                    setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(context, mapConfig.style.styleRawRes)
-                    )
-                    addPolyline {
-                        addAll(listPoints)
-                        color(mapConfig.colorValue)
-                        width(mapConfig.weight.toFloat())
-                    }
-                    moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+            mapView.getMapAsync {
+                it.clear()
+                it.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(context, mapConfig.style.styleRawRes)
+                )
+                it.addPolyline {
+                    addAll(listPoints)
+                    color(mapConfig.colorValue)
+                    width(mapConfig.weight.toFloat())
                 }
             }
         }
