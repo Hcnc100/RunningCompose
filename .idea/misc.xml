@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/drawable/ic_run.xml" value="0.1245" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.1245" />
         <entry key="app/src/main/res/layout/custom_layout_marker_run.xml" value="0.21203703703703702" />
+        <entry key="app/src/main/res/layout/layout_map.xml" value="0.14629629629629629" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1245" />
       </map>
     </option>

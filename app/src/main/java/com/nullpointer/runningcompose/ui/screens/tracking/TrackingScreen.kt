@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
-import com.google.maps.android.compose.*
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
 import com.nullpointer.runningcompose.models.config.MapConfig
@@ -29,7 +28,6 @@ import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonStopTracking
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonPlayTracking
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogCancel
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.MapComponent
 import com.nullpointer.runningcompose.ui.share.ToolbarBackWithAction
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
@@ -49,145 +47,145 @@ fun TrackingScreen(
     locationViewModel: LocationViewModel = hiltViewModel(),
     runsViewModel: RunsViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
-    val configMap by configViewModel.mapConfig.collectAsState()
-    var properties by remember { mutableStateOf(MapProperties()) }
-    val lastLocation by locationViewModel.lastLocation.collectAsState(initial = null)
-    val cameraPositionState = rememberCameraPositionState()
-    val (isShowDialog, changeDialogState) = rememberSaveable { mutableStateOf(false) }
-    var listPoints by remember { mutableStateOf<List<List<LatLng>>>(emptyList()) }
-
-    LaunchedEffect(key1 = Unit) {
-        TrackingServices.showCounterPoint.collect {
-            listPoints = TrackingServices.showListPoints
-        }
-    }
-
-    LaunchedEffect(key1 = lastLocation) {
-        lastLocation?.let {
-            cameraPositionState.animate(CameraUpdateFactory.newCameraPosition(
-                CameraPosition.fromLatLngZoom(it, 17F)))
-        }
-    }
-
-    LaunchedEffect(key1 = configMap) {
-        configMap.let {
-            properties = properties.copy(
-                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
-                    it.style.styleRawRes)
-            )
-        }
-    }
-    Scaffold(
-        topBar = {
-            ToolbarBackWithAction(title = stringResource(R.string.title_tracking_screen),
-                actionBack = navigator::popBackStack,
-                actionCancel = if (TrackingServices.stateServices != WAITING) {
-                    { changeDialogState(true) }
-                } else null)
-        },
-    ) {
-
-        MapAndTimeComponent(
-            cameraPositionState = cameraPositionState,
-            properties = properties,
-            mapConfig = configMap,
-            listPoints = listPoints,
-            actionSaveRun = {
-                TrackingServices.pauseOrResumeServices(context)
-                runsViewModel.insertNewRun(
-                    timeRun = TrackingServices.showTimeInMillis.value,
-                    listPoints = TrackingServices.showListPoints
-                )
-                TrackingServices.finishServices(context)
-                navigator.popBackStack()
-            }
-        )
-
-        if (isShowDialog)
-            DialogCancel(
-                actionCancel = { changeDialogState(false) },
-                acceptAction = {
-                    TrackingServices.finishServices(context)
-                    navigator.popBackStack()
-                }
-            )
-    }
+//    val context = LocalContext.current
+//    val configMap by configViewModel.mapConfig.collectAsState()
+//    var properties by remember { mutableStateOf(MapProperties()) }
+//    val lastLocation by locationViewModel.lastLocation.collectAsState(initial = null)
+//    val cameraPositionState = rememberCameraPositionState()
+//    val (isShowDialog, changeDialogState) = rememberSaveable { mutableStateOf(false) }
+//    var listPoints by remember { mutableStateOf<List<List<LatLng>>>(emptyList()) }
+//
+//    LaunchedEffect(key1 = Unit) {
+//        TrackingServices.showCounterPoint.collect {
+//            listPoints = TrackingServices.showListPoints
+//        }
+//    }
+//
+//    LaunchedEffect(key1 = lastLocation) {
+//        lastLocation?.let {
+//            cameraPositionState.animate(CameraUpdateFactory.newCameraPosition(
+//                CameraPosition.fromLatLngZoom(it, 17F)))
+//        }
+//    }
+//
+//    LaunchedEffect(key1 = configMap) {
+//        configMap.let {
+//            properties = properties.copy(
+//                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
+//                    it.style.styleRawRes)
+//            )
+//        }
+//    }
+//    Scaffold(
+//        topBar = {
+//            ToolbarBackWithAction(title = stringResource(R.string.title_tracking_screen),
+//                actionBack = navigator::popBackStack,
+//                actionCancel = if (TrackingServices.stateServices != WAITING) {
+//                    { changeDialogState(true) }
+//                } else null)
+//        },
+//    ) {
+//
+//        MapAndTimeComponent(
+//            cameraPositionState = cameraPositionState,
+//            properties = properties,
+//            mapConfig = configMap,
+//            listPoints = listPoints,
+//            actionSaveRun = {
+//                TrackingServices.pauseOrResumeServices(context)
+//                runsViewModel.insertNewRun(
+//                    timeRun = TrackingServices.showTimeInMillis.value,
+//                    listPoints = TrackingServices.showListPoints
+//                )
+//                TrackingServices.finishServices(context)
+//                navigator.popBackStack()
+//            }
+//        )
+//
+//        if (isShowDialog)
+//            DialogCancel(
+//                actionCancel = { changeDialogState(false) },
+//                acceptAction = {
+//                    TrackingServices.finishServices(context)
+//                    navigator.popBackStack()
+//                }
+//            )
+//    }
 }
 
-@Composable
-fun MapAndTimeComponent(
-    cameraPositionState: CameraPositionState,
-    properties: MapProperties,
-    mapConfig: MapConfig?,
-    listPoints: List<List<LatLng>>,
-    actionSaveRun: () -> Unit,
-) {
-    val timeRun by TrackingServices.showTimeInMillis.collectAsState()
-
-    when (LocalConfiguration.current.orientation) {
-
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            Box {
-                MapComponent(cameraPositionState = cameraPositionState,
-                    properties = properties,
-                    listPositions = listPoints,
-                    configMap = mapConfig,
-                    modifier = Modifier.fillMaxSize())
-
-                Text(text = timeRun.toFullFormatTime(true),
-                    style = MaterialTheme.typography.h6,
-                    color = Color.White,
-                    modifier = Modifier
-                        .background(MaterialTheme.colors.primary)
-                        .padding(vertical = 5.dp, horizontal = 10.dp)
-                        .align(Alignment.TopCenter)
-                )
-
-                Column(modifier = Modifier
-                    .padding(10.dp)
-                    .align(Alignment.CenterStart)) {
-                    ButtonPlayTracking()
-                    if (TrackingServices.stateServices != WAITING) {
-                        Spacer(modifier = Modifier.height(30.dp))
-                        ButtonStopTracking(actionSave = actionSaveRun)
-                    }
-                }
-            }
-        }
-        else -> {
-            Column {
-                MapComponent(
-                    cameraPositionState = cameraPositionState,
-                    properties = properties,
-                    listPositions = listPoints,
-                    configMap = mapConfig,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(.7f))
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.primary)
-                        .padding(20.dp),
-                ) {
-                    Text(
-                        timeRun.toFullFormatTime(true),
-                        style = MaterialTheme.typography.h3, color = Color.White,
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Row {
-                        ButtonPlayTracking()
-                        if (TrackingServices.stateServices != WAITING) {
-                            Spacer(modifier = Modifier.width(30.dp))
-                            ButtonStopTracking(actionSave = actionSaveRun)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
+//@Composable
+//fun MapAndTimeComponent(
+//    cameraPositionState: CameraPositionState,
+//    properties: MapProperties,
+//    mapConfig: MapConfig?,
+//    listPoints: List<List<LatLng>>,
+//    actionSaveRun: () -> Unit,
+//) {
+//    val timeRun by TrackingServices.showTimeInMillis.collectAsState()
+//
+//    when (LocalConfiguration.current.orientation) {
+//
+//        Configuration.ORIENTATION_LANDSCAPE -> {
+//            Box {
+//                MapComponent(cameraPositionState = cameraPositionState,
+//                    properties = properties,
+//                    listPositions = listPoints,
+//                    configMap = mapConfig,
+//                    modifier = Modifier.fillMaxSize())
+//
+//                Text(text = timeRun.toFullFormatTime(true),
+//                    style = MaterialTheme.typography.h6,
+//                    color = Color.White,
+//                    modifier = Modifier
+//                        .background(MaterialTheme.colors.primary)
+//                        .padding(vertical = 5.dp, horizontal = 10.dp)
+//                        .align(Alignment.TopCenter)
+//                )
+//
+//                Column(modifier = Modifier
+//                    .padding(10.dp)
+//                    .align(Alignment.CenterStart)) {
+//                    ButtonPlayTracking()
+//                    if (TrackingServices.stateServices != WAITING) {
+//                        Spacer(modifier = Modifier.height(30.dp))
+//                        ButtonStopTracking(actionSave = actionSaveRun)
+//                    }
+//                }
+//            }
+//        }
+//        else -> {
+//            Column {
+//                MapComponent(
+//                    cameraPositionState = cameraPositionState,
+//                    properties = properties,
+//                    listPositions = listPoints,
+//                    configMap = mapConfig,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .fillMaxHeight(.7f))
+//
+//                Column(
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .background(MaterialTheme.colors.primary)
+//                        .padding(20.dp),
+//                ) {
+//                    Text(
+//                        timeRun.toFullFormatTime(true),
+//                        style = MaterialTheme.typography.h3, color = Color.White,
+//                    )
+//                    Spacer(modifier = Modifier.height(20.dp))
+//                    Row {
+//                        ButtonPlayTracking()
+//                        if (TrackingServices.stateServices != WAITING) {
+//                            Spacer(modifier = Modifier.width(30.dp))
+//                            ButtonStopTracking(actionSave = actionSaveRun)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//

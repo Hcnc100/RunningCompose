@@ -1,40 +1,42 @@
 package com.nullpointer.runningcompose.ui.screens.config.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import android.content.Context
+import android.os.Bundle
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.Lifecycle.Event.*
+import androidx.lifecycle.LifecycleEventObserver
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.maps.android.compose.*
+import com.google.maps.android.ktx.addPolyline
+import com.google.maps.android.ktx.awaitMap
+import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.config.MapConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
 
 @Composable
 fun MapFromConfig(
     mapConfig: MapConfig,
     modifier: Modifier = Modifier,
+    context: Context = LocalContext.current,
+    scope: CoroutineScope = rememberCoroutineScope()
 ) {
-    val context = LocalContext.current
-    var isMapLoaded by remember {
-        mutableStateOf(true)
-    }
-    val uiSettings = remember {
-        MapUiSettings(
-            zoomControlsEnabled = false,
-            mapToolbarEnabled = false,
-            myLocationButtonEnabled = false
-        )
-    }
-    var properties by remember { mutableStateOf(MapProperties()) }
-
+    val mapViewState = rememberMapWithLifecycle()
     val listPoints = remember {
         listOf(
             LatLng(53.3477, -6.2597),
@@ -43,37 +45,73 @@ fun MapFromConfig(
             LatLng(52.5166, 13.3833),
         )
     }
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(51.5008, -0.1224), 3.5F)
+    val bounds = remember {
+        LatLngBounds.builder().includeAll(listPoints).build()
     }
-    LaunchedEffect(key1 = mapConfig) {
-        properties = properties.copy(
-            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context, mapConfig.style.styleRawRes)
-        )
-    }
-
-    Box(contentAlignment = Alignment.Center) {
-        GoogleMap(
-            modifier = modifier
-                .fillMaxWidth()
-                .aspectRatio(2f)
-                .padding(vertical = 10.dp, horizontal = 20.dp),
-            cameraPositionState = cameraPositionState,
-            properties = properties,
-            uiSettings = uiSettings,
-            googleMapOptionsFactory = {
-                GoogleMapOptions().liteMode(true)
-            },
-            onMapLoaded = {
-                isMapLoaded = false
+    AndroidView(
+        modifier = modifier
+            .height(220.dp)
+            .padding(vertical = 10.dp),
+        factory = {
+            mapViewState
+        },
+        update = { mapView ->
+            scope.launch {
+                with(mapView.awaitMap()) {
+                    uiSettings.isZoomControlsEnabled = false
+                    uiSettings.setAllGesturesEnabled(false)
+                    clear()
+                    setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(context, mapConfig.style.styleRawRes)
+                    )
+                    addPolyline {
+                        addAll(listPoints)
+                        color(mapConfig.colorValue)
+                        width(mapConfig.weight.toFloat())
+                    }
+                    moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50))
+                }
             }
-        ) {
-            Polyline(points = listPoints,
-                width = mapConfig.weight.toFloat(),
-                color = mapConfig.color)
         }
-        if (isMapLoaded)
-            CircularProgressIndicator()
-    }
+    )
+}
 
+fun LatLngBounds.Builder.includeAll(points: List<LatLng>): LatLngBounds.Builder {
+    points.forEach(::include)
+    return this
+}
+
+@Composable
+private fun rememberMapWithLifecycle(
+    context: Context = LocalContext.current
+): MapView {
+    val mapView = remember {
+        MapView(context).apply {
+            id = R.id.map
+        }
+    }
+    val lifecycleObserver = rememberMapLifecycleObserver(mapView = mapView)
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(key1 = lifecycleObserver) {
+        lifecycle.addObserver(lifecycleObserver)
+        onDispose {
+            lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
+    return mapView
+}
+
+@Composable
+private fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver = remember {
+    LifecycleEventObserver { _, event ->
+        when (event) {
+            ON_CREATE -> mapView.onCreate(Bundle())
+            ON_START -> mapView.onStart()
+            ON_RESUME -> mapView.onResume()
+            ON_PAUSE -> mapView.onPause()
+            ON_STOP -> mapView.onStop()
+            ON_DESTROY -> mapView.onDestroy()
+            ON_ANY -> throw IllegalStateException()
+        }
+    }
 }
