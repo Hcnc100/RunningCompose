@@ -36,6 +36,6 @@ fun rememberMainScreenState(
         navHostContentAlignment = Alignment.BottomEnd,
         rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
     )
-) = remember(scaffoldState, navController) {
+) = remember(scaffoldState, navController,navHostEngine) {
     MainScreenState(scaffoldState, context, focusManager, navController,navHostEngine)
 }

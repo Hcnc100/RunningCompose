@@ -51,6 +51,6 @@ fun rememberRootAppState(
     ),
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
-) = remember(scaffoldState, navController) {
+) = remember(scaffoldState, navController,scope,navHostEngine) {
     RootAppState(scaffoldState, context, focusManager, navController,scope,navHostEngine)
 }

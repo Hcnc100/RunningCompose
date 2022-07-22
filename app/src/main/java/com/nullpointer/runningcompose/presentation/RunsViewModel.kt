@@ -10,9 +10,11 @@ import com.nullpointer.runningcompose.core.utils.Utility
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.StatisticsRun
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -28,14 +30,6 @@ class RunsViewModel @Inject constructor(
     private val _messageRuns = Channel<Int>()
     val messageRuns = _messageRuns.receiveAsFlow()
 
-    val statisticsRuns = runsRepository.totalStatisticRuns.catch {
-        Timber.e("Error to load statatistics $it")
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        null
-    )
-
     val listRunsOrdered = flow<Resource<List<Run>>> {
         runsRepository.listRunsOrdered.collect {
             emit(Resource.Success(it))
@@ -50,19 +44,8 @@ class RunsViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         Resource.Loading
     )
-    val listRunsByDate = runsRepository.listRunsOrderByDate.catch {
-        Timber.e("Error when load run $it")
-        _messageRuns.trySend(R.string.error_load_runs_by_date)
-        emit(emptyList())
-    }.flowOn(Dispatchers.IO).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        null
-    )
 
-    val isStatisticsLoad = combine(listRunsByDate, statisticsRuns) { listRuns, statistics ->
-        statistics == null || listRuns == null
-    }
+
 
     fun insertNewRun(newRun: Run) = viewModelScope.launch(Dispatchers.IO) {
         runsRepository.insertNewRun(newRun)

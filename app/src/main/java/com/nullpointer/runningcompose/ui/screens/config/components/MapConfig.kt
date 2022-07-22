@@ -42,8 +42,7 @@ fun MapSettings(
                 MapFromConfig(mapConfig = mapConfig)
                 SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = changeStyleMap)
                 Spacer(modifier = Modifier.height(10.dp))
-                SelectMapWeight(currentWeightMap = mapConfig.weight,
-                    changeWeight = changeWeight)
+                SelectMapWeight(currentWeightMap = mapConfig.weight, changeWeight = changeWeight)
                 Spacer(modifier = Modifier.height(10.dp))
                 Spacer(modifier = Modifier.height(10.dp))
                 SelectMapColor(

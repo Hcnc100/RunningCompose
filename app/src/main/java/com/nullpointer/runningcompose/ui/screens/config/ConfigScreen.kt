@@ -18,6 +18,8 @@ import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfi
 import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
 import com.nullpointer.runningcompose.ui.screens.config.components.MetricConfig
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
+import com.nullpointer.runningcompose.ui.states.OrientationScreenState
+import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -27,25 +29,25 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun ConfigScreen(
     configViewModel: ConfigViewModel,
-    actionRootDestinations: ActionRootDestinations
+    actionRootDestinations: ActionRootDestinations,
+    configState:OrientationScreenState = rememberOrientationScreenState()
 ) {
     val mapConfig by configViewModel.mapConfig.collectAsState()
     val userConfig by configViewModel.userConfig.collectAsState()
     val metricsMap by configViewModel.metrics.collectAsState()
-    val orientation = LocalConfiguration.current.orientation
 
     Scaffold {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             userConfig?.let { it1 ->
                 InfoUserConfig(
-                    orientation = orientation,
+                    orientation = configState.orientation,
                     userConfig = it1,
                     actionGoEditInfo = {
                         actionRootDestinations.changeRoot(EditInfoScreenDestination(isAuth = true))
                     })
             }
             MapSettings(
-                orientation = orientation,
+                orientation = configState.orientation,
                 mapConfig = mapConfig,
                 changeWeight = { configViewModel.changeMapConfig(weight = it) },
                 changeStyleMap = { configViewModel.changeMapConfig(style = it) },

@@ -23,7 +23,6 @@ import com.nullpointer.runningcompose.R
     listNamed: List<String>? = null,
     onChange: (T) -> Unit,
 ) {
-
     val (isDropDown, changeIsDrop) = rememberSaveable { mutableStateOf(false) }
     Row(modifier = Modifier.padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically) {

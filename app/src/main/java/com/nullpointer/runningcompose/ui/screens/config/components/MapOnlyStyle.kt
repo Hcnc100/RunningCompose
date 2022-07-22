@@ -33,27 +33,22 @@ fun MapFromConfig(
             myLocationButtonEnabled = false
         )
     }
-    var properties by remember {
-        mutableStateOf(
-            MapProperties(
-                mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
-                    mapConfig.style.styleRawRes),
-            )
+    var properties by remember { mutableStateOf(MapProperties()) }
+
+    val listPoints = remember {
+        listOf(
+            LatLng(53.3477, -6.2597),
+            LatLng(51.5008, -0.1224),
+            LatLng(48.8567, 2.3508),
+            LatLng(52.5166, 13.3833),
         )
     }
-    val listPoints = listOf(
-        LatLng(53.3477, -6.2597),
-        LatLng(51.5008, -0.1224),
-        LatLng(48.8567, 2.3508),
-        LatLng(52.5166, 13.3833),
-    )
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(51.5008, -0.1224), 3.5F)
     }
     LaunchedEffect(key1 = mapConfig) {
         properties = properties.copy(
-            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context,
-                mapConfig.style.styleRawRes)
+            mapStyleOptions = MapStyleOptions.loadRawResourceStyle(context, mapConfig.style.styleRawRes)
         )
     }
 
