@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.ktx.addPolyline
+import com.google.maps.android.ktx.awaitMap
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.config.MapConfig
 import timber.log.Timber
@@ -72,42 +73,3 @@ fun MapFromConfig(
     )
 }
 
-fun LatLngBounds.Builder.includeAll(points: List<LatLng>): LatLngBounds.Builder {
-    points.forEach(::include)
-    return this
-}
-
-@Composable
-private fun rememberMapWithLifecycle(
-    context: Context = LocalContext.current
-): MapView {
-    val mapView = remember {
-        MapView(context).apply {
-            id = R.id.map
-        }
-    }
-    val lifecycleObserver = rememberMapLifecycleObserver(mapView = mapView)
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    DisposableEffect(key1 = lifecycleObserver) {
-        lifecycle.addObserver(lifecycleObserver)
-        onDispose {
-            lifecycle.removeObserver(lifecycleObserver)
-        }
-    }
-    return mapView
-}
-
-@Composable
-private fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver = remember {
-    LifecycleEventObserver { _, event ->
-        when (event) {
-            ON_CREATE -> mapView.onCreate(Bundle())
-            ON_START -> mapView.onStart()
-            ON_RESUME -> mapView.onResume()
-            ON_PAUSE -> mapView.onPause()
-            ON_STOP -> mapView.onStop()
-            ON_DESTROY -> mapView.onDestroy()
-            ON_ANY -> throw IllegalStateException()
-        }
-    }
-}

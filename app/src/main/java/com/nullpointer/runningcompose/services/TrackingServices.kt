@@ -6,9 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
@@ -16,11 +13,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.maps.model.LatLng
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.clearActionsNotification
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
-import com.nullpointer.runningcompose.domain.location.LocationRepository
+import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.models.types.TrackingState.*
 import com.nullpointer.runningcompose.ui.activitys.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,21 +42,6 @@ class TrackingServices : LifecycleService() {
         private const val NOTIFICATION_CHANNEL_NAME = "Tracking"
         private const val NOTIFICATION_ID = 123456789
 
-
-        // * var to save state servicews
-        var stateServices by mutableStateOf(WAITING)
-            private set
-
-        private val listPoints: MutableList<MutableList<LatLng>> = mutableListOf(mutableListOf())
-        val showListPoints: List<List<LatLng>> = listPoints
-
-        private val counterPoints = MutableStateFlow(0)
-        val showCounterPoint = counterPoints.asStateFlow()
-
-        private val timeInMillis = MutableStateFlow(0L)
-        val showTimeInMillis = timeInMillis.asStateFlow()
-
-
         private fun sendCommand(context: Context, command: String) {
             Intent(context, TrackingServices::class.java).apply {
                 action = command
@@ -75,8 +56,7 @@ class TrackingServices : LifecycleService() {
     }
 
     @Inject
-    lateinit var locationRepository: LocationRepository
-
+    lateinit var locationRepository: TrackingRepository
     private val timerRun = Timer()
 
     // * this no init immediately for error
@@ -88,56 +68,64 @@ class TrackingServices : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         locationRepository
-            .lastLocation
+            .lastLocation.combine(locationRepository.stateTracking) { location, state ->
+                Pair(location, state)
+            }
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             // ! only send location when the tracking is running
-            .filter { stateServices == TRACKING }
+            .filter {
+                val (_, state) = it
+                state == TRACKING
+            }
             // ! this var notify new location
             // ? no send the listPoints
             .onEach {
-                counterPoints.value = counterPoints.value + 1
-                listPoints.last().add(it)
+                val (location, _) = it
+                locationRepository.addNewLocation(location)
             }
             // ! when finish the services, reset static values
             .onCompletion {
                 timerRun.resetValues()
-                listPoints.clear()
-                listPoints.add(mutableListOf())
-                timeInMillis.value = 0
+                locationRepository.clearValues()
             }.launchIn(lifecycleScope)
     }
 
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.action?.let {
-            when (it) {
-                START_COMMAND -> {
-                    stateServices = TRACKING
-                    notificationServices.startRunServices()
-                    timerRun.startTimer()
-                }
-                PAUSE_OR_RESUME_COMMAND -> {
-                    stateServices = if (stateServices == TRACKING) {
-                        notificationServices.updateAction(false)
-                        // ! when pause tracking so add new empty list
-                        // * the user can pause this services and this points may not be
-                        // * consecutive
-                        listPoints.add(mutableListOf())
-                        PAUSE
-                    } else {
-                        notificationServices.updateAction(true)
-                        // ! only start services when resume services
+            lifecycleScope.launch {
+                val stateServices=locationRepository.stateTracking.first()
+                when (it) {
+                    START_COMMAND -> {
+                        locationRepository.changeStateTracking(TRACKING)
+                        notificationServices.startRunServices()
                         timerRun.startTimer()
-                        TRACKING
                     }
+                    PAUSE_OR_RESUME_COMMAND -> {
+                        if (stateServices == TRACKING) {
+                            notificationServices.updateAction(false)
+                            // ! when pause tracking so add new empty list
+                            // * the user can pause this services and this points may not be
+                            // * consecutive
+                            locationRepository.addEmptyList()
+                            locationRepository.changeStateTracking(PAUSE)
+                        } else {
+                            notificationServices.updateAction(true)
+                            // ! only start services when resume services
+                            locationRepository.changeStateTracking(TRACKING)
+                            timerRun.startTimer()
+                        }
+                    }
+                    STOP_COMMAND -> {
+                        // * reset state services to waiting
+                        locationRepository.changeStateTracking(WAITING)
+                        stopForeground(true)
+                        stopSelf()
+                    }
+                    else -> Timber.e("Error action $it")
                 }
-                STOP_COMMAND -> {
-                    // * reset state services to waiting
-                    stateServices = WAITING
-                    stopForeground(true)
-                    stopSelf()
-                }
-                else -> Timber.e("Error action $it")
             }
+
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -249,14 +237,15 @@ class TrackingServices : LifecycleService() {
             val timeStart = System.currentTimeMillis()
             lifecycleScope.launch(Dispatchers.Main) {
                 //while is tracking
-                while (stateServices == TRACKING) {
+                while (locationRepository.stateTracking.first() == TRACKING) {
                     //save the last time stamp that is the current time minus the time start
                     lastTimestamp = System.currentTimeMillis() - timeStart
                     //update the time in millis
-                    timeInMillis.value = timeRun + lastTimestamp
+                    val newTime=timeRun + lastTimestamp
+                    locationRepository.changeTimeTracking(newTime)
                     //if the time in millis is greater than the last time in seconds +1000
                     //so will add one to the current time in seconds
-                    if (timeInMillis.value >= lastSecondTimestamp + 1000L) {
+                    if (newTime >= lastSecondTimestamp + 1000L) {
                         //update the time in seconds
                         timeRunInSeconds += 1
                         notificationServices.updateTimeRunNotification(timeRunInSeconds)

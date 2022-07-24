@@ -10,30 +10,6 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.services.TrackingServices
 
-@Composable
-fun ButtonPlayTracking() {
-    val context = LocalContext.current
-    when (TrackingServices.stateServices) {
-        TrackingState.WAITING -> FloatingActionButton(onClick = {
-            TrackingServices.startServices(context)
-        }) {
-            Icon(painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = stringResource(R.string.description_button_play_tracking))
-        }
-        TrackingState.TRACKING -> FloatingActionButton(onClick = {
-            TrackingServices.pauseOrResumeServices(context)
-        }) {
-            Icon(painter = painterResource(id = R.drawable.ic_pause),
-                contentDescription = stringResource(R.string.description_button_resume_tracking))
-        }
-        TrackingState.PAUSE -> FloatingActionButton(onClick = {
-            TrackingServices.pauseOrResumeServices(context)
-        }) {
-            Icon(painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = stringResource(R.string.description_button_resume))
-        }
-    }
-}
 
 @Composable
 fun ButtonStopTracking(

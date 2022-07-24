@@ -11,6 +11,7 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.presentation.TrackingViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
@@ -33,12 +34,14 @@ import kotlinx.coroutines.flow.first
 fun RunsScreens(
     configViewModel: ConfigViewModel,
     actionRootDestinations: ActionRootDestinations,
-    runsViewModel: RunsViewModel = shareViewModel(),
     selectViewModel: SelectViewModel,
+    trackingViewModel: TrackingViewModel= shareViewModel(),
+    runsViewModel: RunsViewModel = shareViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState()
 ) {
     val listRuns by runsViewModel.listRunsOrdered.collectAsState()
     val sortConfig by configViewModel.sortConfig.collectAsState()
+    val stateTracking by trackingViewModel.stateTracking.collectAsState()
     val (showDialogPermission, changeVisibilityDialog) = rememberSaveable { mutableStateOf(false) }
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
     val metricType by configViewModel.metrics.collectAsState()
@@ -66,6 +69,7 @@ fun RunsScreens(
                 isVisible = !runsState.isScrollInProgress,
                 isSelectedEnable = selectViewModel.isSelectEnable,
                 descriptionButtonAdd = stringResource(R.string.description_button_add_run),
+                trackingState = stateTracking,
                 actionAdd = {
                     when (runsState.permissionState) {
                         PermissionStatus.Granted -> {

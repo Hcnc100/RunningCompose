@@ -30,6 +30,7 @@ fun ButtonToggleAddRemove(
     actionAdd: () -> Unit,
     descriptionButtonRemove: String,
     actionRemove: () -> Unit,
+    trackingState: TrackingState,
 ) {
 
     AnimatedVisibility(
@@ -39,7 +40,7 @@ fun ButtonToggleAddRemove(
     ) {
         FabAnimation(
             isVisible = !isSelectedEnable,
-            icon = if (TrackingServices.stateServices == TrackingState.WAITING) Icons.Default.Add else Icons.Default.PlayArrow,
+            icon = if (trackingState == TrackingState.WAITING) Icons.Default.Add else Icons.Default.PlayArrow,
             description = descriptionButtonAdd,
             action = actionAdd,
         )

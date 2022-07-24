@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
@@ -28,7 +25,7 @@ class SharedLocationManager constructor(
     private val locationRequest = LocationRequest.create().apply {
         interval = LOCATION_UPDATE_INTERVAL
         fastestInterval = FASTEST_LOCATION_INTERVAL
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        priority = Priority.PRIORITY_HIGH_ACCURACY
     }
 
 
@@ -36,11 +33,10 @@ class SharedLocationManager constructor(
     private val _lastLocation = callbackFlow {
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
-                Timber.d("New location: ${result.lastLocation?.toText()}")
                 result.lastLocation?.let { trySend(it.toLatLng()) }
             }
         }
-        Timber.d("Starting location updates")
+        Timber.e("Starting location updates")
 
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
@@ -51,7 +47,7 @@ class SharedLocationManager constructor(
         }
 
         awaitClose {
-            Timber.d("Stopping location updates")
+            Timber.e("Stopping location updates")
             fusedLocationClient.removeLocationUpdates(callback) // clean up when Flow collection ends
         }
     }.shareIn(

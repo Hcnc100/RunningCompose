@@ -2,8 +2,8 @@ package com.nullpointer.runningcompose.inject
 
 import com.nullpointer.runningcompose.domain.config.ConfigRepoImpl
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
-import com.nullpointer.runningcompose.domain.location.LocationRepoImpl
-import com.nullpointer.runningcompose.domain.location.LocationRepository
+import com.nullpointer.runningcompose.domain.location.TrackingRepoImpl
+import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepoImpl
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import dagger.Binds
@@ -31,6 +31,6 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun provideLocationRepository(
-        locationRepoImpl: LocationRepoImpl
-    ):LocationRepository
+        locationRepoImpl: TrackingRepoImpl
+    ):TrackingRepository
 }

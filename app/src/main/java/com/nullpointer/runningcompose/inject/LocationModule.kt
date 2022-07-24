@@ -1,11 +1,10 @@
 package com.nullpointer.runningcompose.inject
 
 import android.content.Context
-import com.nullpointer.runningcompose.data.local.datasource.location.LocationDataSource
-import com.nullpointer.runningcompose.data.local.datasource.location.LocationDataSourceImpl
+import com.nullpointer.runningcompose.data.local.datasource.location.TrackingDataSource
+import com.nullpointer.runningcompose.data.local.datasource.location.TrackingDataSourceImpl
 import com.nullpointer.runningcompose.data.local.location.SharedLocationManager
-import com.nullpointer.runningcompose.domain.location.LocationRepoImpl
-import com.nullpointer.runningcompose.domain.location.LocationRepository
+import com.nullpointer.runningcompose.domain.location.TrackingRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,12 +29,12 @@ object LocationModule {
     @Singleton
     fun provideLocationDataSource(
         sharedLocationManager: SharedLocationManager,
-    ): LocationDataSource = LocationDataSourceImpl(sharedLocationManager)
+    ): TrackingDataSource = TrackingDataSourceImpl(sharedLocationManager)
 
     @Provides
     @Singleton
     fun provideLocationRepository(
-        locationDataSource: LocationDataSource
-    ): LocationRepoImpl = LocationRepoImpl(locationDataSource)
+        locationDataSource: TrackingDataSource
+    ): TrackingRepoImpl = TrackingRepoImpl(locationDataSource)
 
 }
