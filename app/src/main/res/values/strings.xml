@@ -141,5 +141,6 @@
     <string name="error_empty_weight">El peso es requerido</string>
     <string name="error_max_length_weight">El peso no puede ser tan largo</string>
     <string name="message_info_saved_tracking">Guardando datos del recorrido</string>
+    <string name="title_tracking">Realizando seguimiento</string>
 
 </resources>

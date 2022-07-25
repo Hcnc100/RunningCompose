@@ -1,17 +1,20 @@
 package com.nullpointer.runningcompose.core.utils
 
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.os.Build
 import android.text.format.DateFormat
 import androidx.activity.ComponentActivity
 import androidx.annotation.PluralsRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.core.location.LocationRequestCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.models.types.MetricType.*
+import com.nullpointer.runningcompose.models.types.MetricType.Kilo
+import com.nullpointer.runningcompose.models.types.MetricType.Meters
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -86,6 +89,19 @@ fun NotificationCompat.Builder.clearActionsNotification() {
         set(this@clearActionsNotification, ArrayList<NotificationCompat.Action>())
     }
 }
+
+fun Context.getNotifyManager(): NotificationManager{
+   return  getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+}
+
+val Context.correctFlag:Int get() {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    } else {
+        PendingIntent.FLAG_UPDATE_CURRENT
+    }
+}
+
 
 @Composable
 inline fun <reified VM : ViewModel> shareViewModel():VM {

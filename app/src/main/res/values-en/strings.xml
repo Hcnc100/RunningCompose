@@ -117,5 +117,11 @@
     <string name="description_cancel_run">Cancel the current runs and delete the data</string>
     <string name="title_tracking_screen">Tracking</string>
     <string name="title_graph">Trackings</string>
+    <string name="hint_name_user">Write your name</string>
+    <string name="hint_weight_user">Write your weight</string>
+    <string name="error_empty_weight">weight is required</string>
+    <string name="error_max_length_weight">Weight can\'t be that long</string>
+    <string name="message_info_saved_tracking">Saving tracking data</string>
+    <string name="title_tracking">Tracking</string>
 
 </resources>
