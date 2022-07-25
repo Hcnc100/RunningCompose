@@ -51,11 +51,12 @@ object ImageUtils {
         }
     }
 
-    fun deleterImgFromStorage(nameFile:String,context: Context){
+    fun deleterImgFromStorage(fullPath:String, context: Context){
         try {
+            val nameFile=fullPath.split("/").last()
             context.deleteFile(nameFile)
         }catch (e:Exception){
-            Timber.e("Error deleter img $nameFile : $e")
+            Timber.e("Error deleter img $fullPath : $e")
         }
     }
 }
