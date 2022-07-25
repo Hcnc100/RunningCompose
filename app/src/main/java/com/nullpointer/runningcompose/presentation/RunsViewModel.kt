@@ -62,16 +62,10 @@ class RunsViewModel @Inject constructor(
     )
 
 
-
-    fun insertNewRun(newRun: Run) = viewModelScope.launch(Dispatchers.IO) {
-        runsRepository.insertNewRun(newRun)
-    }
-
     fun insertNewRun(
         timeRun: Long,
         listPoints: List<List<LatLng>>,
-        imageMap: Bitmap?,
-        context: Context
+        bitmap: Bitmap?
     ) = viewModelScope.launch(Dispatchers.IO) {
         // * need weight user for calculate calories burned
 
@@ -90,14 +84,6 @@ class RunsViewModel @Inject constructor(
         }.map {
             PolyUtil.encode(it)
         }.toList()
-
-        val pathImgSaved = imageMap?.let {
-            ImageUtils.saveToInternalStorage(
-                bitmapImage = it,
-                "map-run-${currentTime}",
-                context
-            )
-        }
         val avgSpeedInMS = distanceInMeters / (timeRun / 1000f)
         val caloriesBurned = distanceInMeters * (weightUser / 1000f)
 
@@ -109,9 +95,8 @@ class RunsViewModel @Inject constructor(
             listPolyLineEncode = listPolylineEncode,
             mapConfig = mapConfig,
             timestamp = currentTime,
-            pathImgRun = pathImgSaved
         )
-        runsRepository.insertNewRun(run)
+        runsRepository.insertNewRun(run,bitmap)
     }
 
     fun deleterRun(run: Run) = viewModelScope.launch(Dispatchers.IO) {

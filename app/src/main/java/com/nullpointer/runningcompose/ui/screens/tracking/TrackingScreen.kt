@@ -111,8 +111,7 @@ fun TrackingScreen(
                             runsViewModel.insertNewRun(
                                 timeRun = timeRun,
                                 listPoints = drawPolyData.listLocation,
-                                imageMap = bitmapMap,
-                                context = trackingState.context
+                               bitmap = bitmapMap
                             )
                             TrackingServices.finishServices(trackingState.context)
                             actionRootDestinations.backDestination()

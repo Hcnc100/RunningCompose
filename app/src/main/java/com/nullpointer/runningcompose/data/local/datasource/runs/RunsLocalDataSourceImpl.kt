@@ -31,6 +31,9 @@ class RunsLocalDataSourceImpl(
     override suspend fun insertNewRun(run: Run) =
         runDao.insertNewRun(run)
 
+    override suspend fun getListRunsById(listIds: List<Long>) =
+        runDao.getListRunsById(listIds)
+
     override suspend fun deleterListRuns(listIds: List<Long>) =
         runDao.deleterListRuns(listIds)
 

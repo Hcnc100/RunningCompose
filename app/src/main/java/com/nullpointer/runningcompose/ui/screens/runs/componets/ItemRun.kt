@@ -43,17 +43,14 @@ fun ItemRun(
     actionRun: (ActionRun, Run) -> Unit,
     metricType: MetricType,
     modifier: Modifier = Modifier,
-    context: Context = LocalContext.current
 ) {
 
     val colorSelect by derivedStateOf { if (itemRun.isSelected) Color.Cyan.copy(alpha = 0.5f) else Color.Transparent }
-    val bitmap = remember {
-        itemRun.pathImgRun?.let { ImageUtils.loadImageFromStorage(it, context) }
-    }
+
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .crossfade(true)
-            .data(bitmap)
+            .data(itemRun.pathImgRun)
             .build(),
         placeholder = painterResource(id = R.drawable.ic_map),
         error = painterResource(id = R.drawable.ic_error_img),

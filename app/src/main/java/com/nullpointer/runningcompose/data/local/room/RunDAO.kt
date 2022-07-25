@@ -34,6 +34,9 @@ interface RunDAO {
     @Query("DELETE FROM run_table WHERE id IN (:listIds)")
     suspend fun deleterListRuns(listIds: List<Long>)
 
+    @Query("SELECT * FROM run_table WHERE id IN (:listIds)")
+    fun getListRunsById(listIds: List<Long>): List<Run>
+
     @Query("SELECT TOTAL(timeRunInMillis) FROM run_table")
     fun getTotalTimeInMillis(): Flow<Long>
 
@@ -45,4 +48,5 @@ interface RunDAO {
 
     @Query("SELECT AVG(avgSpeedInMeters) FROM run_table")
     fun getTotalAVGSpeed(): Flow<Float?>
+
 }

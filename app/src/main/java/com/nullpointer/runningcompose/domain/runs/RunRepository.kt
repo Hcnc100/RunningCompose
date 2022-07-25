@@ -1,5 +1,7 @@
 package com.nullpointer.runningcompose.domain.runs
 
+import android.content.Context
+import android.graphics.Bitmap
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.config.MapConfig
@@ -16,5 +18,5 @@ interface RunRepository {
 
     suspend fun deleterListRuns(listIds: List<Long>)
     suspend fun deleterRun(run: Run)
-    suspend fun insertNewRun(run: Run)
+    suspend fun insertNewRun(run: Run,bitmap: Bitmap?)
 }
