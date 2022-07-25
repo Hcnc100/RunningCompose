@@ -2,11 +2,11 @@ package com.nullpointer.runningcompose.ui.screens.tracking
 
 import android.content.Context
 import android.content.res.Configuration
+import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -16,11 +16,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.maps.android.ktx.addPolyline
 import com.google.maps.android.ktx.awaitMap
+import com.google.maps.android.ktx.awaitSnapshot
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
@@ -35,12 +38,15 @@ import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.rememberMapWithLifecycle
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.*
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogCancel
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogSaved
 import com.nullpointer.runningcompose.ui.share.ToolbarBackWithAction
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
+import kotlinx.coroutines.launch
 import timber.log.Timber
+
 
 @Destination(
     deepLinks = [
@@ -50,16 +56,16 @@ import timber.log.Timber
 @RootNavGraph
 @Composable
 fun TrackingScreen(
-    locationViewModel: TrackingViewModel = shareViewModel(),
-    runsViewModel: RunsViewModel = hiltViewModel(),
+    trackingViewModel: TrackingViewModel = hiltViewModel(),
+    runsViewModel: RunsViewModel = shareViewModel(),
     trackingState: OrientationScreenState = rememberOrientationScreenState(),
     actionRootDestinations: ActionRootDestinations
 ) {
-    val (isShowDialog, changeDialogState) = rememberSaveable { mutableStateOf(false) }
-    val lastLocation by locationViewModel.lastLocation.collectAsState()
-    val drawPolyData by locationViewModel.drawLinesData.collectAsState()
-    val timeRun by locationViewModel.timeRun.collectAsState()
-    val servicesState by locationViewModel.stateTracking.collectAsState()
+    val lastLocation by trackingViewModel.lastLocation.collectAsState()
+    val drawPolyData by trackingViewModel.drawLinesData.collectAsState()
+    val timeRun by trackingViewModel.timeRun.collectAsState()
+    val servicesState by trackingViewModel.stateTracking.collectAsState()
+    val mapViewState = rememberMapWithLifecycle()
 
 
     Scaffold(
@@ -67,7 +73,7 @@ fun TrackingScreen(
             ToolbarBackWithAction(title = stringResource(R.string.title_tracking_screen),
                 actionBack = actionRootDestinations::backDestination,
                 actionCancel = if (servicesState != WAITING) {
-                    { changeDialogState(true) }
+                    { trackingViewModel.changeDialogCancel(true) }
                 } else null
             )
         },
@@ -79,21 +85,50 @@ fun TrackingScreen(
             timeRun = timeRun,
             lastLocation = lastLocation,
             servicesState = servicesState,
+            mapViewState = mapViewState,
             actionServices = { action ->
                 when (action) {
-                    START -> TrackingServices.startServices(trackingState.context)
-                    RESUME -> TrackingServices.pauseOrResumeServices(trackingState.context)
+                    START -> TrackingServices.startServicesOrResume(trackingState.context)
+                    RESUME -> TrackingServices.pauseServices(trackingState.context)
                     SAVED -> {
-
+                        trackingViewModel.changeDialogSaved(true)
+                        trackingState.scope.launch {
+                            val map = mapViewState.awaitMap()
+                            // * disable animation to last location
+                            TrackingServices.pauseServices(trackingState.context)
+                            trackingViewModel.changeAnimation(false)
+                            val bounds = LatLngBounds.builder().apply {
+                                drawPolyData.listLocation.forEach { list ->
+                                    list.forEach { latLng ->
+                                        include(latLng)
+                                    }
+                                }
+                            }.build()
+                            val cameraUpdate =
+                                CameraUpdateFactory.newLatLngBounds(bounds, 500, 500, 10)
+                            map.moveCamera(cameraUpdate)
+                            val bitmapMap = map.awaitSnapshot()
+                            runsViewModel.insertNewRun(
+                                timeRun = timeRun,
+                                listPoints = drawPolyData.listLocation,
+                                imageMap = bitmapMap,
+                                context = trackingState.context
+                            )
+                            TrackingServices.finishServices(trackingState.context)
+                            actionRootDestinations.backDestination()
+                        }
                     }
                 }
             }
         )
         Text(text = lastLocation.toString())
 
-        if (isShowDialog)
+        if (trackingViewModel.isShowDialogSave)
+            DialogSaved()
+
+        if (trackingViewModel.isShowDialogCancel)
             DialogCancel(
-                actionCancel = { changeDialogState(false) },
+                actionCancel = { trackingViewModel.changeDialogCancel(false) },
                 acceptAction = {
                     TrackingServices.finishServices(trackingState.context)
                     actionRootDestinations.backDestination()
@@ -110,6 +145,7 @@ fun MapAndTime(
     lastLocation: LatLng?,
     servicesState: TrackingState,
     modifier: Modifier = Modifier,
+    mapViewState: MapView,
     actionServices: (TrackingActions) -> Unit,
 ) {
 
@@ -122,27 +158,15 @@ fun MapAndTime(
                 MapTracking(
                     drawPolyData = drawPolyData,
                     lastLocation = lastLocation,
-                    modifier = Modifier.weight(.75f)
+                    modifier = Modifier.weight(.75f),
+                    mapViewState = mapViewState
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(.25f)
-                        .background(MaterialTheme.colors.primary),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(textRun, style = MaterialTheme.typography.h4)
-                        Row {
-                            ButtonsServices(
-                                modifierSpacer = modifier.width(20.dp),
-                                actionServices = actionServices,
-                                servicesState = servicesState
-                            )
-                        }
-                    }
-
-                }
+                ButtonsPortrait(
+                    textRun = textRun,
+                    servicesState = servicesState,
+                    modifier = Modifier.weight(.25f),
+                    actionServices = actionServices,
+                )
             }
         }
         Configuration.ORIENTATION_LANDSCAPE -> {
@@ -150,30 +174,71 @@ fun MapAndTime(
                 MapTracking(
                     lastLocation = lastLocation,
                     drawPolyData = drawPolyData,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
+                    mapViewState = mapViewState
                 )
-                Text(
-                    textRun,
-                    style = MaterialTheme.typography.h4,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .background(MaterialTheme.colors.primary)
-                        .padding(10.dp)
+                ButtonsLandScape(
+                    modifierText = Modifier.align(Alignment.TopCenter),
+                    modifierButtons = Modifier.align(Alignment.CenterStart),
+                    textRun = textRun,
+                    servicesState = servicesState,
+                    actionServices = actionServices
                 )
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .background(MaterialTheme.colors.primary)
-                        .padding(10.dp)
-                ) {
-                    ButtonsServices(
-                        modifierSpacer = modifier.height(20.dp),
-                        actionServices = actionServices,
-                        servicesState = servicesState
-                    )
-                }
             }
         }
+    }
+}
+
+@Composable
+fun ButtonsLandScape(
+    modifierText: Modifier,
+    modifierButtons: Modifier,
+    textRun: String,
+    servicesState: TrackingState,
+    actionServices: (TrackingActions) -> Unit,
+) {
+    Text(
+        textRun,
+        style = MaterialTheme.typography.h4,
+        modifier = modifierText
+            .background(MaterialTheme.colors.primary)
+            .padding(10.dp)
+    )
+    Column(
+        modifier = modifierButtons.padding(5.dp)
+    ) {
+        ButtonsServices(
+            modifierSpacer = Modifier.height(20.dp),
+            actionServices = actionServices,
+            servicesState = servicesState
+        )
+    }
+}
+
+@Composable
+fun ButtonsPortrait(
+    modifier: Modifier = Modifier,
+    textRun: String,
+    servicesState: TrackingState,
+    actionServices: (TrackingActions) -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.primary),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(textRun, style = MaterialTheme.typography.h4)
+            Row {
+                ButtonsServices(
+                    modifierSpacer = Modifier.width(20.dp),
+                    actionServices = actionServices,
+                    servicesState = servicesState
+                )
+            }
+        }
+
     }
 }
 
@@ -203,7 +268,7 @@ private fun ButtonsServices(
 
     if (servicesState != WAITING) {
         Spacer(modifier = modifierSpacer)
-        FloatingActionButton(onClick = { /*TODO*/ }) {
+        FloatingActionButton(onClick = { actionServices(SAVED) }) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_stop),
                 contentDescription = stringResource(id = R.string.description_button_stop_and_save_tracking)
@@ -217,9 +282,10 @@ private fun MapTracking(
     drawPolyData: DrawPolyData,
     modifier: Modifier = Modifier,
     lastLocation: LatLng?,
-    context: Context = LocalContext.current
+    context: Context = LocalContext.current,
+    mapViewState:MapView
 ) {
-    val mapViewState = rememberMapWithLifecycle()
+
     val listPolyline = remember { mutableListOf<Polyline>() }
     var currentConfig by remember { mutableStateOf(MapConfig()) }
 
@@ -261,7 +327,11 @@ private fun MapTracking(
     AndroidView(
         modifier = modifier,
         factory = {
-            mapViewState
+            mapViewState.apply {
+                if (parent != null) {
+                    (parent as ViewGroup).removeView(this) // <- fix
+                }
+            }
         },
         update = { mapView ->
             mapView.getMapAsync { map ->

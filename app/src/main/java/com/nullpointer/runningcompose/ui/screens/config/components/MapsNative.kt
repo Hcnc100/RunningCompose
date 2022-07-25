@@ -2,6 +2,7 @@ package com.nullpointer.runningcompose.ui.screens.config.components
 
 import android.content.Context
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.nullpointer.runningcompose.R
+
 
 fun LatLngBounds.Builder.includeAll(points: List<LatLng>): LatLngBounds.Builder {
     points.forEach(::include)
@@ -43,7 +45,9 @@ fun rememberMapWithLifecycle(
 fun rememberMapLifecycleObserver(mapView: MapView): LifecycleEventObserver = remember {
     LifecycleEventObserver { _, event ->
         when (event) {
-            Lifecycle.Event.ON_CREATE -> mapView.onCreate(Bundle())
+            Lifecycle.Event.ON_CREATE -> {
+                mapView.onCreate(Bundle())
+            }
             Lifecycle.Event.ON_START -> mapView.onStart()
             Lifecycle.Event.ON_RESUME -> mapView.onResume()
             Lifecycle.Event.ON_PAUSE -> mapView.onPause()

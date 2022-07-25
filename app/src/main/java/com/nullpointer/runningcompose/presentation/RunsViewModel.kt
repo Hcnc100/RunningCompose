@@ -1,20 +1,23 @@
 package com.nullpointer.runningcompose.presentation
 
+import android.content.Context
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
+import com.nullpointer.runningcompose.core.utils.ImageUtils
 import com.nullpointer.runningcompose.core.utils.Utility
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
+import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import com.nullpointer.runningcompose.models.Run
-import com.nullpointer.runningcompose.models.StatisticsRun
+import com.nullpointer.runningcompose.models.types.TrackingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,10 +28,23 @@ import javax.inject.Inject
 class RunsViewModel @Inject constructor(
     private val runsRepository: RunRepository,
     private val configRepository: ConfigRepository,
+    locationRepository: TrackingRepository,
 ) : ViewModel() {
+
+    init {
+        Timber.e("Init time running")
+    }
 
     private val _messageRuns = Channel<Int>()
     val messageRuns = _messageRuns.receiveAsFlow()
+
+    val stateTracking = locationRepository
+        .stateTracking
+        .flowOn(Dispatchers.IO).stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            TrackingState.WAITING
+        )
 
     val listRunsOrdered = flow<Resource<List<Run>>> {
         runsRepository.listRunsOrdered.collect {
@@ -54,6 +70,8 @@ class RunsViewModel @Inject constructor(
     fun insertNewRun(
         timeRun: Long,
         listPoints: List<List<LatLng>>,
+        imageMap: Bitmap?,
+        context: Context
     ) = viewModelScope.launch(Dispatchers.IO) {
         // * need weight user for calculate calories burned
 
@@ -62,23 +80,36 @@ class RunsViewModel @Inject constructor(
 
         val weightUser = configRepository.userConfig.first()!!.weight
         val mapConfig = configRepository.mapConfig.first()
+        val currentTime=System.currentTimeMillis()
 
         var distanceInMeters = 0f
-        val listPolylineEncode = listPoints.onEach {
+        val listPolylineEncode = listPoints.asSequence().filter {
+            it.size >= 2
+        }.onEach {
             distanceInMeters += Utility.calculatePolylineLength(it)
         }.map {
             PolyUtil.encode(it)
+        }.toList()
+
+        val pathImgSaved = imageMap?.let {
+            ImageUtils.saveToInternalStorage(
+                bitmapImage = it,
+                "map-run-${currentTime}",
+                context
+            )
         }
         val avgSpeedInMS = distanceInMeters / (timeRun / 1000f)
-
         val caloriesBurned = distanceInMeters * (weightUser / 1000f)
+
         val run = Run(
             avgSpeedInMeters = avgSpeedInMS,
             distanceInMeters = distanceInMeters,
             timeRunInMillis = timeRun,
             caloriesBurned = caloriesBurned,
             listPolyLineEncode = listPolylineEncode,
-            mapConfig = mapConfig
+            mapConfig = mapConfig,
+            timestamp = currentTime,
+            pathImgRun = pathImgSaved
         )
         runsRepository.insertNewRun(run)
     }

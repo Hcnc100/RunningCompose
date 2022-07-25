@@ -1,25 +1,26 @@
 package com.nullpointer.runningcompose.presentation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.model.LatLng
+import com.nullpointer.runningcompose.core.delegates.SavableComposeState
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepository
-import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.ui.screens.tracking.DrawPolyData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 class TrackingViewModel @Inject constructor(
     locationRepository: TrackingRepository,
-    configRepository: ConfigRepository
+    configRepository: ConfigRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val drawLinesData = combine(
@@ -33,19 +34,12 @@ class TrackingViewModel @Inject constructor(
         DrawPolyData()
     )
 
-    val lastLocation = locationRepository.lastLocation.flowOn(Dispatchers.IO).stateIn(
+    val lastLocation = locationRepository.lastLocation.filter { isEnableAnimation }.flowOn(Dispatchers.IO).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null
     )
 
-    val listLocations = locationRepository
-        .lastLocationSaved
-        .flowOn(Dispatchers.IO).stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptyList()
-        )
     val timeRun = locationRepository.timeTracking.flowOn(Dispatchers.IO).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -57,4 +51,23 @@ class TrackingViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = TrackingState.WAITING
     )
+    var isShowDialogCancel by SavableComposeState(savedStateHandle,"KEY_DIALOG_CANCEL",false)
+    private set
+
+    var isShowDialogSave by SavableComposeState(savedStateHandle,"KEY_DIALOG_SAVE",false)
+        private set
+
+    private var isEnableAnimation by mutableStateOf(true)
+
+    fun changeAnimation(isEnable: Boolean){
+        isEnableAnimation=isEnable
+    }
+
+    fun changeDialogCancel(isShowDialog:Boolean){
+        isShowDialogCancel = isShowDialog
+    }
+
+    fun changeDialogSaved(isShowDialog:Boolean){
+        isShowDialogSave = isShowDialog
+    }
 }

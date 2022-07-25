@@ -58,7 +58,7 @@ fun DialogExplainPermission(
                 Text(stringResource(id = idText),
                     style = MaterialTheme.typography.h6)
                 LottieContainer(modifier = Modifier.size(250.dp),
-                    animation = if (isFirstRequestPermission) R.raw.location else R.raw.setting)
+                    animation = if (isFirstRequestPermission) R.raw.location else R.raw.work)
             }
         }
     )

@@ -1,6 +1,8 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
+import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -23,7 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
 import com.nullpointer.runningcompose.models.Run
@@ -38,10 +42,22 @@ fun ItemRun(
     isSelectEnable: Boolean,
     actionRun: (ActionRun, Run) -> Unit,
     metricType: MetricType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    context: Context = LocalContext.current
 ) {
 
     val colorSelect by derivedStateOf { if (itemRun.isSelected) Color.Cyan.copy(alpha = 0.5f) else Color.Transparent }
+    val bitmap = remember {
+        itemRun.pathImgRun?.let { ImageUtils.loadImageFromStorage(it, context) }
+    }
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .crossfade(true)
+            .data(bitmap)
+            .build(),
+        placeholder = painterResource(id = R.drawable.ic_map),
+        error = painterResource(id = R.drawable.ic_error_img),
+    )
 
     Card(
         modifier = modifier
@@ -67,23 +83,17 @@ fun ItemRun(
             .padding(10.dp)
             .height(150.dp)) {
             // * waiting to take snapshot for maps compose
-            Box(modifier = Modifier
-                .weight(.5f)
-                .fillMaxHeight()
-                .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colors.primary)) {
+            Image(
+                painter = painter,
+                contentDescription = stringResource(R.string.description_current_run_img),
+                contentScale = if (painter.state is AsyncImagePainter.State.Success) ContentScale.Crop else ContentScale.Fit,
+                modifier = Modifier
+                    .weight(.5f)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.White),
+            )
 
-                AsyncImage(
-                    model = R.drawable.ic_run,
-                    placeholder = painterResource(id = R.drawable.ic_run),
-                    error = painterResource(id = R.drawable.ic_error_img),
-                    contentDescription = stringResource(R.string.description_current_run_img),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(20.dp)
-                )
-            }
             Spacer(modifier = Modifier.width(20.dp))
             InfoRun(itemRun = itemRun,
                 modifier = Modifier.weight(.5f),

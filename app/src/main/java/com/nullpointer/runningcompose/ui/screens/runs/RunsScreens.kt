@@ -35,13 +35,12 @@ fun RunsScreens(
     configViewModel: ConfigViewModel,
     actionRootDestinations: ActionRootDestinations,
     selectViewModel: SelectViewModel,
-    trackingViewModel: TrackingViewModel= shareViewModel(),
     runsViewModel: RunsViewModel = shareViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState()
 ) {
     val listRuns by runsViewModel.listRunsOrdered.collectAsState()
     val sortConfig by configViewModel.sortConfig.collectAsState()
-    val stateTracking by trackingViewModel.stateTracking.collectAsState()
+    val stateTracking by runsViewModel.stateTracking.collectAsState()
     val (showDialogPermission, changeVisibilityDialog) = rememberSaveable { mutableStateOf(false) }
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
     val metricType by configViewModel.metrics.collectAsState()

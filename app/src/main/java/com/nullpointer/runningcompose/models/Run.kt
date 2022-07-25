@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.models
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
@@ -21,7 +22,8 @@ data class Run(
     @Embedded
     val mapConfig:MapConfig,
     @PrimaryKey(autoGenerate = true)
-    val id:Long=0
+    val id:Long=0,
+    val pathImgRun:String?
 ) : Parcelable {
 
     @IgnoredOnParcel

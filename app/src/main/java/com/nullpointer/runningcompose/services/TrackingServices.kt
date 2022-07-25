@@ -31,9 +31,9 @@ import javax.inject.Inject
 class TrackingServices : LifecycleService() {
     companion object {
         // * commands
-        private const val START_COMMAND = "START_COMMAND"
+        private const val START_OR_RESUME_COMMAND = "START_COMMAND"
         private const val STOP_COMMAND = "STOP_COMMAND"
-        private const val PAUSE_OR_RESUME_COMMAND = "PAUSE_OR_RESUME_COMMAND"
+        private const val PAUSE_COMMAND = "PAUSE_OR_RESUME_COMMAND"
 
         // * delay timer
         const val TIMER_DELAY_TIMER = 50L
@@ -50,14 +50,15 @@ class TrackingServices : LifecycleService() {
             }
         }
 
-        fun startServices(context: Context) = sendCommand(context, START_COMMAND)
+        fun startServicesOrResume(context: Context) = sendCommand(context, START_OR_RESUME_COMMAND)
         fun finishServices(context: Context) = sendCommand(context, STOP_COMMAND)
-        fun pauseOrResumeServices(context: Context) = sendCommand(context, PAUSE_OR_RESUME_COMMAND)
+        fun pauseServices(context: Context) = sendCommand(context, PAUSE_COMMAND)
     }
 
     @Inject
     lateinit var locationRepository: TrackingRepository
     private val timerRun = Timer()
+    private var isFirstRun=false
 
     // * this no init immediately for error
     // * waiting init this services
@@ -96,12 +97,15 @@ class TrackingServices : LifecycleService() {
             lifecycleScope.launch {
                 val stateServices=locationRepository.stateTracking.first()
                 when (it) {
-                    START_COMMAND -> {
+                    START_OR_RESUME_COMMAND -> {
+                        if(isFirstRun){
+                            isFirstRun=false
+                            notificationServices.startRunServices()
+                        }
                         locationRepository.changeStateTracking(TRACKING)
-                        notificationServices.startRunServices()
                         timerRun.startTimer()
                     }
-                    PAUSE_OR_RESUME_COMMAND -> {
+                    PAUSE_COMMAND -> {
                         if (stateServices == TRACKING) {
                             notificationServices.updateAction(false)
                             // ! when pause tracking so add new empty list
@@ -156,7 +160,7 @@ class TrackingServices : LifecycleService() {
             val actionIntent = Intent(
                 context,
                 TrackingServices::class.java
-            ).apply { action = PAUSE_OR_RESUME_COMMAND }
+            ).apply { action = PAUSE_COMMAND }
 
             return PendingIntent.getService(
                 context,
