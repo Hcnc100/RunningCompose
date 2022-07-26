@@ -1,6 +1,5 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
-import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -121,27 +120,27 @@ private fun InfoRun(
             .fillMaxWidth()
     ) {
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
-            TextMiniTitle(text = stringResource(R.string.item_title_date))
-            TextMiniTitle(text = stringResource(R.string.item_title_hour))
-            TextMiniTitle(text = stringResource(R.string.item_title_duration))
-            TextMiniTitle(text = stringResource(R.string.item_title_distance))
-            TextMiniTitle(text = stringResource(R.string.item_title_speed))
-            TextMiniTitle(text = stringResource(R.string.item_title_calories))
+            DetailsRunText(text = stringResource(R.string.item_title_date))
+            DetailsRunText(text = stringResource(R.string.item_title_hour))
+            DetailsRunText(text = stringResource(R.string.item_title_duration))
+            DetailsRunText(text = stringResource(R.string.item_title_distance))
+            DetailsRunText(text = stringResource(R.string.item_title_speed))
+            DetailsRunText(text = stringResource(R.string.item_title_calories))
         }
         Spacer(modifier = Modifier.width(10.dp))
         Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxHeight()) {
-            TextMiniTitle(text = date)
-            TextMiniTitle(text = timeDay)
-            TextMiniTitle(text = timeRun)
-            TextMiniTitle(text = distance)
-            TextMiniTitle(text = speed)
-            TextMiniTitle(text = calories)
+            DetailsRunText(text = date)
+            DetailsRunText(text = timeDay)
+            DetailsRunText(text = timeRun)
+            DetailsRunText(text = distance)
+            DetailsRunText(text = speed)
+            DetailsRunText(text = calories)
         }
     }
 }
 
 @Composable
-private fun TextMiniTitle(
+private fun DetailsRunText(
     text: String,
 ) {
     Text(
