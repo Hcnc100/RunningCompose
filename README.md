@@ -25,38 +25,39 @@ MAPS_API_KEY="your_api_key_xxxx"
 
 ### Note 
 
-This project is not complete, as the map compositing library does not have the *snapshot* functions, to take a picture of the tracking.
-the image will be replaced by the app logo in the main screen items
+~~This project is not complete, as the map compositing library does not have the *snapshot* functions, to take a picture of the tracking.
+the image will be replaced by the app logo in the main screen items~~
+
+### Update
+Use a google map native library, this for take a snapshot of tracking and save this in internal memory, if you see with maps compose library but no save a img tracking see a *map-compose-library* branch
 
 
 
 ## Screenshots
 ### Splash
 <p>
-  <img src="https://i.imgur.com/LwWd8D4.png" alt="splash" width="200"/>
+  <img src="https://i.imgur.com/uvAYldT.png" alt="splash" width="200"/>
 </p>
 
-### MainScreen
+### MainScreen (empty)
 <p>
-  <img src="https://i.imgur.com/bc6aUAR.png" alt="runs" width="200"/>
-  <img src="https://i.imgur.com/SZcQ6Ef.png" alt="statistics" width="200"/>
-  <img src="https://i.imgur.com/aywclCV.png" alt="settings" width="200"/>
+  <img src="https://i.imgur.com/96jya3I.png" alt="runs" width="200"/>
+  <img src="https://i.imgur.com/nD59rQ2.png" alt="statistics" width="200"/>
+  <img src="https://i.imgur.com/ocAYZmM.png" alt="settings" width="200"/>
 </p>
 
 ### TrackingScreen
 <p>
-  <img src="https://i.imgur.com/85Nl8ou.png" alt="empty tracking" width="200"/>
-  <img src="https://i.imgur.com/yPlHZNI.png" alt="init tracking" width="200"/>
-  <img src="https://i.imgur.com/8Pep8ps.png" alt="notification tracking" width="200"/>
-  <img src="https://i.imgur.com/Vw44TEK.png" alt="cancel tracking" width="200"/>
+  <img src="https://i.imgur.com/neddzib.png" alt="init tracking" width="200"/>
+  <img src="https://i.imgur.com/e4kl0fR.png" alt="saving tracking" width="200"/>
+  <img src="https://i.imgur.com/9qW8GQm.png" alt="cancel tracking" width="200"/>
 </p>
 
 ### No Empty Screen
 <p>
-  <img src="https://i.imgur.com/fvIS1V5.png" alt="single-tracking" width="200"/>
-  <img src="https://i.imgur.com/0Evl5lv.png" alt="more-trackings" width="200"/>
-  <img src="https://i.imgur.com/Of56Tps.png" alt="statistics screens" width="200"/>
-  <img src="https://i.imgur.com/0x2EISN.png" alt="details-screen" width="200"/>
+  <img src="https://i.imgur.com/r5w8Lr5.png" alt="more-trackings" width="200"/>
+  <img src="https://i.imgur.com/y61UmFD.png" alt="statistics screens" width="200"/>
+  <img src="https://i.imgur.com/EEHzLq3.png" alt="details-screen" width="200"/>
 </p>
 
 
