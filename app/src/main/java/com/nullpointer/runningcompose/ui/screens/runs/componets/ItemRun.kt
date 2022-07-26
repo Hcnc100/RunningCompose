@@ -113,7 +113,7 @@ private fun InfoRun(
     val timeRun = remember { itemRun.timeRunInMillis.toFullFormatTime(false) }
     val distance = remember { itemRun.distanceInMeters.toMeters(metricType) }
     val calories = remember { itemRun.caloriesBurned.toCaloriesBurned(metricType) }
-    val speed = remember { itemRun.avgSpeedInMeters.toMeters(metricType) }
+    val speed = remember { itemRun.avgSpeedInMeters.toAVGSpeed(metricType) }
 
     Row(
         modifier = modifier
@@ -134,8 +134,8 @@ private fun InfoRun(
             TextMiniTitle(text = timeDay)
             TextMiniTitle(text = timeRun)
             TextMiniTitle(text = distance)
-            TextMiniTitle(text = calories)
             TextMiniTitle(text = speed)
+            TextMiniTitle(text = calories)
         }
     }
 }
