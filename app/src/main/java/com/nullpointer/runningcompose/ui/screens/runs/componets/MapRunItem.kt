@@ -30,7 +30,8 @@ import timber.log.Timber
 fun MapRunItem(
     itemRun: Run,
     modifier: Modifier = Modifier,
-    context: Context = LocalContext.current
+    context: Context = LocalContext.current,
+    alignmentButton: Alignment
 ) {
 
     val mapState = rememberMapWithLifecycle()
@@ -70,7 +71,7 @@ fun MapRunItem(
         })
 
         FloatingActionButton(
-            modifier=Modifier.padding(10.dp).size(45.dp).align(Alignment.BottomEnd),
+            modifier=Modifier.padding(10.dp).size(45.dp).align(alignmentButton),
             onClick = {
             mapState.getMapAsync {map->
                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(bound,50))

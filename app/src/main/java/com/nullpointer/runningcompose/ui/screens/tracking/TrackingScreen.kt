@@ -198,10 +198,10 @@ fun ButtonsLandScape(
 ) {
     Text(
         textRun,
-        style = MaterialTheme.typography.h4,
+        style = MaterialTheme.typography.h5,
         modifier = modifierText
             .background(MaterialTheme.colors.primary)
-            .padding(10.dp)
+            .padding(5.dp)
     )
     Column(
         modifier = modifierButtons.padding(5.dp)

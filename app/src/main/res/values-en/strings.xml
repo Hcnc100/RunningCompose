@@ -123,5 +123,6 @@
     <string name="error_max_length_weight">Weight can\'t be that long</string>
     <string name="message_info_saved_tracking">Saving tracking data</string>
     <string name="title_tracking">Tracking</string>
+    <string name="description_arrow_statistics">Open the tracking statistics</string>
 
 </resources>

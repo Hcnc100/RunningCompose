@@ -1,20 +1,21 @@
 package com.nullpointer.runningcompose.ui.screens.details
 
-import androidx.compose.foundation.background
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.runningcompose.R
@@ -24,6 +25,8 @@ import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.runs.componets.MapRunItem
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
+import com.nullpointer.runningcompose.ui.states.OrientationScreenState
+import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -34,31 +37,107 @@ fun DetailsRun(
     navigator: DestinationsNavigator,
     itemsRun: Run,
     metricType: MetricType,
+    detailsState: OrientationScreenState = rememberOrientationScreenState()
 ) {
+    var isExpanded by remember {
+        mutableStateOf(false)
+    }
+    val iconExpanded by derivedStateOf {
+        if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
+    }
+
     Scaffold(
         topBar = {
-            ToolbarBack(title = stringResource(R.string.title_details),
-                actionBack = navigator::popBackStack)
+            ToolbarBack(
+                title = stringResource(R.string.title_details),
+                actionBack = navigator::popBackStack
+            )
         }
     ) {
-        Column {
-            MapRunItem(
-                itemsRun,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth()
-                    .weight(7f)
-            )
-            Card(modifier = Modifier
-                .padding(10.dp)
-                .weight(3f), shape = RoundedCornerShape(10.dp)) {
-                InfoRun(
-                    itemRun = itemsRun,
-                    modifier = Modifier.padding(10.dp),
-                    metricType = metricType
-                )
+        when (detailsState.orientation) {
+            ORIENTATION_LANDSCAPE -> {
+                Box {
+                    MapRunItem(
+                        itemsRun,
+                        alignmentButton = Alignment.BottomEnd,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Card(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .align(Alignment.TopStart)
+                            .width(250.dp)
+                            .animateContentSize().clickable { isExpanded = !isExpanded },
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Column {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.title_screen_statistics),
+                                    modifier = Modifier
+                                        .padding(5.dp),
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.h6,
+                                    fontSize = 16.sp
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Icon(
+                                    painter = painterResource(id = iconExpanded),
+                                    contentDescription = stringResource(R.string.description_arrow_statistics)
+                                )
+                            }
+                            if (isExpanded)
+                                InfoRun(
+                                    itemRun = itemsRun,
+                                    modifier = Modifier.padding(10.dp),
+                                    metricType = metricType
+                                )
+                        }
+                    }
+
+                }
+            }
+            ORIENTATION_PORTRAIT -> {
+                Column {
+                    MapRunItem(
+                        itemsRun,
+                        alignmentButton = Alignment.BottomEnd,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .fillMaxWidth()
+                            .weight(6.5f)
+                    )
+                    Card(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .weight(3.5f)
+                            .fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Column {
+                            Text(
+                                text = stringResource(id = R.string.title_screen_statistics),
+                                modifier = Modifier.fillMaxWidth().padding(5.dp),
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.h5
+                            )
+                            InfoRun(
+                                itemRun = itemsRun,
+                                modifier = Modifier.padding(10.dp),
+                                metricType = metricType
+                            )
+                        }
+
+                    }
+                }
             }
         }
+
     }
 }
 
