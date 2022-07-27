@@ -3,6 +3,7 @@
 
     <style name="Theme.RunningCompose" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/color_primary_dark</item>
+        <item name="android:windowBackground">@color/color_primary_dark</item>
     </style>
 
     <style name="Theme.AppSplash" parent="Theme.SplashScreen">
