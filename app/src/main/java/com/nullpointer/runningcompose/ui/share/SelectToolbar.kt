@@ -35,10 +35,8 @@ fun SelectToolbar(
 
 
     TopAppBar(
-        backgroundColor = if (numberSelection == 0) MaterialTheme.colors.primarySurface else MaterialTheme.colors.primary,
-        title = {
-            Text(title)
-        },
+        backgroundColor = if (numberSelection == 0)  MaterialTheme.colors.primary else MaterialTheme.colors.secondary,
+        title = { Text(title, color = Color.White) },
         contentColor = Color.White,
         actions = {
             if (numberSelection != 0) {
@@ -52,16 +50,22 @@ fun SelectToolbar(
 }
 
 @Composable
-fun ToolbarBack(title: String, actionBack: (() -> Unit)? = null) {
-    TopAppBar(title = { Text(title) },
+fun ToolbarBack(title: String, actionBack: () -> Unit) {
+    TopAppBar(title = {  Text(title, color = Color.White)},
+        backgroundColor =  MaterialTheme.colors.primary,
+        contentColor = Color.White,
         navigationIcon = {
-            actionBack?.let { action ->
-                IconButton(onClick = { action() }) {
-                    Icon(painterResource(id = R.drawable.ic_arrow_back),
-                        stringResource(id = R.string.description_arrow_back))
-                }
+            IconButton(onClick = actionBack) {
+                Icon(painterResource(id = R.drawable.ic_arrow_back),
+                    stringResource(id = R.string.description_arrow_back))
             }
         })
+}
+
+@Composable
+fun ToolbarSimple(title: String) {
+    TopAppBar(title = {  Text(title, color = Color.White)},
+        backgroundColor =  MaterialTheme.colors.primary)
 }
 
 @Composable
@@ -70,13 +74,16 @@ fun ToolbarBackWithAction(
     actionBack: () -> Unit,
     actionCancel: (() -> Unit)? = null,
 ) {
-    TopAppBar(title = { Text(title) },
+    TopAppBar(
+        backgroundColor =  MaterialTheme.colors.primary,
+        title = {  Text(title, color = Color.White)},
         navigationIcon = {
             IconButton(onClick = actionBack) {
                 Icon(painterResource(id = R.drawable.ic_arrow_back),
                     stringResource(id = R.string.description_arrow_back))
             }
         },
+        contentColor = Color.White,
         actions = {
             actionCancel?.let {actionCancel->
                 IconButton(onClick = actionCancel) {

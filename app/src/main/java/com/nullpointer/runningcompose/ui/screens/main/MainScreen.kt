@@ -1,9 +1,11 @@
 package com.nullpointer.runningcompose.ui.screens.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -76,10 +78,7 @@ private fun MainButtonNavigation(
             BottomNavigationItem(
                 selected = currentDestination?.route == destination.destination.route,
                 onClick = {
-                    if (currentDestination?.route != destination.destination.route) {
-                        actionClear()
-                    }
-
+                    if (currentDestination?.route != destination.destination.route) actionClear()
                     navController.navigate(destination.destination) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
@@ -95,9 +94,10 @@ private fun MainButtonNavigation(
                     )
                 },
                 label = { Text(stringResource(id = destination.titleShow)) },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = LocalContentColor.current,
-                alwaysShowLabel = false
+                selectedContentColor = MaterialTheme.colors.secondary.copy(alpha = 0.7f),
+                unselectedContentColor = Color.White,
+                alwaysShowLabel = false,
+                modifier = Modifier.background(MaterialTheme.colors.primary)
             )
         }
     }

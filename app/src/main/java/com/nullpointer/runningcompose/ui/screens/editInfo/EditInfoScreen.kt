@@ -12,13 +12,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
 import com.nullpointer.runningcompose.ui.share.EditableTextSavable
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
+import com.nullpointer.runningcompose.ui.share.ToolbarSimple
 import com.nullpointer.runningcompose.ui.states.SimpleScreenState
 import com.nullpointer.runningcompose.ui.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -76,13 +76,10 @@ fun EditInfoScreen(
 
 @Composable
 private fun ToolbarEditInfo(isAuth: Boolean, actionBack: () -> Unit) {
-    if (isAuth)
-        ToolbarBack(
-            title = stringResource(R.string.title_edit_data),
-            actionBack = actionBack
-        )
-    else
-        ToolbarBack(title = stringResource(R.string.title_complete_data))
+    if (isAuth) ToolbarBack(
+        title = stringResource(R.string.title_edit_data),
+        actionBack = actionBack
+    ) else ToolbarSimple(title = stringResource(R.string.title_complete_data))
 }
 
 
