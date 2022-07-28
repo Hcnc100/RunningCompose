@@ -11,7 +11,6 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
-import com.nullpointer.runningcompose.presentation.TrackingViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations

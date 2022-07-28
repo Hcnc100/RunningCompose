@@ -1,19 +1,16 @@
 package com.nullpointer.runningcompose.ui.screens.config
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
-import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
 import com.nullpointer.runningcompose.ui.screens.config.components.MetricConfig
@@ -21,7 +18,6 @@ import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDest
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
 @HomeNavGraph

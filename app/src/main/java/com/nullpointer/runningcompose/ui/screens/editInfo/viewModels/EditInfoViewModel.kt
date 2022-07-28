@@ -55,7 +55,7 @@ class EditInfoViewModel @Inject constructor(
     val messageEditInfo = _messageEditInfo.receiveAsFlow()
 
 
-    val isDataValidate get() = !nameUser.hasError && !weightUser.hasError && weightUser.value.isNotEmpty() && nameUser.value.isNotEmpty()
+    private val isDataValidate get() = !nameUser.hasError && !weightUser.hasError && weightUser.value.isNotEmpty() && nameUser.value.isNotEmpty()
 
     init {
         viewModelScope.launch {

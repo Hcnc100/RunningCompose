@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.ui.screens.destinations.ConfigScreenDestination
-import com.nullpointer.runningcompose.ui.screens.destinations.Destination
 import com.nullpointer.runningcompose.ui.screens.destinations.RunsScreensDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.StatisticsScreenDestination
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -31,11 +30,4 @@ enum class HomeDestinations(
         R.drawable.ic_settings,
         ConfigScreenDestination
     );
-
-    companion object {
-        fun isHomeRoute(route: String?): Boolean {
-            if (route == null) return false
-            return values().find { it.destination.route == route } != null
-        }
-    }
 }

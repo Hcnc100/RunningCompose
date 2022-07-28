@@ -3,12 +3,9 @@ package com.nullpointer.runningcompose.ui.screens.tracking.componets
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.types.TrackingState
-import com.nullpointer.runningcompose.services.TrackingServices
 
 
 @Composable

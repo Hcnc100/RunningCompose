@@ -1,29 +1,20 @@
 package com.nullpointer.runningcompose.ui.screens.config.components
 
 import android.content.Context
-import android.os.Bundle
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle.Event.*
-import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.ktx.addPolyline
-import com.google.maps.android.ktx.awaitMap
-import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.config.MapConfig
-import timber.log.Timber
 
 
 @Composable

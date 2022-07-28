@@ -1,22 +1,17 @@
 package com.nullpointer.runningcompose.ui.screens.runs
 
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
-import android.text.Html
-import android.widget.TextView
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
 
