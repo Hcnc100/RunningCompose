@@ -148,7 +148,9 @@ fun MapAndTime(
     actionServices: (TrackingActions) -> Unit,
 ) {
 
-    val textRun by derivedStateOf { timeRun.toFullFormatTime(true) }
+    val textRun by remember {
+        derivedStateOf { timeRun.toFullFormatTime(true) }
+    }
 
 
     when (orientation) {

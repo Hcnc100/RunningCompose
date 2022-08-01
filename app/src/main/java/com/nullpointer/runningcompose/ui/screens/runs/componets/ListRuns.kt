@@ -104,11 +104,15 @@ fun ReverseOrder(
     isReverse: Boolean,
     changeSort: (Boolean) -> Unit,
 ) {
-    val text by derivedStateOf {
-        if(isReverse) R.string.text_asc_order else R.string.text_desc_order
+    val text by remember {
+        derivedStateOf {
+            if(isReverse) R.string.text_asc_order else R.string.text_desc_order
+        }
     }
-    val icon by derivedStateOf {
-        if(isReverse) R.drawable.ic_arrow_upward else  R.drawable.ic_arrow_downward
+    val icon by remember {
+        derivedStateOf {
+            if(isReverse) R.drawable.ic_arrow_upward else  R.drawable.ic_arrow_downward
+        }
     }
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.clickable {

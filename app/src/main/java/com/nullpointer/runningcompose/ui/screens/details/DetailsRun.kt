@@ -42,10 +42,12 @@ fun DetailsRun(
     var isExpanded by remember {
         mutableStateOf(false)
     }
-    val iconExpanded by derivedStateOf {
-        if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
-    }
+    val iconExpanded by remember {
+        derivedStateOf {
+            if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
+        }
 
+    }
     Scaffold(
         topBar = {
             ToolbarBack(
@@ -67,7 +69,8 @@ fun DetailsRun(
                             .padding(5.dp)
                             .align(Alignment.TopStart)
                             .width(250.dp)
-                            .animateContentSize().clickable { isExpanded = !isExpanded },
+                            .animateContentSize()
+                            .clickable { isExpanded = !isExpanded },
                         shape = RoundedCornerShape(10.dp)
                     ) {
                         Column {
@@ -122,7 +125,9 @@ fun DetailsRun(
                         Column {
                             Text(
                                 text = stringResource(id = R.string.title_screen_statistics),
-                                modifier = Modifier.fillMaxWidth().padding(5.dp),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(5.dp),
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.h5
                             )

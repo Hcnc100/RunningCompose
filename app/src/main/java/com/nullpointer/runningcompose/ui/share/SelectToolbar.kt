@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -27,10 +28,12 @@ fun SelectToolbar(
     context: Context = LocalContext.current
 ) {
 
-    val title by derivedStateOf {
-        if (numberSelection == 0)
-            context.getString(titleDefault) else
+    val title by remember {
+        derivedStateOf {
+            if (numberSelection == 0)
+                context.getString(titleDefault) else
                 context.getPlural(titleSelection, numberSelection)
+        }
     }
 
 

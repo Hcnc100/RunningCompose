@@ -1,6 +1,9 @@
 package com.nullpointer.runningcompose.models
 
 import android.os.Parcelable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -26,7 +29,7 @@ data class Run(
 ) : Parcelable {
 
     @IgnoredOnParcel
-    @Ignore
-    var isSelected:Boolean=false
+    @delegate:Ignore
+    var isSelected:Boolean by mutableStateOf(false)
 
 }

@@ -44,7 +44,9 @@ fun ItemRun(
     modifier: Modifier = Modifier,
 ) {
 
-    val colorSelect by derivedStateOf { if (itemRun.isSelected) Color.Cyan.copy(alpha = 0.5f) else Color.Transparent }
+    val colorSelect by remember {
+        derivedStateOf { if (itemRun.isSelected) Color.Cyan.copy(alpha = 0.5f) else Color.Transparent }
+    }
 
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
