@@ -28,11 +28,10 @@ fun SelectToolbar(
     context: Context = LocalContext.current
 ) {
 
-    val title by remember {
+    val title by remember(numberSelection) {
         derivedStateOf {
             if (numberSelection == 0)
-                context.getString(titleDefault) else
-                context.getPlural(titleSelection, numberSelection)
+                context.getString(titleDefault) else context.getPlural(titleSelection, numberSelection)
         }
     }
 

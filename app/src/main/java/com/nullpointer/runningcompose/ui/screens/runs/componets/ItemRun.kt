@@ -44,7 +44,7 @@ fun ItemRun(
     modifier: Modifier = Modifier,
 ) {
 
-    val colorSelect by remember {
+    val colorSelect by remember(itemRun.isSelected) {
         derivedStateOf { if (itemRun.isSelected) Color.Cyan.copy(alpha = 0.5f) else Color.Transparent }
     }
 
