@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     }?.let { startDestination ->
                         loading = false
                         DestinationsNavHost(
-                            navGraph = NavGraphs.root,
+                            navGraph = NavGraphs.main,
                             startRoute = startDestination,
                             navController = rootAppState.navController,
                             engine = rootAppState.navHostEngine,

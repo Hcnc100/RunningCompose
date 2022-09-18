@@ -1,12 +1,12 @@
 package com.nullpointer.runningcompose.ui.screens.details
 
+import android.content.Context
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -34,19 +34,16 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun DetailsRun(
-    navigator: DestinationsNavigator,
     itemsRun: Run,
     metricType: MetricType,
+    navigator: DestinationsNavigator,
     detailsState: OrientationScreenState = rememberOrientationScreenState()
 ) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
-    val iconExpanded by remember {
-        derivedStateOf {
-            if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
-        }
-
+    val iconExpanded = remember(isExpanded) {
+        if (isExpanded) R.drawable.ic_arrow_up else R.drawable.ic_arrow_down
     }
     Scaffold(
         topBar = {
@@ -55,14 +52,16 @@ fun DetailsRun(
                 actionBack = navigator::popBackStack
             )
         }
-    ) {
+    ) { padding ->
         when (detailsState.orientation) {
             ORIENTATION_LANDSCAPE -> {
                 Box {
                     MapRunItem(
-                        itemsRun,
+                        itemRun = itemsRun,
                         alignmentButton = Alignment.BottomEnd,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
                     )
                     Card(
                         modifier = Modifier
@@ -71,22 +70,20 @@ fun DetailsRun(
                             .width(250.dp)
                             .animateContentSize()
                             .clickable { isExpanded = !isExpanded },
-                        shape = RoundedCornerShape(10.dp)
+                        shape = MaterialTheme.shapes.small
                     ) {
                         Column {
                             Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = stringResource(id = R.string.title_screen_statistics),
-                                    modifier = Modifier
-                                        .padding(5.dp),
+                                    fontSize = 16.sp,
                                     textAlign = TextAlign.Center,
+                                    modifier = Modifier.padding(5.dp),
                                     style = MaterialTheme.typography.h6,
-                                    fontSize = 16.sp
+                                    text = stringResource(id = R.string.title_screen_statistics)
                                 )
                                 Spacer(modifier = Modifier.width(5.dp))
                                 Icon(
@@ -106,9 +103,9 @@ fun DetailsRun(
                 }
             }
             ORIENTATION_PORTRAIT -> {
-                Column {
+                Column(modifier = Modifier.padding(padding)) {
                     MapRunItem(
-                        itemsRun,
+                        itemRun = itemsRun,
                         alignmentButton = Alignment.BottomEnd,
                         modifier = Modifier
                             .padding(10.dp)
@@ -120,7 +117,7 @@ fun DetailsRun(
                             .padding(10.dp)
                             .weight(3.5f)
                             .fillMaxWidth(),
-                        shape = RoundedCornerShape(10.dp)
+                        shape = MaterialTheme.shapes.small
                     ) {
                         Column {
                             Text(
@@ -137,28 +134,26 @@ fun DetailsRun(
                                 metricType = metricType
                             )
                         }
-
                     }
                 }
             }
         }
-
     }
 }
 
 @Composable
 private fun InfoRun(
     itemRun: Run,
-    modifier: Modifier = Modifier,
     metricType: MetricType,
+    modifier: Modifier = Modifier,
+    context: Context = LocalContext.current,
 ) {
-    val context = LocalContext.current
     val date = remember { itemRun.timestamp.toDateFormat() }
     val timeDay = remember { itemRun.timestamp.toDateOnlyTime(context) }
-    val timeRun = remember { itemRun.timeRunInMillis.toFullFormatTime(true) }
+    val speed = remember { itemRun.avgSpeedInMeters.toAVGSpeed(metricType) }
     val distance = remember { itemRun.distanceInMeters.toMeters(metricType) }
     val calories = remember { itemRun.caloriesBurned.toCaloriesBurned(metricType) }
-    val speed = remember { itemRun.avgSpeedInMeters.toAVGSpeed(metricType) }
+    val timeRun = remember { itemRun.timeRunInMillis.toFullFormatTime(true) }
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         TitleAndInfo(stringResource(R.string.item_title_date), date)
@@ -172,14 +167,14 @@ private fun InfoRun(
 }
 
 @Composable
-fun TitleAndInfo(
+private fun TitleAndInfo(
     title: String,
     info: String
 ) {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        DetailsRunText(text = title, modifier = Modifier.weight(0.4f))
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        DetailsRunText(text = title)
         Spacer(modifier = Modifier.width(10.dp))
-        DetailsRunText(text = info, modifier = Modifier.weight(0.6f))
+        DetailsRunText(text = info)
     }
 }
 
