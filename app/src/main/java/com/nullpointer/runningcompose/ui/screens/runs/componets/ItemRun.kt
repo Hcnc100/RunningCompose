@@ -1,13 +1,12 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
+import android.content.Context
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -16,8 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,22 +39,13 @@ import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 fun ItemRun(
     itemRun: Run,
     isSelectEnable: Boolean,
-    actionRun: (ActionRun, Run) -> Unit,
     metricType: MetricType,
     modifier: Modifier = Modifier,
+    actionRun: (ActionRun, Run) -> Unit,
 ) {
 
     val colorSelect by animateColorAsState(
         if (itemRun.isSelected) MaterialTheme.colors.secondaryVariant else Color.Transparent
-    )
-
-    val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
-            .crossfade(true)
-            .data(itemRun.pathImgRun)
-            .build(),
-        placeholder = painterResource(id = R.drawable.ic_map),
-        error = painterResource(id = R.drawable.ic_error_img),
     )
 
     Surface(
@@ -72,23 +62,17 @@ fun ItemRun(
             )
     ) {
         Row(modifier = Modifier
-            .drawBehind { drawRect(colorSelect) }
             .padding(10.dp)
             .height(150.dp)) {
             // * waiting to take snapshot for maps compose
-            Image(
-                painter = painter,
-                contentDescription = stringResource(R.string.description_current_run_img),
-                contentScale = if (painter.state is AsyncImagePainter.State.Success) ContentScale.Crop else ContentScale.Fit,
-                modifier = Modifier
-                    .weight(.5f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(Color.White),
+            ImageRun(
+                data = itemRun.pathImgRun,
+                modifier = Modifier.weight(.5f)
             )
 
             Spacer(modifier = Modifier.width(20.dp))
-            InfoRun(itemRun = itemRun,
+            InfoRun(
+                itemRun = itemRun,
                 modifier = Modifier.weight(.5f),
                 metricType = metricType
             )
@@ -96,14 +80,40 @@ fun ItemRun(
     }
 }
 
+@Composable
+private fun ImageRun(
+    data: Any?,
+    modifier: Modifier = Modifier
+) {
+
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .crossfade(true)
+            .data(data)
+            .build(),
+        placeholder = painterResource(id = R.drawable.ic_map),
+        error = painterResource(id = R.drawable.ic_broken_image),
+    )
+
+    Image(
+        painter = painter,
+        contentDescription = stringResource(R.string.description_current_run_img),
+        contentScale = if (painter.isSuccess) ContentScale.Crop else ContentScale.Fit,
+        colorFilter = if(painter.isSuccess) null else ColorFilter.tint(getGrayColor()),
+        modifier = modifier
+            .fillMaxHeight()
+            .clip(RoundedCornerShape(10.dp))
+    )
+}
+
 
 @Composable
 private fun InfoRun(
     itemRun: Run,
-    modifier: Modifier = Modifier,
     metricType: MetricType,
+    modifier: Modifier = Modifier,
+    context:Context=LocalContext.current
 ) {
-    val context = LocalContext.current
     val date = remember { itemRun.timestamp.toDateFormat() }
     val timeDay = remember { itemRun.timestamp.toDateOnlyTime(context) }
     val timeRun = remember { itemRun.timeRunInMillis.toFullFormatTime(false) }
