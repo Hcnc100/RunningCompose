@@ -9,9 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
@@ -24,14 +22,12 @@ import com.ramcosta.composedestinations.spec.NavHostEngine
 import kotlinx.coroutines.CoroutineScope
 
 class RootAppState(
-    scaffoldState: ScaffoldState,
     context: Context,
-    focusManager: FocusManager,
-    val navController: NavHostController,
+    scaffoldState: ScaffoldState,
     val scope: CoroutineScope,
-    val navHostEngine: NavHostEngine
-
-) : SimpleScreenState(scaffoldState, context, focusManager) {
+    val navHostEngine: NavHostEngine,
+    val navController: NavHostController
+) : SimpleScreenState(context, scaffoldState) {
     val rootActions = object : ActionRootDestinations {
         override fun backDestination() = navController.popBackStack()
         override fun changeRoot(direction: Direction) = navController.navigate(direction)
@@ -42,15 +38,14 @@ class RootAppState(
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialNavigationApi::class)
 @Composable
 fun rememberRootAppState(
+    context: Context = LocalContext.current,
+    scope: CoroutineScope = rememberCoroutineScope(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     navController: NavHostController = rememberAnimatedNavController(),
-    scope: CoroutineScope = rememberCoroutineScope(),
     navHostEngine: NavHostEngine = rememberAnimatedNavHostEngine(
         navHostContentAlignment = Alignment.BottomEnd,
         rootDefaultAnimations = RootNavGraphDefaultAnimations.ACCOMPANIST_FADING,
     ),
-    context: Context = LocalContext.current,
-    focusManager: FocusManager = LocalFocusManager.current,
 ) = remember(scaffoldState, navController,scope,navHostEngine) {
-    RootAppState(scaffoldState, context, focusManager, navController,scope,navHostEngine)
+    RootAppState(context, scaffoldState, scope, navHostEngine, navController)
 }

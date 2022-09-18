@@ -1,6 +1,8 @@
 package com.nullpointer.runningcompose.ui.screens.editInfo
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -9,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
@@ -19,8 +22,8 @@ import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoVie
 import com.nullpointer.runningcompose.ui.share.EditableTextSavable
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.nullpointer.runningcompose.ui.share.ToolbarSimple
-import com.nullpointer.runningcompose.ui.states.SimpleScreenState
-import com.nullpointer.runningcompose.ui.states.rememberSimpleScreenState
+import com.nullpointer.runningcompose.ui.states.EditInfoScreen
+import com.nullpointer.runningcompose.ui.states.rememberEditInfoScreen
 import com.ramcosta.composedestinations.annotation.Destination
 
 @MainNavGraph(start = true)
@@ -29,9 +32,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun EditInfoScreen(
     isAuth: Boolean = false,
     configViewModel: ConfigViewModel,
+    actionRootDestinations: ActionRootDestinations,
     editInfoViewModel: EditInfoViewModel = hiltViewModel(),
-    editInfoState: SimpleScreenState = rememberSimpleScreenState(),
-    actionRootDestinations: ActionRootDestinations
+    editInfoState: EditInfoScreen = rememberEditInfoScreen()
 ) {
 
     LaunchedEffect(key1 = Unit) {
@@ -55,18 +58,42 @@ fun EditInfoScreen(
                 }
             })
         }
-    ) {
+    ) { paddingValue ->
         Column(
             modifier = Modifier
-                .padding(it)
+                .padding(paddingValue)
                 .fillMaxWidth()
                 .padding(vertical = 10.dp, horizontal = 20.dp)
         ) {
-            EditableTextSavable(valueProperty = editInfoViewModel.nameUser)
+            EditableTextSavable(
+                valueProperty = editInfoViewModel.nameUser,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    autoCorrect = false,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { editInfoState.moveNextFocus() }
+                )
+            )
             Spacer(modifier = Modifier.height(10.dp))
             EditableTextSavable(
                 valueProperty = editInfoViewModel.weightUser,
-                changeValue = editInfoViewModel::changeWeightUser
+                changeValue = editInfoViewModel::changeWeightUser,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    autoCorrect = false,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        editInfoState.hiddenKeyBoard()
+                        editInfoViewModel.validateDataUser()?.let {
+                            configViewModel.changeUserConfig(it)
+                            if (isAuth) actionRootDestinations.backDestination()
+                        }
+                    }
+                )
             )
         }
     }

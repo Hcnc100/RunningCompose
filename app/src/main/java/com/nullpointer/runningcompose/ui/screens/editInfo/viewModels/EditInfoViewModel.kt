@@ -56,7 +56,7 @@ class EditInfoViewModel @Inject constructor(
 
 
     private val isDataValidate
-        get() = !nameUser.hasError && !weightUser.hasError && weightUser.isEmpty && nameUser.isEmpty
+        get() = !nameUser.hasError && !weightUser.hasError
 
     init {
         viewModelScope.launch {
