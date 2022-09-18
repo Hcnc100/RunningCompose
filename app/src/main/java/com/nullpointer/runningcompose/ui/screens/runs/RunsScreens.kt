@@ -1,9 +1,11 @@
 package com.nullpointer.runningcompose.ui.screens.runs
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
@@ -31,19 +33,20 @@ import kotlinx.coroutines.flow.first
 @Destination
 @Composable
 fun RunsScreens(
+    selectViewModel: SelectViewModel,
     configViewModel: ConfigViewModel,
     actionRootDestinations: ActionRootDestinations,
-    selectViewModel: SelectViewModel,
     runsViewModel: RunsViewModel = shareViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState()
 ) {
-    val listRuns by runsViewModel.listRunsOrdered.collectAsState()
-    val sortConfig by configViewModel.sortConfig.collectAsState()
-    val stateTracking by runsViewModel.stateTracking.collectAsState()
-    val (showDialogPermission, changeVisibilityDialog) = rememberSaveable { mutableStateOf(false) }
-    val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
-    val metricType by configViewModel.metrics.collectAsState()
 
+    val metricType by configViewModel.metrics.collectAsState()
+    val sortConfig by configViewModel.sortConfig.collectAsState()
+    val listRuns by runsViewModel.listRunsOrdered.collectAsState()
+    val stateTracking by runsViewModel.stateTracking.collectAsState()
+    val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
+
+    val (showDialogPermission, changeVisibilityDialog) = rememberSaveable { mutableStateOf(false) }
 
     BackHandler(
         selectViewModel.isSelectEnable,
@@ -87,6 +90,7 @@ fun RunsScreens(
         }
     ) {
         ListRuns(
+            modifier = Modifier.padding(it),
             listState = runsState.lazyGridState,
             listRuns = listRuns,
             isSelectEnable = selectViewModel.isSelectEnable,
@@ -97,7 +101,7 @@ fun RunsScreens(
                 when (action) {
                     DETAILS -> {
                         actionRootDestinations.changeRoot(
-                            DetailsRunDestination.invoke(itemRun, metricType)
+                            DetailsRunDestination(itemRun, metricType)
                         )
                     }
                     SELECT -> selectViewModel.changeSelect(itemRun)
@@ -113,6 +117,4 @@ fun RunsScreens(
             actionHidden = { changeVisibilityDialog(false) },
             actionAccept = runsState::showDialogPermission,
         )
-
-
 }
