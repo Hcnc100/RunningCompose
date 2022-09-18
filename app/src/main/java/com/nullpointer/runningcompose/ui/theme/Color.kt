@@ -10,3 +10,5 @@ val Teal200 = Color(0xFF03DAC5)
 val Purple = Color(0xFF512da8)
 val PurpleDark = Color(0xFF140078)
 val PurpleLite=Color(0xFF8559da)
+
+val colorSelect = Color(0xFF9575cd)

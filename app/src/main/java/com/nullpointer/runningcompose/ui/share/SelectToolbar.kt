@@ -37,9 +37,13 @@ fun SelectToolbar(
     val backgroundToolbar by animateColorAsState(
         if (numberSelection == 0) MaterialTheme.colors.primary else MaterialTheme.colors.secondary
     )
+    val contextColor by animateColorAsState(
+        if(numberSelection == 0) Color.White else Color.Black
+    )
 
     TopAppBar(
         backgroundColor = backgroundToolbar,
+        contentColor = contextColor,
         title = { Text(title) },
         actions = {
             if (numberSelection != 0) {
@@ -56,7 +60,7 @@ fun SelectToolbar(
 
 @Composable
 fun ToolbarBack(title: String, actionBack: () -> Unit) {
-    TopAppBar(title = {  Text(title, color = Color.White)},
+    TopAppBar(title = {  Text(title)},
         backgroundColor =  MaterialTheme.colors.primary,
         contentColor = Color.White,
         navigationIcon = {
@@ -69,7 +73,9 @@ fun ToolbarBack(title: String, actionBack: () -> Unit) {
 
 @Composable
 fun ToolbarSimple(title: String) {
-    TopAppBar(title = {  Text(title, color = Color.White)},
+    TopAppBar(
+        contentColor = Color.White,
+        title = {  Text(title)},
         backgroundColor =  MaterialTheme.colors.primary)
 }
 
@@ -81,14 +87,14 @@ fun ToolbarBackWithAction(
 ) {
     TopAppBar(
         backgroundColor =  MaterialTheme.colors.primary,
-        title = {  Text(title, color = Color.White)},
+        contentColor = Color.White,
+        title = {  Text(title)},
         navigationIcon = {
             IconButton(onClick = actionBack) {
                 Icon(painterResource(id = R.drawable.ic_arrow_back),
                     stringResource(id = R.string.description_arrow_back))
             }
         },
-        contentColor = Color.White,
         actions = {
             actionCancel?.let {actionCancel->
                 IconButton(onClick = actionCancel) {

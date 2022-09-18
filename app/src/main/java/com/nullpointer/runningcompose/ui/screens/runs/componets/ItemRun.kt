@@ -46,7 +46,7 @@ fun ItemRun(
 ) {
 
     val colorSelect by animateColorAsState(
-        if (itemRun.isSelected) MaterialTheme.colors.primary else Color.Transparent
+        if (itemRun.isSelected) MaterialTheme.colors.secondaryVariant else Color.Transparent
     )
 
     val painter = rememberAsyncImagePainter(
