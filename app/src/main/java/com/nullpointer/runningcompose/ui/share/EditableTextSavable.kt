@@ -22,19 +22,20 @@ import com.nullpointer.runningcompose.core.delegates.PropertySavableString
 fun EditableTextSavable(
     valueProperty: PropertySavableString,
     modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
     modifierText: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    isEnabled: Boolean = true,
     shape: Shape = MaterialTheme.shapes.small,
+    changeValue: (String) -> Unit = valueProperty::changeValue
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         OutlinedTextField(
             enabled = isEnabled,
             label = { Text(stringResource(id = valueProperty.label)) },
             placeholder = { Text(stringResource(id = valueProperty.hint)) },
-            value = valueProperty.value,
-            onValueChange = valueProperty::changeValue,
+            value = valueProperty.currentValue,
+            onValueChange = changeValue,
             isError = valueProperty.hasError,
             modifier = modifierText.fillMaxWidth(),
             keyboardOptions = keyboardOptions,

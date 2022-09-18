@@ -47,30 +47,45 @@ fun EditInfoScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    editInfoState.hiddenKeyBoard()
-                    editInfoViewModel.validateDataUser()?.let {
-                        configViewModel.changeUserConfig(it)
-                        if (isAuth) actionRootDestinations.backDestination()
-                    }
+            ButtonSaveInfo(actionClick = {
+                editInfoState.hiddenKeyBoard()
+                editInfoViewModel.validateDataUser()?.let {
+                    configViewModel.changeUserConfig(it)
+                    if (isAuth) actionRootDestinations.backDestination()
                 }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_save),
-                    contentDescription = stringResource(R.string.description_icon_save_info))
-            }
+            })
         }
     ) {
         Column(
             modifier = Modifier
+                .padding(it)
                 .fillMaxWidth()
                 .padding(vertical = 10.dp, horizontal = 20.dp)
         ) {
             EditableTextSavable(valueProperty = editInfoViewModel.nameUser)
             Spacer(modifier = Modifier.height(10.dp))
-            EditableTextSavable(valueProperty = editInfoViewModel.weightUser)
+            EditableTextSavable(
+                valueProperty = editInfoViewModel.weightUser,
+                changeValue = editInfoViewModel::changeWeightUser
+            )
         }
+    }
+}
+
+
+@Composable
+private fun ButtonSaveInfo(
+    actionClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FloatingActionButton(
+        modifier = modifier,
+        onClick = actionClick
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_save),
+            contentDescription = stringResource(R.string.description_icon_save_info)
+        )
     }
 }
 

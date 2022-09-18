@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
-import com.nullpointer.runningcompose.core.delegates.PropertySavableWeight
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.config.UserConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,34 +27,36 @@ class EditInfoViewModel @Inject constructor(
         private const val MAX_LENGTH_WEIGHT = 5
         private const val MIN_WEIGHT = 10F
         private const val MAX_WEIGHT = 300F
+        private const val TAG_NAME_USER = "TAG_NAME_USER"
+        private const val TAG_WEIGHT_USER = "TAG_WEIGHT_USER"
     }
 
     val nameUser = PropertySavableString(
-        state = savedStateHandle,
+        savedState = savedStateHandle,
         label = R.string.label_name_user,
         hint = R.string.hint_name_user,
         maxLength = MAX_LENGTH_NAME,
         emptyError = R.string.error_empty_name,
-        lengthError = R.string.error_max_length_name
+        lengthError = R.string.error_max_length_name,
+        tagSavable = TAG_NAME_USER
     )
 
-    val weightUser = PropertySavableWeight(
-        state = savedStateHandle,
+    val weightUser = PropertySavableString(
+        savedState = savedStateHandle,
         label = R.string.label_weight_user,
         hint = R.string.hint_weight_user,
         maxLength = MAX_LENGTH_WEIGHT,
         emptyError = R.string.error_empty_weight,
         lengthError = R.string.error_max_length_weight,
-        invalidWeightError = R.string.error_range_weight,
-        minWeight = MIN_WEIGHT,
-        maxWeight = MAX_WEIGHT
+        tagSavable = TAG_WEIGHT_USER
     )
 
     private val _messageEditInfo = Channel<Int>()
     val messageEditInfo = _messageEditInfo.receiveAsFlow()
 
 
-    private val isDataValidate get() = !nameUser.hasError && !weightUser.hasError && weightUser.value.isNotEmpty() && nameUser.value.isNotEmpty()
+    private val isDataValidate
+        get() = !nameUser.hasError && !weightUser.hasError && weightUser.isEmpty && nameUser.isEmpty
 
     init {
         viewModelScope.launch {
@@ -67,10 +68,17 @@ class EditInfoViewModel @Inject constructor(
         }
     }
 
+    fun changeWeightUser(weight: String) {
+        weightUser.changeValue(weight)
+        val userWeight = weight.toFloatOrNull() ?: 0F
+        if (!weightUser.hasError && userWeight !in MIN_WEIGHT..MAX_WEIGHT) {
+            weightUser.setAnotherError(R.string.error_range_weight)
+        }
+    }
 
     fun validateDataUser(): UserConfig? {
         return if (isDataValidate) {
-            UserConfig(nameUser.value, weightUser.value.toFloat())
+            UserConfig(nameUser.currentValue, weightUser.currentValue.toFloat())
         } else {
             _messageEditInfo.trySend(R.string.error_validate_data)
             null
