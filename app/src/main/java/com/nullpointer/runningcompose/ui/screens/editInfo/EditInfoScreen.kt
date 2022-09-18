@@ -14,7 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
-import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
+import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
 import com.nullpointer.runningcompose.ui.share.EditableTextSavable
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
@@ -23,7 +23,7 @@ import com.nullpointer.runningcompose.ui.states.SimpleScreenState
 import com.nullpointer.runningcompose.ui.states.rememberSimpleScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 
-@RootNavGraph(start = true)
+@MainNavGraph(start = true)
 @Destination
 @Composable
 fun EditInfoScreen(

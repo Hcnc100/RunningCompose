@@ -22,7 +22,7 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
+import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.runs.componets.MapRunItem
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
@@ -30,7 +30,7 @@ import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@RootNavGraph
+@MainNavGraph
 @Destination
 @Composable
 fun DetailsRun(

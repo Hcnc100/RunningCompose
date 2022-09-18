@@ -34,7 +34,7 @@ import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.TrackingViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
-import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
+import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.rememberMapWithLifecycle
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.*
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogCancel
@@ -53,7 +53,7 @@ import timber.log.Timber
         DeepLink(uriPattern = "https://www.running-compose.com/tracking")
     ]
 )
-@RootNavGraph
+@MainNavGraph
 @Composable
 fun TrackingScreen(
     trackingViewModel: TrackingViewModel = hiltViewModel(),

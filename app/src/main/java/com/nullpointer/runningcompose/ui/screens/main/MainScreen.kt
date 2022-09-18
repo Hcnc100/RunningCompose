@@ -16,7 +16,7 @@ import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeDestinations
-import com.nullpointer.runningcompose.ui.navigation.RootNavGraph
+import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.share.SelectToolbar
 import com.nullpointer.runningcompose.ui.states.MainScreenState
@@ -26,7 +26,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ramcosta.composedestinations.navigation.navigate
 
-@RootNavGraph
+@MainNavGraph
 @Destination
 @Composable
 fun MainScreen(
