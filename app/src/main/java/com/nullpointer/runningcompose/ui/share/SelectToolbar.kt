@@ -4,9 +4,9 @@ package com.nullpointer.runningcompose.ui.share
 import android.content.Context
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
@@ -28,23 +28,26 @@ fun SelectToolbar(
     context: Context = LocalContext.current
 ) {
 
-    val title by remember(numberSelection) {
-        derivedStateOf {
-            if (numberSelection == 0)
-                context.getString(titleDefault) else context.getPlural(titleSelection, numberSelection)
-        }
+    val title = remember(numberSelection) {
+        if (numberSelection == 0)
+            context.getString(titleDefault) else context.getPlural(titleSelection, numberSelection)
+
     }
 
+    val backgroundToolbar by animateColorAsState(
+        if (numberSelection == 0) MaterialTheme.colors.primary else MaterialTheme.colors.secondary
+    )
 
     TopAppBar(
-        backgroundColor = if (numberSelection == 0)  MaterialTheme.colors.primary else MaterialTheme.colors.secondary,
-        title = { Text(title, color = Color.White) },
-        contentColor = Color.White,
+        backgroundColor = backgroundToolbar,
+        title = { Text(title) },
         actions = {
             if (numberSelection != 0) {
                 IconButton(onClick = actionClear) {
-                    Icon(painterResource(id = R.drawable.ic_clear),
-                        contentDescription = stringResource(R.string.description_clear_selection))
+                    Icon(
+                        painterResource(id = R.drawable.ic_clear),
+                        contentDescription = stringResource(R.string.description_clear_selection)
+                    )
                 }
             }
         }
