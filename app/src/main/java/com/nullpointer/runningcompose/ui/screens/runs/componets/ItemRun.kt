@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,9 +9,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -44,9 +45,9 @@ fun ItemRun(
     modifier: Modifier = Modifier,
 ) {
 
-    val colorSelect by remember(itemRun.isSelected) {
-        derivedStateOf { if (itemRun.isSelected) Color.Cyan.copy(alpha = 0.5f) else Color.Transparent }
-    }
+    val colorSelect by animateColorAsState(
+        if (itemRun.isSelected) MaterialTheme.colors.primary else Color.Transparent
+    )
 
     val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
@@ -57,24 +58,18 @@ fun ItemRun(
         error = painterResource(id = R.drawable.ic_error_img),
     )
 
-    Card(
+    Surface(
+        color = colorSelect,
+        shape = MaterialTheme.shapes.small,
         modifier = modifier
             .padding(3.dp)
             .combinedClickable(
                 onClick = {
-                    if (isSelectEnable) {
-                        actionRun(ActionRun.SELECT, itemRun)
-                    } else {
-                        actionRun(ActionRun.DETAILS, itemRun)
-                    }
+                    val action = if (isSelectEnable) ActionRun.SELECT else ActionRun.DETAILS
+                    actionRun(action, itemRun)
                 },
-                onLongClick = {
-                    if (!isSelectEnable) {
-                        actionRun(ActionRun.SELECT, itemRun)
-                    }
-                }
-            ),
-        shape = RoundedCornerShape(10.dp),
+                onLongClick = { if (!isSelectEnable) actionRun(ActionRun.SELECT, itemRun) }
+            )
     ) {
         Row(modifier = Modifier
             .drawBehind { drawRect(colorSelect) }
