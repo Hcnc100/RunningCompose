@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.ui.screens.tracking
+package com.nullpointer.runningcompose.models
 
 import com.google.android.gms.maps.model.LatLng
 import com.nullpointer.runningcompose.models.config.MapConfig

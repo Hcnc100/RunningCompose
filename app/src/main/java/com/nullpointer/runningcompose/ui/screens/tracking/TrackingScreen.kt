@@ -1,35 +1,33 @@
 package com.nullpointer.runningcompose.ui.screens.tracking
 
-import android.content.Context
 import android.content.res.Configuration
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.Polyline
-import com.google.maps.android.ktx.addPolyline
 import com.google.maps.android.ktx.awaitMap
 import com.google.maps.android.ktx.awaitSnapshot
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
-import com.nullpointer.runningcompose.models.config.MapConfig
+import com.nullpointer.runningcompose.models.DrawPolyData
 import com.nullpointer.runningcompose.models.types.TrackingState
-import com.nullpointer.runningcompose.models.types.TrackingState.*
+import com.nullpointer.runningcompose.models.types.TrackingState.WAITING
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.TrackingViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
@@ -37,15 +35,16 @@ import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.rememberMapWithLifecycle
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.*
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonsServices
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogCancel
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogSaved
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.MapTracking
 import com.nullpointer.runningcompose.ui.share.ToolbarBackWithAction
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 @Destination(
@@ -56,10 +55,10 @@ import timber.log.Timber
 @MainNavGraph
 @Composable
 fun TrackingScreen(
-    trackingViewModel: TrackingViewModel = hiltViewModel(),
+    actionRootDestinations: ActionRootDestinations,
     runsViewModel: RunsViewModel = shareViewModel(),
-    trackingState: OrientationScreenState = rememberOrientationScreenState(),
-    actionRootDestinations: ActionRootDestinations
+    trackingViewModel: TrackingViewModel = hiltViewModel(),
+    trackingState: OrientationScreenState = rememberOrientationScreenState()
 ) {
     val lastLocation by trackingViewModel.lastLocation.collectAsState()
     val drawPolyData by trackingViewModel.drawLinesData.collectAsState()
@@ -80,6 +79,7 @@ fun TrackingScreen(
     ) {
 
         MapAndTime(
+            modifier = Modifier.padding(it),
             orientation = trackingState.orientation,
             drawPolyData = drawPolyData,
             timeRun = timeRun,
@@ -137,7 +137,7 @@ fun TrackingScreen(
 }
 
 @Composable
-fun MapAndTime(
+private fun MapAndTime(
     orientation: Int,
     timeRun: Long,
     drawPolyData: DrawPolyData,
@@ -148,10 +148,9 @@ fun MapAndTime(
     actionServices: (TrackingActions) -> Unit,
 ) {
 
-    val textRun by remember(timeRun) {
-        derivedStateOf { timeRun.toFullFormatTime(true) }
+    val textRun = remember(timeRun) {
+        timeRun.toFullFormatTime(true)
     }
-
 
     when (orientation) {
         Configuration.ORIENTATION_PORTRAIT -> {
@@ -162,12 +161,17 @@ fun MapAndTime(
                     modifier = Modifier.weight(.75f),
                     mapViewState = mapViewState
                 )
-                ButtonsPortrait(
-                    textRun = textRun,
-                    servicesState = servicesState,
-                    modifier = Modifier.weight(.25f),
-                    actionServices = actionServices,
-                )
+                ContainerPortraitInfo(
+                    modifier = Modifier.weight(.25f)
+                ) {
+                    TextTimeRun(textRun = textRun)
+                    Row {
+                        ButtonsServices(
+                            actionServices = actionServices,
+                            servicesState = servicesState
+                        )
+                    }
+                }
             }
         }
         Configuration.ORIENTATION_LANDSCAPE -> {
@@ -178,174 +182,61 @@ fun MapAndTime(
                     modifier = Modifier.fillMaxSize(),
                     mapViewState = mapViewState
                 )
-                ButtonsLandScape(
-                    modifierText = Modifier.align(Alignment.TopCenter),
-                    modifierButtons = Modifier.align(Alignment.CenterStart),
-                    textRun = textRun,
-                    servicesState = servicesState,
-                    actionServices = actionServices
+
+                TextTimeRun(
+                    textRun = textRun, modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .background(MaterialTheme.colors.primary)
+                        .padding(5.dp)
                 )
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(5.dp)
+                ) {
+                    ButtonsServices(
+                        actionServices = actionServices,
+                        servicesState = servicesState
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun ButtonsLandScape(
-    modifierText: Modifier,
-    modifierButtons: Modifier,
+private fun TextTimeRun(
     textRun: String,
-    servicesState: TrackingState,
-    actionServices: (TrackingActions) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Text(
-        textRun,
-        style = MaterialTheme.typography.h5,
-        modifier = modifierText
-            .background(MaterialTheme.colors.primary)
-            .padding(5.dp)
+        text = textRun,
+        style = MaterialTheme.typography.h4,
+        color = Color.White,
+        modifier = modifier
     )
-    Column(
-        modifier = modifierButtons.padding(5.dp)
+}
+
+
+@Composable
+private fun ContainerPortraitInfo(
+    modifier: Modifier = Modifier,
+    container: @Composable ColumnScope.() -> Unit
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.primary)
     ) {
-        ButtonsServices(
-            modifierSpacer = Modifier.height(20.dp),
-            actionServices = actionServices,
-            servicesState = servicesState
+        Column(
+            content = container,
+            horizontalAlignment = Alignment.CenterHorizontally
         )
     }
 }
 
-@Composable
-fun ButtonsPortrait(
-    modifier: Modifier = Modifier,
-    textRun: String,
-    servicesState: TrackingState,
-    actionServices: (TrackingActions) -> Unit,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.primary),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(textRun, style = MaterialTheme.typography.h4)
-            Row {
-                ButtonsServices(
-                    modifierSpacer = Modifier.width(20.dp),
-                    actionServices = actionServices,
-                    servicesState = servicesState
-                )
-            }
-        }
 
-    }
-}
-
-@Composable
-private fun ButtonsServices(
-    modifierSpacer: Modifier,
-    actionServices: (TrackingActions) -> Unit,
-    servicesState: TrackingState
-) {
-    if (servicesState == WAITING || servicesState == PAUSE) {
-        FloatingActionButton(onClick = { actionServices(START) }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = stringResource(id = R.string.description_button_play_tracking)
-            )
-        }
-    }
-
-    if (servicesState == TRACKING) {
-        FloatingActionButton(onClick = { actionServices(RESUME) }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_pause),
-                contentDescription = stringResource(id = R.string.description_button_resume)
-            )
-        }
-    }
-
-    if (servicesState != WAITING) {
-        Spacer(modifier = modifierSpacer)
-        FloatingActionButton(onClick = { actionServices(SAVED) }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_stop),
-                contentDescription = stringResource(id = R.string.description_button_stop_and_save_tracking)
-            )
-        }
-    }
-}
-
-@Composable
-private fun MapTracking(
-    drawPolyData: DrawPolyData,
-    modifier: Modifier = Modifier,
-    lastLocation: LatLng?,
-    context: Context = LocalContext.current,
-    mapViewState:MapView
-) {
-
-    val listPolyline = remember { mutableListOf<Polyline>() }
-    var currentConfig by remember { mutableStateOf(MapConfig()) }
-
-    LaunchedEffect(key1 = lastLocation) {
-        lastLocation?.let {
-            val map = mapViewState.awaitMap()
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(it, 17f))
-        }
-    }
-
-    LaunchedEffect(key1 = drawPolyData) {
-        val map = mapViewState.awaitMap()
-        // ! Disparity = clear map
-        // ! clear map and re draw all polyline if the style change or ir the list in repo
-        // ! is different to the lines draw
-
-        // * this for no draw Unnecessary polyline and only update the last polyline points
-        if (listPolyline.size != drawPolyData.listLocation.size || currentConfig != drawPolyData.mapConfig) {
-            Timber.d("Disparity: clear map and update styles ")
-            currentConfig = drawPolyData.mapConfig
-            listPolyline.clear()
-            drawPolyData.listLocation.forEach {
-                listPolyline.add(
-                    map.addPolyline {
-                        color(currentConfig.colorValue)
-                        width(currentConfig.weight.toFloat())
-                        addAll(it)
-                    }
-                )
-            }
-        } else {
-            // * update the last polyline points
-            val lastPolyline = listPolyline.last()
-            lastPolyline.points = drawPolyData.listLocation.last()
-        }
-    }
-
-
-    AndroidView(
-        modifier = modifier,
-        factory = {
-            mapViewState.apply {
-                if (parent != null) {
-                    (parent as ViewGroup).removeView(this) // <- fix
-                }
-            }
-        },
-        update = { mapView ->
-            mapView.getMapAsync { map ->
-                map.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                        context,
-                        drawPolyData.mapConfig.style.styleRawRes
-                    )
-                )
-            }
-        }
-    )
-}
 
 
 
