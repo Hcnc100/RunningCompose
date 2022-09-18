@@ -1,6 +1,5 @@
 package com.nullpointer.runningcompose.presentation
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,8 +7,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
-import com.nullpointer.runningcompose.core.utils.ImageUtils
 import com.nullpointer.runningcompose.core.utils.Utility
+import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
@@ -19,7 +18,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -66,7 +64,7 @@ class RunsViewModel @Inject constructor(
         timeRun: Long,
         listPoints: List<List<LatLng>>,
         bitmap: Bitmap?
-    ) = viewModelScope.launch(Dispatchers.IO) {
+    ) = launchSafeIO {
         // * need weight user for calculate calories burned
 
         // ? Se estima que el costo energético de cada kilómetro que corres,
@@ -74,7 +72,7 @@ class RunsViewModel @Inject constructor(
 
         val weightUser = configRepository.userConfig.first()!!.weight
         val mapConfig = configRepository.mapConfig.first()
-        val currentTime=System.currentTimeMillis()
+        val currentTime = System.currentTimeMillis()
 
         var distanceInMeters = 0f
         val listPolylineEncode = listPoints.asSequence().filter {
@@ -99,11 +97,11 @@ class RunsViewModel @Inject constructor(
         runsRepository.insertNewRun(run,bitmap)
     }
 
-    fun deleterRun(run: Run) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleterRun(run: Run) = launchSafeIO {
         runsRepository.deleterRun(run)
     }
 
-    fun deleterListRun(listIds: List<Long>) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleterListRun(listIds: List<Long>) = launchSafeIO {
         runsRepository.deleterListRuns(listIds)
     }
 }

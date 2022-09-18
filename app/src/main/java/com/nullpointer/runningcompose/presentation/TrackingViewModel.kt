@@ -18,10 +18,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrackingViewModel @Inject constructor(
-    locationRepository: TrackingRepository,
+    savedStateHandle: SavedStateHandle,
     configRepository: ConfigRepository,
-    savedStateHandle: SavedStateHandle
+    locationRepository: TrackingRepository
 ) : ViewModel() {
+
+    companion object {
+        private const val KEY_DIALOG_CANCEL = "KEY_DIALOG_CANCEL"
+        private const val KEY_DIALOG_SAVE = "KEY_DIALOG_SAVE"
+    }
 
     val drawLinesData = combine(
         locationRepository.lastLocationSaved,
@@ -51,16 +56,16 @@ class TrackingViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = TrackingState.WAITING
     )
-    var isShowDialogCancel by SavableComposeState(savedStateHandle,"KEY_DIALOG_CANCEL",false)
-    private set
+    var isShowDialogCancel by SavableComposeState(savedStateHandle, KEY_DIALOG_CANCEL, false)
+        private set
 
-    var isShowDialogSave by SavableComposeState(savedStateHandle,"KEY_DIALOG_SAVE",false)
+    var isShowDialogSave by SavableComposeState(savedStateHandle, KEY_DIALOG_SAVE, false)
         private set
 
     private var isEnableAnimation by mutableStateOf(true)
 
-    fun changeAnimation(isEnable: Boolean){
-        isEnableAnimation=isEnable
+    fun changeAnimation(isEnable: Boolean) {
+        isEnableAnimation = isEnable
     }
 
     fun changeDialogCancel(isShowDialog:Boolean){

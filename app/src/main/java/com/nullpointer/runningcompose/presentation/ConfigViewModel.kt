@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.core.states.LoginStatus
+import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
@@ -14,7 +15,6 @@ import com.nullpointer.runningcompose.models.types.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -76,20 +76,20 @@ class ConfigViewModel @Inject constructor(
 
     val isFirstLocationPermission = configRepo.isFirstPermissionLocation.catch {
         Timber.e("Error in location permission state")
-    }.stateIn(
+    }.flowOn(Dispatchers.IO).stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
         true
     )
 
-    fun changeFirstRequestPermission() = viewModelScope.launch(Dispatchers.IO) {
+    fun changeFirstRequestPermission() = launchSafeIO {
         configRepo.changeIsFirstPermissionLocation()
     }
 
 
     fun changeUserConfig(
         userConfig: UserConfig
-    ) = viewModelScope.launch(Dispatchers.IO) {
+    ) = launchSafeIO {
         configRepo.changeUserConfig(userConfig)
     }
 
@@ -97,21 +97,21 @@ class ConfigViewModel @Inject constructor(
         style: MapStyle? = null,
         weight: Int? = null,
         color: Color? = null,
-    ) = viewModelScope.launch(Dispatchers.IO) {
+    ) = launchSafeIO {
         configRepo.changeMapConfig(style, weight, color)
     }
 
 
     fun changeMetrics(
         metrics: MetricType,
-    ) = viewModelScope.launch(Dispatchers.IO) {
+    ) = launchSafeIO {
         configRepo.changeMetricConfig(metrics)
     }
 
     fun changeSortConfig(
         sortType: SortType? = null,
         isReverse: Boolean? = null,
-    ) = viewModelScope.launch(Dispatchers.IO) {
+    ) = launchSafeIO {
         configRepo.changeSortConfig(sortType, isReverse)
     }
 
