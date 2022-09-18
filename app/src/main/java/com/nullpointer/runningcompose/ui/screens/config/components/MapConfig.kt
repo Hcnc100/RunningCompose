@@ -4,11 +4,12 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.core.utils.getGrayColor
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.ui.screens.config.components.share.SelectOptionConfig
@@ -28,8 +30,8 @@ fun MapSettings(
     orientation: Int,
     mapConfig: MapConfig,
     changeWeight: (Int) -> Unit,
-    changeStyleMap: (MapStyle) -> Unit,
     changeColorMap: (Color) -> Unit,
+    changeStyleMap: (MapStyle) -> Unit,
 ) {
     val (isDialogShow, changeVisibleDialog) = rememberSaveable {
         mutableStateOf(false)
@@ -75,7 +77,8 @@ fun MapSettings(
     if (isDialogShow)
         DialogColorPicker(
             hiddenDialog = { changeVisibleDialog(false) },
-            changeColor = changeColorMap)
+            changeColor = changeColorMap
+        )
 }
 
 
@@ -129,13 +132,12 @@ fun SelectMapColor(
             .fillMaxHeight()
             .border(
                 width = 2.dp,
-                color = if (isSystemInDarkTheme()) Color.LightGray else Color.DarkGray,
-                shape = RoundedCornerShape(5.dp))
+                color = getGrayColor(),
+                shape = RoundedCornerShape(5.dp)
+            )
             .padding(2.dp)
             .background(currentColor)
-            .clickable {
-                showDialogColor()
-            }
+            .clickable { showDialogColor() }
         )
     }
 

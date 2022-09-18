@@ -54,12 +54,16 @@ fun InfoUserConfig(
         Button(onClick = actionGoEditInfo,
             modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Row {
-                Icon(painter = painterResource(id = R.drawable.ic_edit),
+                Icon(
+                    tint = Color.White.copy(alpha = .8f),
+                    painter = painterResource(id = R.drawable.ic_edit),
                     contentDescription = stringResource(R.string.description_icon_edit_info),
-                    tint = Color.White.copy(alpha = .8f))
+                )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = stringResource(R.string.text_edit_info_user),
-                    color = Color.White.copy(alpha = .8f))
+                Text(
+                    text = stringResource(R.string.text_edit_info_user),
+                    color = Color.White.copy(alpha = .8f)
+                )
             }
         }
     }

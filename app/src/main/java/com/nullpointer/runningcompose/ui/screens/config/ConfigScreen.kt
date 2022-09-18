@@ -1,6 +1,7 @@
 package com.nullpointer.runningcompose.ui.screens.config
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -32,19 +33,23 @@ fun ConfigScreen(
     val userConfig by configViewModel.userConfig.collectAsState()
     val metricsMap by configViewModel.metrics.collectAsState()
 
-    Scaffold {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            userConfig?.let { it1 ->
+    Scaffold { paddingValues ->
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(paddingValues)
+        ) {
+            userConfig?.let { userConfig ->
                 InfoUserConfig(
+                    userConfig = userConfig,
                     orientation = configState.orientation,
-                    userConfig = it1,
                     actionGoEditInfo = {
                         actionRootDestinations.changeRoot(EditInfoScreenDestination(isAuth = true))
                     })
             }
             MapSettings(
-                orientation = configState.orientation,
                 mapConfig = mapConfig,
+                orientation = configState.orientation,
                 changeWeight = { configViewModel.changeMapConfig(weight = it) },
                 changeStyleMap = { configViewModel.changeMapConfig(style = it) },
                 changeColorMap = { configViewModel.changeMapConfig(color = it) }
