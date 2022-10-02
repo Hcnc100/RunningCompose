@@ -65,7 +65,10 @@ fun ListRuns(
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(dimensionResource(id = R.dimen.size_item_run)),
                     state = listState,
-                    modifier = modifier
+                    modifier = modifier,
+                    contentPadding = PaddingValues(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     item(span = { GridItemSpan(maxLineSpan) }, key = "header-sort") {
                         if (!isSelectEnable)

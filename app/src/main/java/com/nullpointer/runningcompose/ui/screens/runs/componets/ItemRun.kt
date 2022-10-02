@@ -15,7 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.nullpointer.runningcompose.R
@@ -45,14 +43,14 @@ fun ItemRun(
 ) {
 
     val colorSelect by animateColorAsState(
-        if (itemRun.isSelected) MaterialTheme.colors.secondaryVariant else Color.Transparent
+        if (itemRun.isSelected) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.surface
     )
 
     Surface(
         color = colorSelect,
         shape = MaterialTheme.shapes.small,
+        elevation = 3.dp,
         modifier = modifier
-            .padding(3.dp)
             .combinedClickable(
                 onClick = {
                     val action = if (isSelectEnable) ActionRun.SELECT else ActionRun.DETAILS
