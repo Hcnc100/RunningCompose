@@ -1,29 +1,25 @@
 package com.nullpointer.runningcompose.data.local.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
+import kotlin.math.acos
+
 
 @Dao
 interface RunDAO {
+    @RawQuery(observedEntities = [Run::class])
+    fun getListRunRawQuery(query: SupportSQLiteQuery): Flow<List<Run>>
 
-    @Query("SELECT * FROM run_table ORDER BY timeStamp DESC")
-    fun getListRunsByTimestamp(): Flow<List<Run>>
-
-    @Query("SELECT * FROM run_table ORDER BY caloriesBurned DESC")
-    fun getListRunsByCaloriesBurned(): Flow<List<Run>>
-
-    @Query("SELECT * FROM run_table ORDER BY distanceInMeters DESC")
-    fun getListRunsByDistance(): Flow<List<Run>>
-
-    @Query("SELECT * FROM run_table ORDER BY avgSpeedInMeters DESC")
-    fun getListRunsByAvgSpeed(): Flow<List<Run>>
-
-    @Query("SELECT * FROM run_table ORDER BY timeRunInMillis DESC")
-    fun getListRunsByRunTimeRun(): Flow<List<Run>>
+    fun getListRunsBy(sortType: SortType, ascendance: Boolean): Flow<List<Run>> {
+        val order = if (ascendance) "ASC" else "DESC"
+        val statement = "SELECT * FROM run_table ORDER BY ${sortType.nameTable} $order"
+        val query: SupportSQLiteQuery = SimpleSQLiteQuery(statement, arrayOf())
+        return getListRunRawQuery(query)
+    }
 
     @Insert
     suspend fun insertNewRun(run: Run)

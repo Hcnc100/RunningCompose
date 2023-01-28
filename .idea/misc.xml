@@ -22,4 +22,11 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="RunningCompose.app" />
+      </set>
+    </option>
+  </component>
 </project>

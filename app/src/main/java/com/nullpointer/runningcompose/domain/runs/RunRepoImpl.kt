@@ -11,9 +11,7 @@ import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import me.shouheng.compress.Compress
 import me.shouheng.compress.concrete
 import me.shouheng.compress.strategy.config.ScaleMode
@@ -27,14 +25,12 @@ class RunRepoImpl(
     private val context: Context
 ) : RunRepository {
 
-
     override val listRunsOrdered: Flow<List<Run>> = configLocalDataSource.sortConfig.flatMapLatest {
-        runsLocalDataSource.getListForTypeSort(it.sortType)
-            .map { list -> if (it.isReverse) list.reversed() else list }
+        runsLocalDataSource.getListForTypeSort(it.sortType, it.isReverse)
     }
 
     override val listRunsOrderByDate: Flow<List<Run>> =
-        runsLocalDataSource.getListForTypeSort(SortType.DATE)
+        runsLocalDataSource.getListForTypeSort(SortType.DATE,true)
 
     override val totalStatisticRuns: Flow<StatisticsRun> =
         runsLocalDataSource.totalStatisticRuns
@@ -51,7 +47,7 @@ class RunRepoImpl(
         runsLocalDataSource.deleterRun(run)
 
     override suspend fun insertNewRun(run: Run, bitmap: Bitmap?) {
-        val fileCompress=bitmap?.let {
+        val fileCompress = bitmap?.let {
             Compress.with(context, it)
                 .setQuality(80)
                 .concrete {

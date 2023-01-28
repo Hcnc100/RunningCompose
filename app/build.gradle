@@ -136,7 +136,6 @@ dependencies {
     // * gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
-
     implementation 'com.google.maps.android:maps-ktx:3.4.0'
     implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
     implementation "androidx.fragment:fragment-ktx:1.5.5"
@@ -154,4 +153,9 @@ dependencies {
 
     // * permissions
     implementation "com.google.accompanist:accompanist-permissions:0.28.0"
+
+    // * paging - room
+    implementation "androidx.paging:paging-compose:1.0.0-alpha17"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+
 }
