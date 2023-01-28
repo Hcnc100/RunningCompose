@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.nullpointer.runningcompose.R
@@ -42,7 +43,7 @@ fun RunsScreens(
 
     val metricType by configViewModel.metrics.collectAsState()
     val sortConfig by configViewModel.sortConfig.collectAsState()
-    val listRuns by runsViewModel.listRunsOrdered.collectAsState()
+    val listRuns = runsViewModel.listRunsOrdered.collectAsLazyPagingItems()
     val stateTracking by runsViewModel.stateTracking.collectAsState()
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
 
@@ -56,12 +57,12 @@ fun RunsScreens(
     LaunchedEffect(key1 = Unit) {
         runsViewModel.messageRuns.collect(runsState::showSnackMessage)
     }
-    LaunchedEffect(key1 = Unit) {
-        runsViewModel.listRunsOrdered.first { it is Resource.Success }.let {
-            val firstListRuns = it as Resource.Success
-            if (firstListRuns.data.isNotEmpty()) selectViewModel.restoreSelect(firstListRuns.data)
-        }
-    }
+//    LaunchedEffect(key1 = Unit) {
+//        runsViewModel.listRunsOrdered.first { it is Resource.Success }.let {
+//            val firstListRuns = it as Resource.Success
+//            if (firstListRuns.data.isNotEmpty()) selectViewModel.restoreSelect(firstListRuns.data)
+//        }
+//    }
 
     Scaffold(
         scaffoldState = runsState.scaffoldState,

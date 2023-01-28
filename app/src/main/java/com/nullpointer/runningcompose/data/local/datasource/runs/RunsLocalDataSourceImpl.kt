@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.data.local.datasource.runs
 
+import androidx.paging.PagingSource
 import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
 import com.nullpointer.runningcompose.data.local.room.RunDAO
 import com.nullpointer.runningcompose.models.Run
@@ -40,6 +41,12 @@ class RunsLocalDataSourceImpl(
     override suspend fun deleterRun(run: Run) =
         runDao.deleterRun(run)
 
-    override fun getListForTypeSort(sortType: SortType, ascendant: Boolean): Flow<List<Run>> =
+    override fun getListForTypeSort(sortType: SortType, ascendant: Boolean): PagingSource<Int, Run> =
         runDao.getListRunsBy(sortType,ascendant)
+
+    override fun getListOrderByDate(limit: Int): Flow<List<Run>> =
+        runDao.getLastRunsOrderByDate(limit)
+
+    override fun getCountRun(): Flow<Int> =
+        runDao.getRowCount()
 }

@@ -2,7 +2,7 @@ package com.nullpointer.runningcompose.domain.runs
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import androidx.paging.PagingSource
 import com.nullpointer.runningcompose.core.utils.ImageUtils
 import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
 import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSource
@@ -10,27 +10,24 @@ import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transform
 import me.shouheng.compress.Compress
 import me.shouheng.compress.concrete
 import me.shouheng.compress.strategy.config.ScaleMode
-import me.shouheng.compress.utils.copyTo
 
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RunRepoImpl(
-    configLocalDataSource: ConfigLocalDataSource,
+    private val configLocalDataSource: ConfigLocalDataSource,
     private val runsLocalDataSource: RunsLocalDataSource,
     private val context: Context
 ) : RunRepository {
 
-    override val listRunsOrdered: Flow<List<Run>> = configLocalDataSource.sortConfig.flatMapLatest {
-        runsLocalDataSource.getListForTypeSort(it.sortType, it.isReverse)
-    }
+    override val countRuns: Flow<Int> = runsLocalDataSource.getCountRun()
 
     override val listRunsOrderByDate: Flow<List<Run>> =
-        runsLocalDataSource.getListForTypeSort(SortType.DATE,true)
+        runsLocalDataSource.getListOrderByDate(10)
 
     override val totalStatisticRuns: Flow<StatisticsRun> =
         runsLocalDataSource.totalStatisticRuns
@@ -61,6 +58,12 @@ class RunRepoImpl(
         val pathImg = fileCompress?.let { ImageUtils.saveToInternalStorage(it, nameFile, context) }
         fileCompress?.delete()
         runsLocalDataSource.insertNewRun(run.copy(pathImgRun = pathImg))
+    }
+
+    override fun getAllListRunOrdered(
+        sortType: SortType,isReverse:Boolean
+    ): PagingSource<Int, Run> {
+        return runsLocalDataSource.getListForTypeSort(sortType,isReverse)
     }
 
 }

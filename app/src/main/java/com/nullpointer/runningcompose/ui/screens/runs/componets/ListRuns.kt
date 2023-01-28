@@ -16,20 +16,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.compose.LazyPagingItems
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
-import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListRuns(
     modifier: Modifier = Modifier,
-    listRuns: Resource<List<Run>>,
+    listRuns: LazyPagingItems<Run>,
     listState: LazyGridState,
     isSelectEnable: Boolean,
     metricType: MetricType,
@@ -38,60 +37,51 @@ fun ListRuns(
     actionRun: (ActionRun, Run) -> Unit,
 ) {
 
-    when (listRuns) {
-        Resource.Failure -> {
-            EmptyScreen(
-                animation = R.raw.empty1,
-                textEmpty = stringResource(R.string.message_empty_runs),
-                modifier = modifier
+
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(dimensionResource(id = R.dimen.size_item_run)),
+        state = listState,
+        modifier = modifier,
+        contentPadding = PaddingValues(4.dp),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }, key = "header-sort") {
+            if (!isSelectEnable)
+                SelectDropMenu(
+                    sortConfig = sortConfig,
+                    changeSort = changeSort
+                )
+        }
+        items(listRuns, key = { it.id }) { item ->
+            ItemRun(
+                itemRun = item,
+                actionRun = actionRun,
+                isSelectEnable = isSelectEnable,
+                metricType = metricType,
+                modifier = Modifier.animateItemPlacement()
             )
         }
-        Resource.Loading -> {
-            LazyVerticalGrid(
-                modifier = modifier,
-                columns = GridCells.Adaptive(dimensionResource(id = R.dimen.size_item_run))
-            ) {
-                items(10, key = { it }) { ItemRunFake() }
-            }
-        }
-        is Resource.Success -> {
-            if (listRuns.data.isEmpty()) {
-                EmptyScreen(
-                    animation = R.raw.empty1,
-                    textEmpty = stringResource(R.string.message_empty_runs),
-                    modifier = modifier
-                )
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(dimensionResource(id = R.dimen.size_item_run)),
-                    state = listState,
-                    modifier = modifier,
-                    contentPadding = PaddingValues(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(5.dp),
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    item(span = { GridItemSpan(maxLineSpan) }, key = "header-sort") {
-                        if (!isSelectEnable)
-                            SelectDropMenu(
-                                sortConfig = sortConfig,
-                                changeSort = changeSort
-                            )
-                    }
+    }
+}
 
-                    items(listRuns.data, key = {it.id}){
-                        ItemRun(
-                            itemRun = it,
-                            actionRun = actionRun,
-                            isSelectEnable = isSelectEnable,
-                            metricType = metricType,
-                            modifier = Modifier.animateItemPlacement()
-                        )
-                    }
-                }
-            }
+inline fun <T : Any> LazyGridScope.items(
+    lazyPagingItems: LazyPagingItems<T>,
+    noinline key: ((item: T) -> Any)? = null,
+    noinline span: (LazyGridItemSpanScope.(item: T) -> GridItemSpan)? = null,
+    crossinline itemContent: @Composable LazyGridItemScope.(item: T) -> Unit
+) {
+    items(
+        count = lazyPagingItems.itemCount,
+        key = if (key != null) { index: Int -> key(lazyPagingItems[index]!!) } else null,
+        span = if (span != null) {
+            { span(lazyPagingItems[it]!!) }
+        } else null,
+    ) { index ->
+        lazyPagingItems[index]?.let {
+            itemContent(it)
         }
     }
-
 }
 
 @Composable

@@ -3,10 +3,11 @@ package com.nullpointer.runningcompose.presentation
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
-import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.Utility
 import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
@@ -16,12 +17,13 @@ import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.types.TrackingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
-
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class RunsViewModel @Inject constructor(
     private val runsRepository: RunRepository,
@@ -44,20 +46,19 @@ class RunsViewModel @Inject constructor(
             TrackingState.WAITING
         )
 
-    val listRunsOrdered = flow<Resource<List<Run>>> {
-        runsRepository.listRunsOrdered.collect {
-            emit(Resource.Success(it))
-
-        }
-    }.catch {
-        Timber.e("Error when load run $it")
-        _messageRuns.trySend(R.string.error_load_runs)
-        emit(Resource.Failure)
-    }.flowOn(Dispatchers.IO).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        Resource.Loading
-    )
+    val listRunsOrdered =
+        combine(runsRepository.countRuns, configRepository.sortConfig) { _, config ->
+            config
+        }.flatMapLatest { config ->
+            Pager(
+                PagingConfig(
+                    pageSize = 30,
+                    initialLoadSize = 10
+                )
+            ) {
+                runsRepository.getAllListRunOrdered(config.sortType, config.isReverse)
+            }.flow
+        }.cachedIn(viewModelScope).flowOn(Dispatchers.IO)
 
 
     fun insertNewRun(
@@ -94,7 +95,7 @@ class RunsViewModel @Inject constructor(
             mapConfig = mapConfig,
             timestamp = currentTime,
         )
-        runsRepository.insertNewRun(run,bitmap)
+        runsRepository.insertNewRun(run, bitmap)
     }
 
     fun deleterRun(run: Run) = launchSafeIO {

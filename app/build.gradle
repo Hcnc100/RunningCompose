@@ -108,6 +108,10 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
     testImplementation "androidx.room:room-testing:$roomVersion"
+    // ? room testing
+    testImplementation "androidx.room:room-testing:$roomVersion"
+    implementation "androidx.room:room-paging:$roomVersion"
+
 
     // * save state
     implementation "androidx.savedstate:savedstate-ktx:1.2.0"

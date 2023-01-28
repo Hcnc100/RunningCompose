@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.data.local.datasource.runs
 
+import androidx.paging.PagingSource
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.SortType
@@ -13,5 +14,8 @@ interface RunsLocalDataSource {
     suspend fun deleterRun(run: Run)
     suspend fun insertNewRun(run: Run)
     suspend fun getListRunsById(listIds: List<Long>):List<Run>
-    fun getListForTypeSort(sortType: SortType, ascendant:Boolean):Flow<List<Run>>
+    fun getListForTypeSort(sortType: SortType, ascendant:Boolean): PagingSource<Int, Run>
+
+    fun getListOrderByDate(limit:Int):Flow<List<Run>>
+    fun getCountRun(): Flow<Int>
 }
