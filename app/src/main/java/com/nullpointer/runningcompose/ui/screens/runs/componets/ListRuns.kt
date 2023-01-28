@@ -1,8 +1,12 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -17,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.config.SortConfig
@@ -29,7 +34,7 @@ import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 fun ListRuns(
     modifier: Modifier = Modifier,
     listRuns: LazyPagingItems<Run>,
-    listState: LazyGridState,
+    listState: LazyListState,
     isSelectEnable: Boolean,
     metricType: MetricType,
     sortConfig: SortConfig,
@@ -38,49 +43,79 @@ fun ListRuns(
 ) {
 
 
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(dimensionResource(id = R.dimen.size_item_run)),
+    LazyColumn(
         state = listState,
         modifier = modifier,
         contentPadding = PaddingValues(4.dp),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        item(span = { GridItemSpan(maxLineSpan) }, key = "header-sort") {
+        item(key = "header-sort") {
             if (!isSelectEnable)
                 SelectDropMenu(
                     sortConfig = sortConfig,
                     changeSort = changeSort
                 )
         }
-        items(listRuns, key = { it.id }) { item ->
-            ItemRun(
-                itemRun = item,
-                actionRun = actionRun,
-                isSelectEnable = isSelectEnable,
-                metricType = metricType,
-                modifier = Modifier.animateItemPlacement()
-            )
+        itemsIndexed(listRuns, key = { _, it -> it.id }) { _, run ->
+            if(run!=null){
+                ItemRun(
+                    itemRun = run,
+                    actionRun = actionRun,
+                    isSelectEnable = isSelectEnable,
+                    metricType = metricType,
+                    modifier = Modifier.animateItemPlacement()
+                )
+            }
         }
     }
 }
 
-inline fun <T : Any> LazyGridScope.items(
-    lazyPagingItems: LazyPagingItems<T>,
-    noinline key: ((item: T) -> Any)? = null,
-    noinline span: (LazyGridItemSpanScope.(item: T) -> GridItemSpan)? = null,
-    crossinline itemContent: @Composable LazyGridItemScope.(item: T) -> Unit
+fun <T : Any> LazyGridScope.items(
+    items: LazyPagingItems<T>,
+    key: ((index: Int, item: T) -> Any)? = null,
+    span: (LazyGridItemSpanScope.(item: T) -> GridItemSpan)? = null,
+    itemContent: @Composable LazyGridItemScope.(item: T) -> Unit
 ) {
     items(
-        count = lazyPagingItems.itemCount,
-        key = if (key != null) { index: Int -> key(lazyPagingItems[index]!!) } else null,
-        span = if (span != null) {
-            { span(lazyPagingItems[it]!!) }
-        } else null,
+        count = items.itemCount,
+        key = if (key == null) null else { index ->
+            val item = items.peek(index)
+            if (item == null) {
+                PagingPlaceholderKey(index)
+            } else {
+                key(index, item)
+            }
+        }
     ) { index ->
-        lazyPagingItems[index]?.let {
+        items[index]?.let {
             itemContent(it)
         }
+    }
+}
+
+data class PagingPlaceholderKey(private val index: Int) : Parcelable {
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(index)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object {
+        @Suppress("unused")
+        @JvmField
+        val CREATOR: Parcelable.Creator<com.nullpointer.runningcompose.ui.screens.runs.componets.PagingPlaceholderKey> =
+            object :
+                Parcelable.Creator<com.nullpointer.runningcompose.ui.screens.runs.componets.PagingPlaceholderKey> {
+                override fun createFromParcel(parcel: Parcel) =
+                    PagingPlaceholderKey(parcel.readInt())
+
+                override fun newArray(size: Int) =
+                    arrayOfNulls<com.nullpointer.runningcompose.ui.screens.runs.componets.PagingPlaceholderKey?>(
+                        size
+                    )
+            }
     }
 }
 

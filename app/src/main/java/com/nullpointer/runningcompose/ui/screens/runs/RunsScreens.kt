@@ -11,7 +11,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
@@ -27,7 +26,6 @@ import com.nullpointer.runningcompose.ui.share.ButtonToggleAddRemove
 import com.nullpointer.runningcompose.ui.states.RunsScreenState
 import com.nullpointer.runningcompose.ui.states.rememberRunsScreenState
 import com.ramcosta.composedestinations.annotation.Destination
-import kotlinx.coroutines.flow.first
 
 @OptIn(ExperimentalPermissionsApi::class)
 @HomeNavGraph(start = true)
@@ -92,7 +90,7 @@ fun RunsScreens(
     ) {
         ListRuns(
             modifier = Modifier.padding(it),
-            listState = runsState.lazyGridState,
+            listState = runsState.lazyListState,
             listRuns = listRuns,
             isSelectEnable = selectViewModel.isSelectEnable,
             metricType = metricType,

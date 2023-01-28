@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -19,11 +21,11 @@ import com.google.accompanist.permissions.rememberPermissionState
 class RunsScreenState constructor(
     context: Context,
     scaffoldState: ScaffoldState,
-    val lazyGridState: LazyGridState,
+    val lazyListState: LazyListState,
     private val locationPermissionState: PermissionState
 ) : SimpleScreenState(context, scaffoldState) {
 
-    val isScrollInProgress get() = lazyGridState.isScrollInProgress
+    val isScrollInProgress get() = lazyListState.isScrollInProgress
     val permissionState get() = locationPermissionState.status
 
 
@@ -41,7 +43,7 @@ class RunsScreenState constructor(
 @Composable
 fun rememberRunsScreenState(
     context: Context = LocalContext.current,
-    lazyState: LazyGridState = rememberLazyGridState(),
+    lazyState: LazyListState = rememberLazyListState(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     locationPermissionState: PermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_FINE_LOCATION
