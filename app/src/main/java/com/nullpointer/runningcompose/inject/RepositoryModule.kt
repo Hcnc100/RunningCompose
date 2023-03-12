@@ -1,5 +1,7 @@
 package com.nullpointer.runningcompose.inject
 
+import com.nullpointer.runningcompose.domain.auth.AuthRepoImpl
+import com.nullpointer.runningcompose.domain.auth.AuthRepository
 import com.nullpointer.runningcompose.domain.config.ConfigRepoImpl
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepoImpl
@@ -26,11 +28,17 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun provideRunsRepository(
         runRepoImpl: RunRepoImpl
-    ):RunRepository
+    ): RunRepository
 
     @Binds
     @Singleton
     abstract fun provideLocationRepository(
         locationRepoImpl: TrackingRepoImpl
-    ):TrackingRepository
+    ): TrackingRepository
+
+    @Binds
+    @Singleton
+    abstract fun provideAuthRepository(
+        authRepoImpl: AuthRepoImpl
+    ): AuthRepository
 }

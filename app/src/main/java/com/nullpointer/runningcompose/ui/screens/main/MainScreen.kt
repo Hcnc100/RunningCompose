@@ -10,7 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.nullpointer.runningcompose.core.states.LoginStatus
+import com.nullpointer.runningcompose.core.states.Resource
+import com.nullpointer.runningcompose.models.AuthData
+import com.nullpointer.runningcompose.presentation.AuthViewModel
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
@@ -24,16 +26,15 @@ import com.ramcosta.composedestinations.navigation.dependency
 @Composable
 fun MainScreen(
     actionSuccess: () -> Unit,
-    configViewModel: ConfigViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel(),
     mainScreenState: MainScreenState = rememberMainScreenState()
 ) {
 
-    val stateAuth by configViewModel.stateAuth.collectAsState()
+    val stateAuth by authViewModel.authData.collectAsState()
 
     MainScreenState(
-        stateAuth = stateAuth,
+        authDataState = stateAuth,
         actionSuccess = actionSuccess,
-        configViewModel = configViewModel,
         scaffoldState = mainScreenState.scaffoldState,
         navController = mainScreenState.navController,
         actionsRootDestinations = mainScreenState.rootActions
@@ -43,20 +44,20 @@ fun MainScreen(
 
 @Composable
 fun MainScreenState(
-    stateAuth: LoginStatus,
+    authDataState: Resource<AuthData>,
     actionSuccess: () -> Unit,
     scaffoldState: ScaffoldState,
     navController: NavHostController,
-    configViewModel: ConfigViewModel,
-    actionsRootDestinations: ActionRootDestinations
+    actionsRootDestinations: ActionRootDestinations,
+    configViewModel: ConfigViewModel = hiltViewModel()
 ) {
     Scaffold(
         scaffoldState = scaffoldState
     ) { innerPadding ->
-        when (stateAuth) {
-            LoginStatus.Authenticating -> null
-            LoginStatus.Authenticated -> HomeScreenDestination
-            LoginStatus.Unauthenticated -> EditInfoScreenDestination
+        when (authDataState) {
+            Resource.Loading -> null
+            Resource.Failure -> EditInfoScreenDestination
+            is Resource.Success -> if (authDataState.data.isAuth) HomeScreenDestination else EditInfoScreenDestination
         }?.let { startDestination ->
             LaunchedEffect(key1 = Unit) {
                 actionSuccess()
