@@ -20,14 +20,6 @@ kotlin {
 }
 
 android {
-    signingConfigs {
-        debug {
-            storeFile file('C:\\Users\\desarrollador6\\Documents\\personal\\keys\\run\\run-key-debug.jks')
-            storePassword '12345678'
-            keyAlias 'run-debug'
-            keyPassword '12345678'
-        }
-    }
     compileSdk 33
 
     defaultConfig {

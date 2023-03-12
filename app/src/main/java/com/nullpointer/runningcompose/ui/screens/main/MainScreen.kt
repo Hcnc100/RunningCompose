@@ -1,103 +1,75 @@
 package com.nullpointer.runningcompose.ui.screens.main
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.nullpointer.runningcompose.R
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.nullpointer.runningcompose.core.states.LoginStatus
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
-import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
-import com.nullpointer.runningcompose.ui.navigation.HomeDestinations
-import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
-import com.nullpointer.runningcompose.ui.share.SelectToolbar
+import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
+import com.nullpointer.runningcompose.ui.screens.destinations.HomeScreenDestination
 import com.nullpointer.runningcompose.ui.states.MainScreenState
 import com.nullpointer.runningcompose.ui.states.rememberMainScreenState
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.dependency
-import com.ramcosta.composedestinations.navigation.navigate
 
-@MainNavGraph
-@Destination
 @Composable
 fun MainScreen(
-    actionRootDestinations: ActionRootDestinations,
-    mainState: MainScreenState = rememberMainScreenState(),
-    configViewModel: ConfigViewModel,
-    selectViewModel: SelectViewModel,
+    actionSuccess: () -> Unit,
+    configViewModel: ConfigViewModel = hiltViewModel(),
+    mainScreenState: MainScreenState = rememberMainScreenState()
 ) {
-    Scaffold(
-        bottomBar = {
-            MainButtonNavigation(
-                navController = mainState.navController,
-                actionClear = selectViewModel::clearSelect
-            )
-        },
-        topBar = {
-            SelectToolbar(
-                titleDefault = R.string.app_name,
-                titleSelection = R.plurals.selected_items,
-                numberSelection = selectViewModel.sizeSelected,
-                actionClear = selectViewModel::clearSelect
-            )
-        }
-    ) { innerPadding ->
-        DestinationsNavHost(
-            navGraph = NavGraphs.home,
-            modifier = Modifier.padding(innerPadding),
-            startRoute = NavGraphs.home.startRoute,
-            navController = mainState.navController,
-            engine = mainState.navHostEngine,
-            dependenciesContainerBuilder = {
-                dependency(actionRootDestinations)
-                dependency(configViewModel)
-                dependency(selectViewModel)
-            }
-        )
-    }
+
+    val stateAuth by configViewModel.stateAuth.collectAsState()
+
+    MainScreenState(
+        stateAuth = stateAuth,
+        actionSuccess = actionSuccess,
+        configViewModel = configViewModel,
+        scaffoldState = mainScreenState.scaffoldState,
+        navController = mainScreenState.navController,
+        actionsRootDestinations = mainScreenState.rootActions
+    )
+
 }
 
 @Composable
-private fun MainButtonNavigation(
-    navController: NavController,
-    actionClear: () -> Unit,
+fun MainScreenState(
+    stateAuth: LoginStatus,
+    actionSuccess: () -> Unit,
+    scaffoldState: ScaffoldState,
+    navController: NavHostController,
+    configViewModel: ConfigViewModel,
+    actionsRootDestinations: ActionRootDestinations
 ) {
-    val currentDestination = navController.currentBackStackEntryAsState()
-        .value?.destination
-    BottomNavigation {
-        HomeDestinations.values().forEach { destination ->
-            BottomNavigationItem(
-                selected = currentDestination?.route == destination.destination.route,
-                onClick = {
-                    if (currentDestination?.route != destination.destination.route) actionClear()
-                    navController.navigate(destination.destination) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Icon(
-                        painterResource(id = destination.iconNavigation),
-                        stringResource(id = destination.titleShow)
-                    )
-                },
-                label = { Text(stringResource(id = destination.titleShow)) },
-                selectedContentColor = MaterialTheme.colors.secondary.copy(alpha = 0.7f),
-                unselectedContentColor = Color.White,
-                alwaysShowLabel = false,
-                modifier = Modifier.background(MaterialTheme.colors.primary)
+    Scaffold(
+        scaffoldState = scaffoldState
+    ) { innerPadding ->
+        when (stateAuth) {
+            LoginStatus.Authenticating -> null
+            LoginStatus.Authenticated -> HomeScreenDestination
+            LoginStatus.Unauthenticated -> EditInfoScreenDestination
+        }?.let { startDestination ->
+            LaunchedEffect(key1 = Unit) {
+                actionSuccess()
+            }
+            DestinationsNavHost(
+                navGraph = NavGraphs.main,
+                startRoute = startDestination,
+                navController = navController,
+                modifier = Modifier.padding(innerPadding),
+                dependenciesContainerBuilder = {
+                    dependency(actionsRootDestinations)
+                    dependency(configViewModel)
+                }
             )
         }
     }
