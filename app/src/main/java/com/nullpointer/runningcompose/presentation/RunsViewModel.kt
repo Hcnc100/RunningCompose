@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.nullpointer.runningcompose.core.utils.Utility
 import com.nullpointer.runningcompose.core.utils.launchSafeIO
+import com.nullpointer.runningcompose.domain.auth.AuthRepository
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
@@ -28,7 +29,8 @@ import javax.inject.Inject
 class RunsViewModel @Inject constructor(
     private val runsRepository: RunRepository,
     private val configRepository: ConfigRepository,
-    locationRepository: TrackingRepository,
+    private val authRepository: AuthRepository,
+    locationRepository: TrackingRepository
 ) : ViewModel() {
 
     init {
@@ -71,7 +73,7 @@ class RunsViewModel @Inject constructor(
         // ? Se estima que el costo energético de cada kilómetro que corres,
         // ? es de 1 kcal (1000 calorías) por cada kilogramo de peso corporal del corredo
 
-        val weightUser = configRepository.userConfig.first()!!.weight
+        val weightUser = authRepository.authData.first().weight
         val mapConfig = configRepository.mapConfig.first()
         val currentTime = System.currentTimeMillis()
 

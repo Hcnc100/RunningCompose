@@ -3,18 +3,19 @@ package com.nullpointer.runningcompose.presentation
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nullpointer.runningcompose.core.states.LoginStatus
 import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
-import com.nullpointer.runningcompose.models.config.UserConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,15 +34,6 @@ class ConfigViewModel @Inject constructor(
         MapConfig()
     )
 
-    val userConfig = configRepo.userConfig.flowOn(
-        Dispatchers.IO
-    ).catch {
-        Timber.e("Error to load map config")
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        null
-    )
 
     val metrics = configRepo.metricsConfig.flowOn(
         Dispatchers.IO
@@ -63,16 +55,6 @@ class ConfigViewModel @Inject constructor(
         SortConfig()
     )
 
-    val stateAuth = flow {
-        configRepo.userConfig.collect {
-            val status = if (it != null) LoginStatus.Authenticated else LoginStatus.Unauthenticated
-            emit(status)
-        }
-    }.flowOn(Dispatchers.IO).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        LoginStatus.Authenticating
-    )
 
     val isFirstLocationPermission = configRepo.isFirstPermissionLocation.catch {
         Timber.e("Error in location permission state")
@@ -84,13 +66,6 @@ class ConfigViewModel @Inject constructor(
 
     fun changeFirstRequestPermission() = launchSafeIO {
         configRepo.changeIsFirstPermissionLocation()
-    }
-
-
-    fun changeUserConfig(
-        userConfig: UserConfig
-    ) = launchSafeIO {
-        configRepo.changeUserConfig(userConfig)
     }
 
     fun changeMapConfig(

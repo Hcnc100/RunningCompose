@@ -2,8 +2,6 @@ package com.nullpointer.runningcompose.inject
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
 import com.nullpointer.runningcompose.data.local.room.RunDAO
 import com.nullpointer.runningcompose.data.local.room.RunDatabase
 import dagger.Module
@@ -26,7 +24,7 @@ object DatabaseModule {
         context,
         RunDatabase::class.java,
         NAME_DATABASE
-    ).build()
+    ).fallbackToDestructiveMigration().build()
 
     @Provides
     @Singleton

@@ -1,15 +1,14 @@
 package com.nullpointer.runningcompose.inject
 
-import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
 import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
 import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSourceImpl
 import com.nullpointer.runningcompose.domain.config.ConfigRepoImpl
-import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -20,8 +19,8 @@ object ConfigModule {
     @Provides
     @Singleton
     fun providePreferences(
-        @ApplicationContext context: Context
-    ):ConfigUserStore = ConfigUserStore(context)
+        dataStore: DataStore<Preferences>
+    ): ConfigUserStore = ConfigUserStore(dataStore)
 
     @Provides
     @Singleton

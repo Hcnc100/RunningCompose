@@ -12,10 +12,8 @@ import androidx.compose.ui.Modifier
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
-import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
 import com.nullpointer.runningcompose.ui.screens.config.components.MetricConfig
-import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -30,7 +28,7 @@ fun ConfigScreen(
     configState:OrientationScreenState = rememberOrientationScreenState()
 ) {
     val mapConfig by configViewModel.mapConfig.collectAsState()
-    val userConfig by configViewModel.userConfig.collectAsState()
+//    val userConfig by configViewModel.userConfig.collectAsState()
     val metricsMap by configViewModel.metrics.collectAsState()
 
     Scaffold { paddingValues ->
@@ -39,14 +37,14 @@ fun ConfigScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
         ) {
-            userConfig?.let { userConfig ->
-                InfoUserConfig(
-                    userConfig = userConfig,
-                    orientation = configState.orientation,
-                    actionGoEditInfo = {
-                        actionRootDestinations.changeRoot(EditInfoScreenDestination(isAuth = true))
-                    })
-            }
+//            userConfig?.let { userConfig ->
+//                InfoUserConfig(
+//                    userConfig = userConfig,
+//                    orientation = configState.orientation,
+//                    actionGoEditInfo = {
+//                        actionRootDestinations.changeRoot(EditInfoScreenDestination(isAuth = true))
+//                    })
+//            }
             MapSettings(
                 mapConfig = mapConfig,
                 orientation = configState.orientation,

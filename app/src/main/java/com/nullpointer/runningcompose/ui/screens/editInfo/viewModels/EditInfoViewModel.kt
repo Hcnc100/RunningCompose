@@ -2,18 +2,13 @@ package com.nullpointer.runningcompose.ui.screens.editInfo.viewModels
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.AuthData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,15 +53,15 @@ class EditInfoViewModel @Inject constructor(
     private val isDataValidate
         get() = !nameUser.hasError && !weightUser.hasError
 
-    init {
-        viewModelScope.launch {
-            val userData = withContext(Dispatchers.IO) { configRepository.userConfig.first() }
-            userData?.let {
-                nameUser.changeValue(userData.name)
-                weightUser.changeValue(userData.weight.toString())
-            }
-        }
-    }
+//    init {
+//        viewModelScope.launch {
+//            val userData = withContext(Dispatchers.IO) { configRepository.userConfig.first() }
+//            userData?.let {
+//                nameUser.changeValue(userData.name)
+//                weightUser.changeValue(userData.weight.toString())
+//            }
+//        }
+//    }
 
     fun changeWeightUser(weight: String) {
         weightUser.changeValue(weight)
