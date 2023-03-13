@@ -10,7 +10,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 
-class EditInfoScreen(
+class EditInfoScreenState(
     context: Context,
     scaffoldState: ScaffoldState,
     private val focusManager: FocusManager,
@@ -23,10 +23,10 @@ class EditInfoScreen(
 }
 
 @Composable
-fun rememberEditInfoScreen(
+fun rememberEditInfoScreenState(
     context: Context = LocalContext.current,
     focusManager: FocusManager = LocalFocusManager.current,
     scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) = remember(scaffoldState) {
-    EditInfoScreen(context, scaffoldState, focusManager)
+    EditInfoScreenState(context, scaffoldState, focusManager)
 }

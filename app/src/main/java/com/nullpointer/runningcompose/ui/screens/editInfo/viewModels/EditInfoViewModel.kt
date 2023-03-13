@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
-import com.nullpointer.runningcompose.models.config.UserConfig
+import com.nullpointer.runningcompose.models.AuthData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -76,9 +76,12 @@ class EditInfoViewModel @Inject constructor(
         }
     }
 
-    fun validateDataUser(): UserConfig? {
+    fun validateDataUser(): AuthData? {
         return if (isDataValidate) {
-            UserConfig(nameUser.currentValue, weightUser.currentValue.toFloat())
+            AuthData(
+                name = nameUser.currentValue,
+                weight = weightUser.currentValue.toFloat()
+            )
         } else {
             _messageEditInfo.trySend(R.string.error_validate_data)
             null

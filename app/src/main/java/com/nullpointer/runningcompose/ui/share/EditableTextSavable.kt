@@ -28,7 +28,6 @@ fun EditableTextSavable(
     shape: Shape = MaterialTheme.shapes.small,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    changeValue: (String) -> Unit = valueProperty::changeValue,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     Surface {
@@ -37,12 +36,12 @@ fun EditableTextSavable(
                 shape = shape,
                 enabled = isEnabled,
                 singleLine = singleLine,
-                onValueChange = changeValue,
                 isError = valueProperty.hasError,
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
                 value = valueProperty.currentValue,
                 modifier = modifierText.fillMaxWidth(),
+                onValueChange = valueProperty::changeValue,
                 visualTransformation = visualTransformation,
                 label = { Text(stringResource(id = valueProperty.label)) },
                 placeholder = { Text(stringResource(id = valueProperty.hint)) },

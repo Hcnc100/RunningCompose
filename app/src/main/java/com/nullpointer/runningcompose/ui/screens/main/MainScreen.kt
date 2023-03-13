@@ -27,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.dependency
 fun MainScreen(
     actionSuccess: () -> Unit,
     authViewModel: AuthViewModel = hiltViewModel(),
-    mainScreenState: MainScreenState = rememberMainScreenState()
+    mainScreenState: MainScreenState = rememberMainScreenState(),
 ) {
 
     val stateAuth by authViewModel.authData.collectAsState()
@@ -37,7 +37,8 @@ fun MainScreen(
         actionSuccess = actionSuccess,
         scaffoldState = mainScreenState.scaffoldState,
         navController = mainScreenState.navController,
-        actionsRootDestinations = mainScreenState.rootActions
+        actionsRootDestinations = mainScreenState.rootActions,
+        authViewModel = authViewModel
     )
 
 }
@@ -49,7 +50,8 @@ fun MainScreenState(
     scaffoldState: ScaffoldState,
     navController: NavHostController,
     actionsRootDestinations: ActionRootDestinations,
-    configViewModel: ConfigViewModel = hiltViewModel()
+    configViewModel: ConfigViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel
 ) {
     Scaffold(
         scaffoldState = scaffoldState
@@ -70,6 +72,7 @@ fun MainScreenState(
                 dependenciesContainerBuilder = {
                     dependency(actionsRootDestinations)
                     dependency(configViewModel)
+                    dependency(authViewModel)
                 }
             )
         }
