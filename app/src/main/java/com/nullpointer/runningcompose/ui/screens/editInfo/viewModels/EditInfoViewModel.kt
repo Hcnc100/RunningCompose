@@ -4,17 +4,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
-import com.nullpointer.runningcompose.domain.config.ConfigRepository
+import com.nullpointer.runningcompose.core.utils.launchSafeIO
+import com.nullpointer.runningcompose.domain.auth.AuthRepository
 import com.nullpointer.runningcompose.models.AuthData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class EditInfoViewModel @Inject constructor(
-    private val configRepository: ConfigRepository,
     savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     companion object {
@@ -53,25 +57,23 @@ class EditInfoViewModel @Inject constructor(
     private val isDataValidate
         get() = !nameUser.hasError && !weightUser.hasError
 
-//    init {
-//        viewModelScope.launch {
-//            val userData = withContext(Dispatchers.IO) { configRepository.userConfig.first() }
-//            userData?.let {
-//                nameUser.changeValue(userData.name)
-//                weightUser.changeValue(userData.weight.toString())
-//            }
-//        }
-//    }
+    fun restoreSaveData() = launchSafeIO {
+        val userData = withContext(Dispatchers.IO) { authRepository.authData.first() }
+        nameUser.changeValue(userData.name, isInit = true)
+        weightUser.changeValue(userData.weight.toString(), isInit = true)
+    }
 
-    fun changeWeightUser(weight: String) {
-        weightUser.changeValue(weight)
-        val userWeight = weight.toFloatOrNull() ?: 0F
+    private fun reValueWeightUser() {
+        val userWeight = weightUser.currentValue.toFloatOrNull() ?: 0F
         if (!weightUser.hasError && userWeight !in MIN_WEIGHT..MAX_WEIGHT) {
             weightUser.setAnotherError(R.string.error_range_weight)
         }
     }
 
     fun validateDataUser(): AuthData? {
+        nameUser.reValueField()
+        weightUser.reValueField()
+        reValueWeightUser()
         return if (isDataValidate) {
             AuthData(
                 name = nameUser.currentValue,
@@ -81,5 +83,9 @@ class EditInfoViewModel @Inject constructor(
             _messageEditInfo.trySend(R.string.error_validate_data)
             null
         }
+    }
+
+    fun addMessage(message: Int) {
+        _messageEditInfo.trySend(message)
     }
 }

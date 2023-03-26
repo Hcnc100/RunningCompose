@@ -43,6 +43,10 @@ fun EditInfoScreen(
         editInfoViewModel.messageEditInfo.collect(editInfoScreenState::showSnackMessage)
     }
 
+    LaunchedEffect(key1 = Unit) {
+        if (isAuth) editInfoViewModel.restoreSaveData()
+    }
+
     EditInfoScreen(
         isAuth = isAuth,
         isSavingData = authViewModel.isUpdatedData,
@@ -57,7 +61,7 @@ fun EditInfoScreen(
                     editInfoScreenState.hiddenKeyBoard()
                     editInfoViewModel.validateDataUser()?.let {
                         authViewModel.saveAuthData(it)
-                        if (isAuth) actionRootDestinations.backDestination()
+                        if (isAuth) editInfoViewModel.addMessage(R.string.message_data_updated)
                     }
                 }
             }
@@ -96,7 +100,7 @@ fun EditInfoScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(horizontal = 15.dp)
+                .padding(10.dp)
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {

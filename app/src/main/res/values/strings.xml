@@ -143,5 +143,6 @@
     <string name="message_info_saved_tracking">Guardando datos del recorrido</string>
     <string name="title_tracking">Realizando seguimiento</string>
     <string name="description_arrow_statistics">Abre las estadísticas del recorrido</string>
+    <string name="message_data_updated">Datos actualizados correctamente</string>
 
 </resources>

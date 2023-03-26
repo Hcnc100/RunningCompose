@@ -34,8 +34,9 @@ class PropertySavableString(
     val isEmpty get() = currentValue.isEmpty()
 
 
-    fun changeValue(newValue: String) {
+    fun changeValue(newValue: String, isInit: Boolean = false) {
         currentValue = newValue
+        if (isInit) return
         errorValue = when {
             newValue.isEmpty() && emptyError != RESOURCE_DEFAULT -> emptyError
             newValue.length > maxLength && lengthError != RESOURCE_DEFAULT -> lengthError
