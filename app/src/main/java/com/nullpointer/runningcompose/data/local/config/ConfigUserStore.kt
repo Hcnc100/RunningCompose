@@ -1,6 +1,7 @@
 package com.nullpointer.runningcompose.data.local.config
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -68,7 +69,7 @@ class ConfigUserStore(
             MapConfig(
                 style = style ?: mapConfig.style,
                 weight = weight ?: mapConfig.weight,
-                colorValue = color?.value?.toInt() ?: mapConfig.colorValue
+                colorValue = color?.toArgb() ?: mapConfig.colorValue
             )
         )
     }

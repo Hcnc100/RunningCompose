@@ -41,16 +41,22 @@ fun MapSettings(
         TitleConfig(text = stringResource(R.string.title_config_map))
         when (orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
-                MapFromConfig(mapConfig = mapConfig)
-                SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = changeStyleMap)
-                Spacer(modifier = Modifier.height(10.dp))
-                SelectMapWeight(currentWeightMap = mapConfig.weight, changeWeight = changeWeight)
-                Spacer(modifier = Modifier.height(10.dp))
-                Spacer(modifier = Modifier.height(10.dp))
-                SelectMapColor(
-                    currentColor = mapConfig.color,
-                    showDialogColor = { changeVisibleDialog(true) }
-                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+
+                    MapFromConfig(mapConfig = mapConfig)
+                    SelectMapStyle(currentStyle = mapConfig.style, changeStyleMap = changeStyleMap)
+                    SelectMapWeight(
+                        currentWeightMap = mapConfig.weight,
+                        changeWeight = changeWeight
+                    )
+                    SelectMapColor(
+                        currentColor = mapConfig.color,
+                        showDialogColor = { changeVisibleDialog(true) }
+                    )
+                }
+
             }
             else -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {

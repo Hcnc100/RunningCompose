@@ -3,8 +3,11 @@ package com.nullpointer.runningcompose.presentation
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.launchSafeIO
+import com.nullpointer.runningcompose.domain.auth.AuthRepository
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
+import com.nullpointer.runningcompose.models.AuthData
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
@@ -12,16 +15,14 @@ import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ConfigViewModel @Inject constructor(
     private val configRepo: ConfigRepository,
+    private val authRepo: AuthRepository
 ) : ViewModel() {
 
     val mapConfig = configRepo.mapConfig.flowOn(
@@ -32,6 +33,17 @@ class ConfigViewModel @Inject constructor(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
         MapConfig()
+    )
+
+    val authData = authRepo.authData.transform<AuthData, Resource<AuthData>> {
+        emit(Resource.Success(it))
+    }.catch {
+        Timber.e("Error to load auth data")
+        emit(Resource.Failure)
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        Resource.Loading
     )
 
 
@@ -45,7 +57,7 @@ class ConfigViewModel @Inject constructor(
         MetricType.Meters
     )
 
-    val sortConfig=configRepo.sortConfig.flowOn(
+    val sortConfig = configRepo.sortConfig.flowOn(
         Dispatchers.IO
     ).catch {
         Timber.e("Error to load metrics config")

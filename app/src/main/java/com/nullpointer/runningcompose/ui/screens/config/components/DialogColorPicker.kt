@@ -27,7 +27,9 @@ fun DialogColorPicker(
     changeColor: (Color) -> Unit,
 ) {
     val controller = rememberColorPickerController()
-    controller.setWheelColor(Color.DarkGray)
+    LaunchedEffect(key1 = Unit) {
+        controller.setWheelColor(Color.DarkGray)
+    }
 
     AlertDialog(
         onDismissRequest = hiddenDialog,
@@ -71,12 +73,17 @@ private fun BodySelectColor(
                             textColor = colorEnvelope.hexCode
                         }
                     )
-                    Box(modifier = Modifier.weight(.5f).fillMaxHeight(),
-                        contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier
+                            .weight(.5f)
+                            .fillMaxHeight(),
+                        contentAlignment = Alignment.Center
+                    ) {
 
                         InfoColorSelected(
                             textColor = textColor,
-                            colorValue = controller.selectedColor.value)
+                            colorValue = controller.selectedColor.value
+                        )
                     }
                 }
             }
@@ -119,7 +126,8 @@ private fun InfoColorSelected(
             .border(
                 width = 2.dp,
                 color = if (isSystemInDarkTheme()) Color.LightGray else Color.DarkGray,
-                shape = RoundedCornerShape(5.dp))
+                shape = RoundedCornerShape(5.dp)
+            )
             .padding(2.dp)
             .background(colorValue))
 
