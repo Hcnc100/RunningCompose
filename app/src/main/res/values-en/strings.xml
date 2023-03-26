@@ -66,7 +66,7 @@
     <string name="title_total_calories_burned">Total Calories Burned</string>
     <string name="title_toltal_avg_speed">Average speed</string>
     <string name="title_avg_speed_run_graph">Avg Speed</string>
-    <string name="title_runs_order_date_graph">Tours sorted by date</string>
+    <string name="title_runs_order_date_graph">Latest tours sorted by date</string>
 
     <!-- navigation -->
     <string name="title_screen_runs">Runs</string>

@@ -3,6 +3,7 @@ package com.nullpointer.runningcompose.ui.screens.statistics
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,6 +17,7 @@ import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.models.types.StatisticsData
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.StatisticsViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
@@ -42,10 +44,27 @@ fun StatisticsScreen(
         statisticsViewModel.messageStatistics.collect(statisticsState::showSnackMessage)
     }
 
-    Scaffold(
+    StatisticsScreen(
+        metricType = metricType,
+        fullStatistics = fullStatistics,
+        orientation = statisticsState.orientation,
         scaffoldState = statisticsState.scaffoldState
+    )
+
+}
+
+
+@Composable
+fun StatisticsScreen(
+    orientation: Int,
+    metricType: MetricType,
+    scaffoldState: ScaffoldState,
+    fullStatistics: Resource<StatisticsData>
+) {
+    Scaffold(
+        scaffoldState = scaffoldState
     ) {
-        when (val fullStatistics = fullStatistics) {
+        when (fullStatistics) {
             Resource.Failure -> {
                 EmptyScreen(
                     animation = R.raw.empty2,
@@ -66,7 +85,7 @@ fun StatisticsScreen(
                     )
                 } else {
                     StatisticsAndGraph(
-                        orientation = statisticsState.orientation,
+                        orientation = orientation,
                         listRuns = listRuns.reversed(),
                         statistics = statistics,
                         metricType = metricType,
@@ -122,10 +141,10 @@ private fun StatisticsAndGraph(
                     modifier = Modifier
                         .weight(.5f)
                         .fillMaxHeight()
-                    )
-                }
+                )
             }
         }
+    }
 }
 
 
