@@ -64,8 +64,8 @@ class RunsViewModel @Inject constructor(
         }.flatMapLatest { config ->
             Pager(
                 PagingConfig(
-                    pageSize = 30,
-                    initialLoadSize = 10
+                    pageSize = 15,
+                    initialLoadSize = 8
                 )
             ) {
                 runsRepository.getAllListRunOrdered(config.sortType, config.isReverse)
