@@ -115,8 +115,8 @@
 
 
     <!-- dialog permissions tracking -->
-    <string name="need_permissions_tracking">Necesita conceder el permiso de localización</string>
-    <string name="setting_permissions_tracking">Necesitas conceder el permiso de localización desde la pantalla de ajustes</string>
+    <string name="need_permissions_tracking">Necesita conceder el permiso de localización precisa</string>
+    <string name="setting_permissions_tracking">Necesita conceder el permiso de localización precisa desde la pantalla de ajustes</string>
     <string name="description_icon_open_settings">Botón para abrir las configuraciones de la app</string>
     <string name="description_permissions_help">Botón para resaltar un cuadro de ayuda, relacionado con los permisos</string>
 

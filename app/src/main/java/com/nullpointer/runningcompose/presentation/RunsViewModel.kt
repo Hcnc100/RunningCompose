@@ -48,6 +48,16 @@ class RunsViewModel @Inject constructor(
             TrackingState.WAITING
         )
 
+    val numberRuns = runsRepository.countRuns
+        .flowOn(Dispatchers.IO)
+        .catch {
+            Timber.e("Error to load number runs")
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            -1
+        )
+
     val listRunsOrdered =
         combine(runsRepository.countRuns, configRepository.sortConfig) { _, config ->
             config

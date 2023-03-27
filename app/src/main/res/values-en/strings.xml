@@ -98,8 +98,8 @@
 
 
     <!-- dialog permissions tracking -->
-    <string name="need_permissions_tracking">You need to grant location permission</string>
-    <string name="setting_permissions_tracking">You need to grant the location permission from the settings screen</string>
+    <string name="need_permissions_tracking">You need to grant fine location permission</string>
+    <string name="setting_permissions_tracking">You need to grant fine location permission from the settings screen</string>
     <string name="description_icon_open_settings">Button to open the app settings</string>
     <string name="description_permissions_help">Button to highlight a help box, related to permissions</string>
 

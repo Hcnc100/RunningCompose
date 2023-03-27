@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +26,7 @@ import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
+import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -39,32 +39,70 @@ fun ListRuns(
     metricType: MetricType,
     sortConfig: SortConfig,
     changeSort: (SortType?, Boolean?) -> Unit,
-    actionRun: (ActionRun, Run) -> Unit,
+    actionRun: (ActionRun, Run?) -> Unit,
+    numberRuns: Int
 ) {
 
 
-    LazyColumn(
-        state = listState,
-        modifier = modifier,
-        contentPadding = PaddingValues(4.dp),
-        verticalArrangement = Arrangement.spacedBy(5.dp)
-    ) {
-        item(key = "header-sort") {
-            if (!isSelectEnable)
-                SelectDropMenu(
-                    sortConfig = sortConfig,
-                    changeSort = changeSort
+    when (numberRuns) {
+        -1 -> {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(50.dp),
+                    color = MaterialTheme.colors.primary
                 )
+            }
         }
-        itemsIndexed(listRuns, key = { _, it -> it.id }) { _, run ->
-            if(run!=null){
-                ItemRun(
-                    itemRun = run,
-                    actionRun = actionRun,
-                    isSelectEnable = isSelectEnable,
-                    metricType = metricType,
-                    modifier = Modifier.animateItemPlacement()
-                )
+        0 -> {
+            Box(Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LottieContainer(modifier = Modifier.size(250.dp), animation = R.raw.empty1)
+                    Text(
+                        text = stringResource(id = R.string.message_empty_runs),
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 10.dp)
+                    )
+                }
+            }
+        }
+        else -> {
+            LazyColumn(
+                state = listState,
+                modifier = modifier,
+                contentPadding = PaddingValues(4.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+
+
+                item(key = "header-sort") {
+                    if (!isSelectEnable)
+                        SelectDropMenu(
+                            sortConfig = sortConfig,
+                            changeSort = changeSort
+                        )
+                }
+
+
+
+
+
+                itemsIndexed(listRuns, key = { _, it -> it.id }) { _, run ->
+                    if (run != null) {
+                        ItemRun(
+                            itemRun = run,
+                            actionRun = actionRun,
+                            isSelectEnable = isSelectEnable,
+                            metricType = metricType,
+                            modifier = Modifier.animateItemPlacement()
+                        )
+                    }
+                }
             }
         }
     }

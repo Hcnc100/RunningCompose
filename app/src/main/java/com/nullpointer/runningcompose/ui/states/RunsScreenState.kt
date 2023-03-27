@@ -2,11 +2,12 @@ package com.nullpointer.runningcompose.ui.states
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
@@ -22,7 +23,7 @@ class RunsScreenState constructor(
     context: Context,
     scaffoldState: ScaffoldState,
     val lazyListState: LazyListState,
-    private val locationPermissionState: PermissionState
+    val locationPermissionState: PermissionState
 ) : SimpleScreenState(context, scaffoldState) {
 
     val isScrollInProgress get() = lazyListState.isScrollInProgress
@@ -33,6 +34,13 @@ class RunsScreenState constructor(
         locationPermissionState.launchPermissionRequest()
     }
 
+    fun openSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = Uri.parse("package:" + context.packageName)
+        context.startActivity(intent)
+    }
+
+
     fun showToast(@StringRes stringRes: Int) {
         Toast.makeText(context, context.getText(stringRes), Toast.LENGTH_SHORT).show()
     }
@@ -42,12 +50,14 @@ class RunsScreenState constructor(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun rememberRunsScreenState(
+    actionAfterPermission: () -> Unit,
     context: Context = LocalContext.current,
     lazyState: LazyListState = rememberLazyListState(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     locationPermissionState: PermissionState = rememberPermissionState(
-        Manifest.permission.ACCESS_FINE_LOCATION
-    )
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        onPermissionResult = { actionAfterPermission() }
+    ),
 ) = remember(scaffoldState, lazyState,locationPermissionState) {
     RunsScreenState(context, scaffoldState, lazyState, locationPermissionState)
 }
