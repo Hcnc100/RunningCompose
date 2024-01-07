@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.data.local.datasource.runs
+package com.nullpointer.runningcompose.datasource.run.local
 
 import androidx.paging.PagingSource
 import com.nullpointer.runningcompose.models.Run

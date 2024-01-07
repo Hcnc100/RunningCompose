@@ -4,15 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.paging.PagingSource
 import com.nullpointer.runningcompose.core.utils.ImageUtils
-import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
-import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSource
+import com.nullpointer.runningcompose.datasource.config.local.ConfigLocalDataSource
+import com.nullpointer.runningcompose.datasource.run.local.RunsLocalDataSource
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.transform
 import me.shouheng.compress.Compress
 import me.shouheng.compress.concrete
 import me.shouheng.compress.strategy.config.ScaleMode

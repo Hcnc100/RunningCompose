@@ -1,9 +1,9 @@
 package com.nullpointer.runningcompose.inject
 
 import android.content.Context
-import com.nullpointer.runningcompose.data.local.datasource.location.TrackingDataSource
-import com.nullpointer.runningcompose.data.local.datasource.location.TrackingDataSourceImpl
-import com.nullpointer.runningcompose.data.local.location.SharedLocationManager
+import com.nullpointer.runningcompose.datasource.location.local.TrackingDataSource
+import com.nullpointer.runningcompose.datasource.location.local.TrackingDataSourceImpl
+import com.nullpointer.runningcompose.data.location.local.SharedLocationManager
 import com.nullpointer.runningcompose.domain.location.TrackingRepoImpl
 import dagger.Module
 import dagger.Provides

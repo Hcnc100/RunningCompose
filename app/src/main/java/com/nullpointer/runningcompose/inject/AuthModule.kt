@@ -1,8 +1,8 @@
 package com.nullpointer.runningcompose.inject
 
-import com.nullpointer.runningcompose.data.local.auth.AuthLocalDataSource
-import com.nullpointer.runningcompose.data.local.auth.AuthLocalDataSourceImpl
-import com.nullpointer.runningcompose.data.local.dataStore.AuthDataStore
+import com.nullpointer.runningcompose.datasource.auth.local.AuthLocalDataSource
+import com.nullpointer.runningcompose.datasource.auth.local.AuthLocalDataSourceImpl
+import com.nullpointer.runningcompose.data.auth.local.AuthDataStore
 import com.nullpointer.runningcompose.domain.auth.AuthRepoImpl
 import dagger.Module
 import dagger.Provides

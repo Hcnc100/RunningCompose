@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.data.local.config
+package com.nullpointer.runningcompose.data.config.local
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb

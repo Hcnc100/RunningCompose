@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.data.local.datasource.config
+package com.nullpointer.runningcompose.datasource.config.local
 
 import androidx.compose.ui.graphics.Color
 import com.nullpointer.runningcompose.models.config.MapConfig

@@ -1,7 +1,7 @@
 package com.nullpointer.runningcompose.domain.location
 
 import com.google.android.gms.maps.model.LatLng
-import com.nullpointer.runningcompose.data.local.datasource.location.TrackingDataSource
+import com.nullpointer.runningcompose.datasource.location.local.TrackingDataSource
 import com.nullpointer.runningcompose.models.types.TrackingState
 import kotlinx.coroutines.flow.Flow
 

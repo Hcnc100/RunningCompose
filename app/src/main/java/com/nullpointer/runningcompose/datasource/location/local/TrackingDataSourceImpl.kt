@@ -1,11 +1,10 @@
-package com.nullpointer.runningcompose.data.local.datasource.location
+package com.nullpointer.runningcompose.datasource.location.local
 
 import com.google.android.gms.maps.model.LatLng
-import com.nullpointer.runningcompose.data.local.location.SharedLocationManager
+import com.nullpointer.runningcompose.data.location.local.SharedLocationManager
 import com.nullpointer.runningcompose.models.types.TrackingState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 class TrackingDataSourceImpl(
     sharedLocationManager: SharedLocationManager,

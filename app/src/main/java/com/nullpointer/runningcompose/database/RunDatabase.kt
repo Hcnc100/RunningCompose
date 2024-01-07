@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.data.local.room
+package com.nullpointer.runningcompose.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

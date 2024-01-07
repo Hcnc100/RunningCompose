@@ -1,12 +1,10 @@
-package com.nullpointer.runningcompose.data.local.datasource.runs
+package com.nullpointer.runningcompose.datasource.run.local
 
 import androidx.paging.PagingSource
-import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
-import com.nullpointer.runningcompose.data.local.room.RunDAO
+import com.nullpointer.runningcompose.database.RunDAO
 import com.nullpointer.runningcompose.models.Run
 import com.nullpointer.runningcompose.models.StatisticsRun
 import com.nullpointer.runningcompose.models.types.SortType
-import com.nullpointer.runningcompose.models.types.SortType.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 

@@ -2,8 +2,8 @@ package com.nullpointer.runningcompose.inject
 
 import android.content.Context
 import androidx.room.Room
-import com.nullpointer.runningcompose.data.local.room.RunDAO
-import com.nullpointer.runningcompose.data.local.room.RunDatabase
+import com.nullpointer.runningcompose.database.RunDAO
+import com.nullpointer.runningcompose.database.RunDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

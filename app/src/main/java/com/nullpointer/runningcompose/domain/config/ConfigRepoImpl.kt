@@ -1,7 +1,7 @@
 package com.nullpointer.runningcompose.domain.config
 
 import androidx.compose.ui.graphics.Color
-import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
+import com.nullpointer.runningcompose.datasource.config.local.ConfigLocalDataSource
 import com.nullpointer.runningcompose.models.config.MapConfig
 import com.nullpointer.runningcompose.models.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle

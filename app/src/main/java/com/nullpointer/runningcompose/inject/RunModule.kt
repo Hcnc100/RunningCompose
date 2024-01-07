@@ -1,11 +1,10 @@
 package com.nullpointer.runningcompose.inject
 
 import android.content.Context
-import com.nullpointer.runningcompose.data.local.config.ConfigUserStore
-import com.nullpointer.runningcompose.data.local.datasource.config.ConfigLocalDataSource
-import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSource
-import com.nullpointer.runningcompose.data.local.datasource.runs.RunsLocalDataSourceImpl
-import com.nullpointer.runningcompose.data.local.room.RunDAO
+import com.nullpointer.runningcompose.datasource.config.local.ConfigLocalDataSource
+import com.nullpointer.runningcompose.datasource.run.local.RunsLocalDataSource
+import com.nullpointer.runningcompose.datasource.run.local.RunsLocalDataSourceImpl
+import com.nullpointer.runningcompose.database.RunDAO
 import com.nullpointer.runningcompose.domain.runs.RunRepoImpl
 import dagger.Module
 import dagger.Provides

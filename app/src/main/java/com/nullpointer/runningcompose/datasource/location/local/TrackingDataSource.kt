@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.data.local.datasource.location
+package com.nullpointer.runningcompose.datasource.location.local
 
 import com.google.android.gms.maps.model.LatLng
 import com.nullpointer.runningcompose.models.types.TrackingState

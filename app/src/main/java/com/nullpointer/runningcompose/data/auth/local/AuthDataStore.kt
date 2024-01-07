@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.data.local.dataStore
+package com.nullpointer.runningcompose.data.auth.local
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
