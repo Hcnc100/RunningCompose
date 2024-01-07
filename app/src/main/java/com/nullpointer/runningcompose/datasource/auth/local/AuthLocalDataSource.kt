@@ -1,6 +1,6 @@
 package com.nullpointer.runningcompose.datasource.auth.local
 
-import com.nullpointer.runningcompose.models.AuthData
+import com.nullpointer.runningcompose.models.data.AuthData
 import kotlinx.coroutines.flow.Flow
 
 interface AuthLocalDataSource {

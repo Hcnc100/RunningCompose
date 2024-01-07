@@ -11,7 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.details.components.StatisticsRun
@@ -26,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun DetailsRun(
-    itemsRun: Run,
+    itemsRun: RunData,
     metricType: MetricType,
     navigator: DestinationsNavigator,
     detailsState: OrientationScreenState = rememberOrientationScreenState()
@@ -44,7 +45,7 @@ fun DetailsRun(
             ORIENTATION_LANDSCAPE -> {
                 Box {
                     MapRunItem(
-                        itemRun = itemsRun,
+                        itemRunEntity = itemsRun,
                         alignmentButton = Alignment.BottomEnd,
                         modifier = Modifier
                             .fillMaxSize()
@@ -53,7 +54,7 @@ fun DetailsRun(
                     StatisticsRun(
                         fontSizeBody = 12.sp,
                         fontSizeTitle = 14.sp,
-                        itemRun = itemsRun,
+                        itemRunEntity = itemsRun,
                         metricType = metricType,
                         isStatisticsExpanded = true,
                         modifier = Modifier
@@ -67,7 +68,7 @@ fun DetailsRun(
             ORIENTATION_PORTRAIT -> {
                 Column(modifier = Modifier.padding(padding)) {
                     MapRunItem(
-                        itemRun = itemsRun,
+                        itemRunEntity = itemsRun,
                         alignmentButton = Alignment.BottomEnd,
                         modifier = Modifier
                             .padding(10.dp)
@@ -77,7 +78,7 @@ fun DetailsRun(
                     StatisticsRun(
                         fontSizeTitle = 24.sp,
                         fontSizeBody = 16.sp,
-                        itemRun = itemsRun,
+                        itemRunEntity = itemsRun,
                         metricType = metricType,
                         isStatisticsExpanded = false,
                         modifier = Modifier

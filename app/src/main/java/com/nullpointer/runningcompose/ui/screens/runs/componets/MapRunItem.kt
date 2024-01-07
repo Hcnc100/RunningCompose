@@ -20,14 +20,15 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.ktx.addPolyline
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.ui.screens.config.components.includeAll
 import com.nullpointer.runningcompose.ui.screens.config.components.rememberMapWithLifecycle
 import timber.log.Timber
 
 @Composable
 fun MapRunItem(
-    itemRun: Run,
+    itemRunEntity: RunData,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current,
     alignmentButton: Alignment
@@ -35,7 +36,7 @@ fun MapRunItem(
 
     val mapState = rememberMapWithLifecycle()
     val listDecode= remember {
-        itemRun.listPolyLineEncode.map {
+        itemRunEntity.listPolyLineEncode.map {
             PolyUtil.decode(it)
         }
     }
@@ -54,14 +55,14 @@ fun MapRunItem(
                 map.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                         context,
-                        itemRun.mapConfig.style.styleRawRes
+                        itemRunEntity.mapConfig.style.styleRawRes
                     )
                 )
                 map.animateCamera(CameraUpdateFactory.newLatLngBounds(bound,50))
                 listDecode.forEach {
                     map.addPolyline {
-                       color(itemRun.mapConfig.colorValue)
-                       width(itemRun.mapConfig.weight.toFloat())
+                       color(itemRunEntity.mapConfig.colorValue)
+                       width(itemRunEntity.mapConfig.weight.toFloat())
                        addAll(it)
                     }
                 }

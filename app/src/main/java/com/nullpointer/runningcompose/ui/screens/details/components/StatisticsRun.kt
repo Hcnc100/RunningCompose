@@ -22,12 +22,13 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 
 @Composable
 fun StatisticsRun(
-    itemRun: Run,
+    itemRunEntity: RunData,
     fontSizeBody: TextUnit,
     metricType: MetricType,
     fontSizeTitle: TextUnit,
@@ -50,7 +51,7 @@ fun StatisticsRun(
             )
             if (isExpanded || !isStatisticsExpanded)
                 InfoRun(
-                    itemRun = itemRun,
+                    itemRunEntity = itemRunEntity,
                     modifier = Modifier.padding(10.dp),
                     metricType = metricType,
                     fontSize = fontSizeBody
@@ -93,18 +94,18 @@ fun TitleStatistics(
 
 @Composable
 private fun InfoRun(
-    itemRun: Run,
+    itemRunEntity: RunData,
     fontSize: TextUnit,
     metricType: MetricType,
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current
 ) {
-    val date = remember { itemRun.timestamp.toDateFormat() }
-    val timeDay = remember { itemRun.timestamp.toDateOnlyTime(context) }
-    val speed = remember { itemRun.avgSpeedInMeters.toAVGSpeed(metricType) }
-    val distance = remember { itemRun.distanceInMeters.toMeters(metricType) }
-    val calories = remember { itemRun.caloriesBurned.toCaloriesBurned(metricType) }
-    val timeRun = remember { itemRun.timeRunInMillis.toFullFormatTime(true) }
+    val date = remember { itemRunEntity.timestamp.toDateFormat() }
+    val timeDay = remember { itemRunEntity.timestamp.toDateOnlyTime(context) }
+    val speed = remember { itemRunEntity.avgSpeedInMeters.toAVGSpeed(metricType) }
+    val distance = remember { itemRunEntity.distanceInMeters.toMeters(metricType) }
+    val calories = remember { itemRunEntity.caloriesBurned.toCaloriesBurned(metricType) }
+    val timeRun = remember { itemRunEntity.timeRunInMillis.toFullFormatTime(true) }
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         TitleAndInfo(stringResource(R.string.item_title_date), date, fontSize)

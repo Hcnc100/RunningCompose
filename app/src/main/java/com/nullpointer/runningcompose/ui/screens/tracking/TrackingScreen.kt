@@ -25,7 +25,7 @@ import com.google.maps.android.ktx.awaitSnapshot
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
-import com.nullpointer.runningcompose.models.DrawPolyData
+import com.nullpointer.runningcompose.models.data.DrawPolyData
 import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.models.types.TrackingState.WAITING
 import com.nullpointer.runningcompose.presentation.RunsViewModel

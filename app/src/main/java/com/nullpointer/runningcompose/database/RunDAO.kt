@@ -1,40 +1,39 @@
 package com.nullpointer.runningcompose.database
 
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.*
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface RunDAO {
-    @RawQuery(observedEntities = [Run::class])
-    fun getListRunRawQuery(query: SupportSQLiteQuery): PagingSource<Int, Run>
+    @RawQuery(observedEntities = [RunEntity::class])
+    fun getListRunRawQuery(query: SupportSQLiteQuery): PagingSource<Int, RunEntity>
 
-    fun getListRunsBy(sortType: SortType, ascendance: Boolean): PagingSource<Int, Run> {
+    fun getListRunsBy(sortType: SortType, ascendance: Boolean): PagingSource<Int, RunEntity> {
         val order = if (ascendance) "ASC" else "DESC"
         val statement = "SELECT * FROM run_table ORDER BY ${sortType.nameTable} $order"
         val query: SupportSQLiteQuery = SimpleSQLiteQuery(statement, arrayOf())
         return getListRunRawQuery(query)
     }
     @Query("SELECT * FROM run_table ORDER by timeStamp ASC LIMIT :limit")
-    fun getLastRunsOrderByDate(limit:Int):Flow<List<Run>>
+    fun getLastRunsOrderByDate(limit:Int):Flow<List<RunEntity>>
 
     @Insert
-    suspend fun insertNewRun(run: Run)
+    suspend fun insertNewRun(runEntity: RunEntity)
 
     @Delete
-    suspend fun deleterRun(run: Run)
+    suspend fun deleterRun(runEntity: RunEntity)
 
     @Query("DELETE FROM run_table WHERE id IN (:listIds)")
     suspend fun deleterListRuns(listIds: List<Long>)
 
     @Query("SELECT * FROM run_table WHERE id IN (:listIds)")
-    fun getListRunsById(listIds: List<Long>): List<Run>
+    fun getListRunsById(listIds: List<Long>): List<RunEntity>
 
     @Query("SELECT TOTAL(timeRunInMillis) FROM run_table")
     fun getTotalTimeInMillis(): Flow<Long>

@@ -15,7 +15,7 @@ import com.nullpointer.runningcompose.core.utils.toAVGSpeed
 import com.nullpointer.runningcompose.core.utils.toCaloriesBurned
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
 import com.nullpointer.runningcompose.core.utils.toMeters
-import com.nullpointer.runningcompose.models.StatisticsRun
+import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
 
 @Composable

@@ -13,13 +13,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.share.mpGraph.MpGraphAndroid
 
 @Composable
 fun GraphRuns(
-    list: List<Run>,
+    list: List<RunData>,
     modifier: Modifier = Modifier,
     metricType: MetricType,
 ) {

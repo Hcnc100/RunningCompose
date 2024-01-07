@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.core.delegates.SavableComposeState
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepository
-import com.nullpointer.runningcompose.models.DrawPolyData
+import com.nullpointer.runningcompose.models.data.DrawPolyData
 import com.nullpointer.runningcompose.models.types.TrackingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

@@ -14,8 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
-import com.nullpointer.runningcompose.models.Run
-import com.nullpointer.runningcompose.models.StatisticsRun
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
+import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.StatisticsData
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
@@ -86,7 +87,7 @@ fun StatisticsScreen(
                 } else {
                     StatisticsAndGraph(
                         orientation = orientation,
-                        listRuns = listRuns.reversed(),
+                        listRunEntities = listRuns.reversed(),
                         statistics = statistics,
                         metricType = metricType,
                         modifier = Modifier
@@ -100,7 +101,7 @@ fun StatisticsScreen(
 @Composable
 private fun StatisticsAndGraph(
     orientation: Int,
-    listRuns: List<Run>,
+    listRunEntities: List<RunData>,
     statistics: StatisticsRun,
     metricType: MetricType,
     modifier: Modifier = Modifier
@@ -118,7 +119,7 @@ private fun StatisticsAndGraph(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 GraphRuns(
-                    list = listRuns,
+                    list = listRunEntities,
                     metricType = metricType,
                     modifier = Modifier
                         .weight(6F)
@@ -136,7 +137,7 @@ private fun StatisticsAndGraph(
                         .fillMaxHeight()
                 )
                 GraphRuns(
-                    list = listRuns,
+                    list = listRunEntities,
                     metricType = metricType,
                     modifier = Modifier
                         .weight(.5f)

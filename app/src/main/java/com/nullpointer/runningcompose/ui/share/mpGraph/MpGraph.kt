@@ -12,13 +12,14 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 
 
 @Composable
 fun MpGraphAndroid(
-    list: List<Run>,
+    list: List<RunData>,
     modifier: Modifier = Modifier,
     metricType: MetricType
 ) {
@@ -69,7 +70,7 @@ fun setupGraph(graph: BarChart) = with(graph) {
 fun updateValuesGraph(
     context: Context,
     barChart: BarChart,
-    list: List<Run>,
+    list: List<RunData>,
     colorText: Int,
     metricType: MetricType
 ) = with(barChart) {

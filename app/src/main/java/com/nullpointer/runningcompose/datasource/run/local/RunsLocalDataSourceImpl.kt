@@ -2,11 +2,13 @@ package com.nullpointer.runningcompose.datasource.run.local
 
 import androidx.paging.PagingSource
 import com.nullpointer.runningcompose.database.RunDAO
-import com.nullpointer.runningcompose.models.Run
-import com.nullpointer.runningcompose.models.StatisticsRun
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.data.StatisticsRun
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 class RunsLocalDataSourceImpl(
     private val runDao: RunDAO,
@@ -27,24 +29,30 @@ class RunsLocalDataSourceImpl(
     }
 
 
-    override suspend fun insertNewRun(run: Run) =
-        runDao.insertNewRun(run)
+    override suspend fun insertNewRun(runData: RunData) =
+        runDao.insertNewRun(RunEntity.fromRunData(runData))
 
     override suspend fun getListRunsById(listIds: List<Long>) =
-        runDao.getListRunsById(listIds)
+        runDao.getListRunsById(listIds).map(RunData::fromRunEntity)
 
     override suspend fun deleterListRuns(listIds: List<Long>) =
         runDao.deleterListRuns(listIds)
 
-    override suspend fun deleterRun(run: Run) =
-        runDao.deleterRun(run)
+    override suspend fun deleterRun(runData: RunData) =
+        runDao.deleterRun(RunEntity.fromRunData(runData))
 
-    override fun getListForTypeSort(sortType: SortType, ascendant: Boolean): PagingSource<Int, Run> =
-        runDao.getListRunsBy(sortType,ascendant)
+    override fun getListForTypeSort(
+        sortType: SortType,
+        ascendant: Boolean
+    ): PagingSource<Int, RunEntity> =
+        runDao.getListRunsBy(sortType, ascendant)
 
-    override fun getListOrderByDate(limit: Int): Flow<List<Run>> =
-        runDao.getLastRunsOrderByDate(limit)
+    override fun getListOrderByDate(limit: Int): Flow<List<RunData>> =
+        runDao.getLastRunsOrderByDate(limit).map { list ->
+            list.map(RunData::fromRunEntity)
+        }
 
     override fun getCountRun(): Flow<Int> =
         runDao.getRowCount()
 }
+

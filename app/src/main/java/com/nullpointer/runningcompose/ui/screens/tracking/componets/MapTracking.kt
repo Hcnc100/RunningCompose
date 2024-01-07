@@ -13,8 +13,8 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Polyline
 import com.google.maps.android.ktx.addPolyline
 import com.google.maps.android.ktx.awaitMap
-import com.nullpointer.runningcompose.models.DrawPolyData
-import com.nullpointer.runningcompose.models.config.MapConfig
+import com.nullpointer.runningcompose.models.data.DrawPolyData
+import com.nullpointer.runningcompose.models.data.config.MapConfig
 import timber.log.Timber
 
 @Composable

@@ -19,7 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.getGrayColor
-import com.nullpointer.runningcompose.models.config.MapConfig
+import com.nullpointer.runningcompose.models.data.config.MapConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.ui.screens.config.components.share.SelectOptionConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleConfig

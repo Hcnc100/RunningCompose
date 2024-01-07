@@ -2,15 +2,37 @@ package com.nullpointer.runningcompose.ui.screens.runs.componets
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,27 +42,28 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.itemsIndexed
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.Run
-import com.nullpointer.runningcompose.models.config.SortConfig
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListRuns(
     modifier: Modifier = Modifier,
-    listRuns: LazyPagingItems<Run>,
+    listRuns: LazyPagingItems<RunData>,
     listState: LazyListState,
     isSelectEnable: Boolean,
     metricType: MetricType,
     sortConfig: SortConfig,
     changeSort: (SortType?, Boolean?) -> Unit,
-    actionRun: (ActionRun, Run?) -> Unit,
-    numberRuns: Int
+    actionRun: (ActionRun, RunData?) -> Unit,
+    numberRuns: Int,
+    listRunSelected:SnapshotStateMap<Long, RunData>,
 ) {
 
 
@@ -79,7 +102,6 @@ fun ListRuns(
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
 
-
                 item(key = "header-sort") {
                     if (!isSelectEnable)
                         SelectDropMenu(
@@ -87,21 +109,22 @@ fun ListRuns(
                             changeSort = changeSort
                         )
                 }
+                items(
+                    listRuns.itemCount,
+                    key = listRuns.itemKey { it.id },
+                    contentType = listRuns.itemContentType { "run"},
+                  ) {index ->
 
+                    val run = listRuns[index]!!
 
-
-
-
-                itemsIndexed(listRuns, key = { _, it -> it.id }) { _, run ->
-                    if (run != null) {
-                        ItemRun(
-                            itemRun = run,
-                            actionRun = actionRun,
-                            isSelectEnable = isSelectEnable,
-                            metricType = metricType,
-                            modifier = Modifier.animateItemPlacement()
-                        )
-                    }
+                    ItemRun(
+                        isSelect = listRunSelected.containsKey(run.id),
+                        itemRunEntity = run,
+                        actionRun = { actionRun(it, run) },
+                        isSelectEnable = isSelectEnable,
+                        metricType = metricType,
+//                            modifier = Modifier.animateItemPlacement()
+                    )
                 }
             }
         }

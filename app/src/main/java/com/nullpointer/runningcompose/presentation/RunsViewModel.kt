@@ -1,11 +1,13 @@
 package com.nullpointer.runningcompose.presentation
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.PolyUtil
 import com.nullpointer.runningcompose.core.utils.Utility
@@ -14,7 +16,8 @@ import com.nullpointer.runningcompose.domain.auth.AuthRepository
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.TrackingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +42,9 @@ class RunsViewModel @Inject constructor(
 
     private val _messageRuns = Channel<Int>()
     val messageRuns = _messageRuns.receiveAsFlow()
+
+
+
 
     val stateTracking = locationRepository
         .stateTracking
@@ -69,7 +75,11 @@ class RunsViewModel @Inject constructor(
                 )
             ) {
                 runsRepository.getAllListRunOrdered(config.sortType, config.isReverse)
-            }.flow
+            }.flow.map {pagingData->
+                pagingData.map {
+                    RunData.fromRunEntity(it)
+                }
+            }
         }.cachedIn(viewModelScope).flowOn(Dispatchers.IO)
 
 
@@ -98,7 +108,7 @@ class RunsViewModel @Inject constructor(
         val avgSpeedInMS = distanceInMeters / (timeRun / 1000f)
         val caloriesBurned = distanceInMeters * (weightUser / 1000f)
 
-        val run = Run(
+        val runData = RunData(
             avgSpeedInMeters = avgSpeedInMS,
             distanceInMeters = distanceInMeters,
             timeRunInMillis = timeRun,
@@ -107,11 +117,11 @@ class RunsViewModel @Inject constructor(
             mapConfig = mapConfig,
             timestamp = currentTime,
         )
-        runsRepository.insertNewRun(run, bitmap)
+        runsRepository.insertNewRun(runData, bitmap)
     }
 
-    fun deleterRun(run: Run) = launchSafeIO {
-        runsRepository.deleterRun(run)
+    fun deleterRun(runData: RunData) = launchSafeIO {
+        runsRepository.deleterRun(runData)
     }
 
     fun deleterListRun(listIds: List<Long>) = launchSafeIO {

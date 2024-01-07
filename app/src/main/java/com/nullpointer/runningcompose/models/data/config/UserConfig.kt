@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.models.config
+package com.nullpointer.runningcompose.models.data.config
 
 data class UserConfig(
     val name:String,

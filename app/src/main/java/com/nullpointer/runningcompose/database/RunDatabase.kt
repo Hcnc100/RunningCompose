@@ -3,10 +3,10 @@ package com.nullpointer.runningcompose.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.entities.RunEntity
 
 @Database(
-    entities = [Run::class],
+    entities = [RunEntity::class],
     version = 1,
     exportSchema = false
 )

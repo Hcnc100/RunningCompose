@@ -1,7 +1,7 @@
 package com.nullpointer.runningcompose.database
 
 import androidx.room.TypeConverter
-import com.nullpointer.runningcompose.models.config.MapConfig
+import com.nullpointer.runningcompose.models.data.config.MapConfig
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

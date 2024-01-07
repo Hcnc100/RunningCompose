@@ -9,13 +9,14 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 
 
 @SuppressLint("ViewConstructor")
 class CustomMarkerView(
-    private val listRuns: List<Run>,
+    private val listRunEntities: List<RunData>,
     private val metricType: MetricType,
     context: Context,
     layoutId: Int,
@@ -39,7 +40,7 @@ class CustomMarkerView(
             return
         }
         val currentIndex = e.x.toInt()
-        with(listRuns[currentIndex]) {
+        with(listRunEntities[currentIndex]) {
             textDate.text = timestamp.toDateFormat()
             textAvgSpeed.text = avgSpeedInMeters.toAVGSpeed(metricType)
             textCalories.text = caloriesBurned.toCaloriesBurned(metricType)

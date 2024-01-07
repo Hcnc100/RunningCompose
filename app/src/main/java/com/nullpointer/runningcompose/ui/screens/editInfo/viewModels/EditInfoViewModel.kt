@@ -6,7 +6,7 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
 import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.auth.AuthRepository
-import com.nullpointer.runningcompose.models.AuthData
+import com.nullpointer.runningcompose.models.data.AuthData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel

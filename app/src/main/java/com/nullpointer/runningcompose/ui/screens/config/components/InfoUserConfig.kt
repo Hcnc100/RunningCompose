@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
-import com.nullpointer.runningcompose.models.AuthData
+import com.nullpointer.runningcompose.models.data.AuthData
 import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleConfig
 
 @Composable

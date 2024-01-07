@@ -8,6 +8,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,8 +22,9 @@ import com.google.accompanist.permissions.isGranted
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.shareViewModel
-import com.nullpointer.runningcompose.models.Run
-import com.nullpointer.runningcompose.models.config.SortConfig
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
+import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import com.nullpointer.runningcompose.models.types.TrackingState
@@ -62,6 +64,7 @@ fun RunsScreens(
     val stateTracking by runsViewModel.stateTracking.collectAsState()
     val listRuns = runsViewModel.listRunsOrdered.collectAsLazyPagingItems()
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
+    val listRunsSelected= selectViewModel.listRunsSelected
 
     BackHandler(
         selectViewModel.isSelectEnable,
@@ -75,6 +78,7 @@ fun RunsScreens(
 
 
     RunsScreens(
+        listRunsSelected = listRunsSelected,
         scaffoldState = runsState.scaffoldState,
         listRuns = listRuns,
         metricType = metricType,
@@ -114,7 +118,7 @@ fun RunsScreens(
 @Composable
 fun RunsScreens(
     scaffoldState: ScaffoldState,
-    listRuns: LazyPagingItems<Run>,
+    listRuns: LazyPagingItems<RunData>,
     metricType: MetricType,
     sortConfig: SortConfig,
     changeSort: (SortType?, Boolean?) -> Unit,
@@ -124,8 +128,9 @@ fun RunsScreens(
     trackingState: TrackingState,
     lazyListState: LazyListState,
     permissionState: PermissionState,
-    actionRunScreen: (ActionRun, Run?) -> Unit,
+    actionRunScreen: (ActionRun, RunData?) -> Unit,
     numberRuns: Int,
+    listRunsSelected: SnapshotStateMap<Long, RunData>,
 ) {
 
 
@@ -157,7 +162,8 @@ fun RunsScreens(
                         sortConfig = sortConfig,
                         changeSort = changeSort,
                         actionRun = actionRunScreen,
-                        numberRuns = numberRuns
+                        numberRuns = numberRuns,
+                        listRunSelected = listRunsSelected
                     )
                 }
             } else {

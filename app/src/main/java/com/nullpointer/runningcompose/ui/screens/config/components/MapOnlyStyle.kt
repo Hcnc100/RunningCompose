@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.ktx.addPolyline
-import com.nullpointer.runningcompose.models.config.MapConfig
+import com.nullpointer.runningcompose.models.data.config.MapConfig
 
 
 @Composable

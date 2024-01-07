@@ -1,9 +1,11 @@
 package com.nullpointer.runningcompose.presentation
 
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.runningcompose.core.delegates.SavableComposeState
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -20,31 +22,21 @@ class SelectViewModel @Inject constructor(
         KEY_RUN_LIST_ID,
         emptyList()
     )
-    private var listRunsSelect = mutableListOf<Run>()
+    val listRunsSelected = mutableStateMapOf<Long, RunData>()
 
     val isSelectEnable get() = listSelect.isNotEmpty()
 
     val sizeSelected get() = listSelect.size
 
-    fun changeSelect(runSelect:Run){
-        listSelect=if(listSelect.contains(runSelect.id)){
-            runSelect.isSelected=false
-            listRunsSelect.remove(runSelect)
-            listSelect-runSelect.id
+    fun changeSelect(runData: RunData){
+        if(listSelect.contains(runData.id)){
+            listRunsSelected.remove(runData.id)
         }else{
-            runSelect.isSelected=true
-            listRunsSelect.add(runSelect)
-            listSelect+runSelect.id
+            listRunsSelected[runData.id]=runData
         }
     }
 
-    fun restoreSelect(listRuns:List<Run>){
-        listRuns.filter { listSelect.contains(it.id) }.onEach {
-            it.isSelected=true
-        }.let {
-            listRunsSelect.addAll(listRuns)
-        }
-    }
+
 
     fun getListForDeleter(): List<Long> {
         val listTempIds= listOf(*listSelect.toTypedArray())
@@ -53,9 +45,9 @@ class SelectViewModel @Inject constructor(
     }
 
     fun clearSelect(){
-        listRunsSelect.forEach{ it.isSelected=false }
-        listSelect= emptyList()
-        listRunsSelect.clear()
+//        listRunsSelect.forEach{ it.isSelected=false }
+//        listSelect= emptyList()
+//        listRunsSelect.clear()
     }
 
 }

@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.models
+package com.nullpointer.runningcompose.models.data
 
 data class StatisticsRun(
     val distance:Float,

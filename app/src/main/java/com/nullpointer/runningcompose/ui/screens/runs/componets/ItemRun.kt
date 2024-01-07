@@ -27,7 +27,8 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
-import com.nullpointer.runningcompose.models.Run
+import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 
@@ -35,15 +36,17 @@ import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ItemRun(
-    itemRun: Run,
+    isSelect: Boolean,
+    itemRunEntity: RunData,
     isSelectEnable: Boolean,
     metricType: MetricType,
     modifier: Modifier = Modifier,
-    actionRun: (ActionRun, Run) -> Unit,
+    actionRun: (ActionRun) -> Unit,
 ) {
 
     val colorSelect by animateColorAsState(
-        if (itemRun.isSelected) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.surface
+        if (isSelect) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.surface,
+        label = "ANIMATE_SELECT_COLOR"
     )
 
     Surface(
@@ -54,9 +57,9 @@ fun ItemRun(
             .combinedClickable(
                 onClick = {
                     val action = if (isSelectEnable) ActionRun.SELECT else ActionRun.DETAILS
-                    actionRun(action, itemRun)
+                    actionRun(action)
                 },
-                onLongClick = { if (!isSelectEnable) actionRun(ActionRun.SELECT, itemRun) }
+                onLongClick = { if (!isSelectEnable) actionRun(ActionRun.SELECT) }
             )
     ) {
         Row(modifier = Modifier
@@ -64,13 +67,13 @@ fun ItemRun(
             .height(150.dp)) {
             // * waiting to take snapshot for maps compose
             ImageRun(
-                data = itemRun.pathImgRun,
+                data = itemRunEntity.pathImgRun,
                 modifier = Modifier.weight(.5f)
             )
 
             Spacer(modifier = Modifier.width(20.dp))
             InfoRun(
-                itemRun = itemRun,
+                itemRunEntity = itemRunEntity,
                 modifier = Modifier.weight(.5f),
                 metricType = metricType
             )
@@ -107,17 +110,17 @@ private fun ImageRun(
 
 @Composable
 private fun InfoRun(
-    itemRun: Run,
+    itemRunEntity: RunData,
     metricType: MetricType,
     modifier: Modifier = Modifier,
     context:Context=LocalContext.current
 ) {
-    val date = remember { itemRun.timestamp.toDateFormat() }
-    val timeDay = remember { itemRun.timestamp.toDateOnlyTime(context) }
-    val timeRun = remember { itemRun.timeRunInMillis.toFullFormatTime(false) }
-    val distance = remember { itemRun.distanceInMeters.toMeters(metricType) }
-    val calories = remember { itemRun.caloriesBurned.toCaloriesBurned(metricType) }
-    val speed = remember { itemRun.avgSpeedInMeters.toAVGSpeed(metricType) }
+    val date = remember { itemRunEntity.timestamp.toDateFormat() }
+    val timeDay = remember { itemRunEntity.timestamp.toDateOnlyTime(context) }
+    val timeRun = remember { itemRunEntity.timeRunInMillis.toFullFormatTime(false) }
+    val distance = remember { itemRunEntity.distanceInMeters.toMeters(metricType) }
+    val calories = remember { itemRunEntity.caloriesBurned.toCaloriesBurned(metricType) }
+    val speed = remember { itemRunEntity.avgSpeedInMeters.toAVGSpeed(metricType) }
 
     Row(
         modifier = modifier

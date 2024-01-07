@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.models.config
+package com.nullpointer.runningcompose.models.data.config
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb

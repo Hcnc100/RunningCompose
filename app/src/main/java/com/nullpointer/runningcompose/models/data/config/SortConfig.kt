@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.models.config
+package com.nullpointer.runningcompose.models.data.config
 
 import com.nullpointer.runningcompose.models.types.SortType
 
