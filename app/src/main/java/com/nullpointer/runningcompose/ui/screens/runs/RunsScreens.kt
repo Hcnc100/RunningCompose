@@ -67,8 +67,8 @@ fun RunsScreens(
     val listRunsSelected= selectViewModel.listRunsSelected
 
     BackHandler(
-        selectViewModel.isSelectEnable,
-        selectViewModel::clearSelect
+        enabled = listRunsSelected.isNotEmpty(),
+        onBack = selectViewModel::clearSelect
     )
 
     LaunchedEffect(key1 = Unit) {
@@ -87,7 +87,7 @@ fun RunsScreens(
         trackingState = stateTracking,
         lazyListState = runsState.lazyListState,
         changeSort = configViewModel::changeSortConfig,
-        isSelectEnable = selectViewModel.isSelectEnable,
+        isSelectEnable = listRunsSelected.isNotEmpty(),
         isScrollInProgress = runsState.isScrollInProgress,
         permissionState = runsState.locationPermissionState,
         isFirstRequestPermission = Resource.Success(isFirstDialogRequest),
@@ -143,7 +143,7 @@ fun RunsScreens(
                     scaffoldState = scaffoldState,
                     floatingActionButton = {
                         ButtonToggleAddRemove(
-                            isVisible = !isScrollInProgress,
+//                            isVisible = !isScrollInProgress,
                             isSelectedEnable = isSelectEnable,
                             descriptionButtonAdd = stringResource(R.string.description_button_add_run),
                             trackingState = trackingState,

@@ -59,9 +59,12 @@ fun EditInfoScreen(
                 ACTION_BACK -> actionRootDestinations.backDestination()
                 CHANGE_DATA -> {
                     editInfoScreenState.hiddenKeyBoard()
-                    editInfoViewModel.validateDataUser()?.let {
-                        authViewModel.saveAuthData(it)
-                        if (isAuth) editInfoViewModel.addMessage(R.string.message_data_updated)
+                    editInfoViewModel.validateDataUser()?.let { authData ->
+                        authViewModel.saveAuthData(authData).invokeOnCompletion {
+                            if(it==null && isAuth){
+                                editInfoViewModel.addMessage(R.string.message_data_updated)
+                            }
+                        }
                     }
                 }
             }

@@ -40,7 +40,7 @@ fun HomeScreen(
     HomeScreen(
         scaffoldState = mainState.scaffoldState,
         navHostController = mainState.navController,
-        sizeSelected = selectViewModel.sizeSelected,
+        sizeSelected = selectViewModel.listRunsSelected.size,
         clearSelected = selectViewModel::clearSelect,
         actionRootDestinations = actionRootDestinations,
         configViewModel = configViewModel,

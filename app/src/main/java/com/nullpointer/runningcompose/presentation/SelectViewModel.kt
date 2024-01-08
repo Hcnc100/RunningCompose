@@ -17,19 +17,13 @@ class SelectViewModel @Inject constructor(
         private const val KEY_RUN_LIST_ID = "KEY_RUN_LIST_ID"
     }
 
-    private var listSelect:List<Long> by SavableComposeState(
-        savedStateHandle,
-        KEY_RUN_LIST_ID,
-        emptyList()
-    )
+
     val listRunsSelected = mutableStateMapOf<Long, RunData>()
 
-    val isSelectEnable get() = listSelect.isNotEmpty()
 
-    val sizeSelected get() = listSelect.size
 
     fun changeSelect(runData: RunData){
-        if(listSelect.contains(runData.id)){
+        if(listRunsSelected.contains(runData.id)){
             listRunsSelected.remove(runData.id)
         }else{
             listRunsSelected[runData.id]=runData
@@ -39,15 +33,13 @@ class SelectViewModel @Inject constructor(
 
 
     fun getListForDeleter(): List<Long> {
-        val listTempIds= listOf(*listSelect.toTypedArray())
+        val listTempIds= listRunsSelected.map { it.key }
         clearSelect()
         return listTempIds
     }
 
     fun clearSelect(){
-//        listRunsSelect.forEach{ it.isSelected=false }
-//        listSelect= emptyList()
-//        listRunsSelect.clear()
+       listRunsSelected.clear()
     }
 
 }
