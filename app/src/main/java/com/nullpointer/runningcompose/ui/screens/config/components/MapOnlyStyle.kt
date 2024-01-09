@@ -32,7 +32,7 @@ fun MapFromConfig(
             LatLng(52.5166, 13.3833),
         )
     }
-    val bounds = remember {
+    val bounds = remember(listPoints) {
         LatLngBounds.builder().includeAll(listPoints).build()
     }
     AndroidView(

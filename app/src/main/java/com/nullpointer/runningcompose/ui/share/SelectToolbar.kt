@@ -28,17 +28,18 @@ fun SelectToolbar(
     context: Context = LocalContext.current
 ) {
 
-    val title = remember(numberSelection) {
+    val title =
         if (numberSelection == 0)
             context.getString(titleDefault) else context.getPlural(titleSelection, numberSelection)
 
-    }
+
 
     val backgroundToolbar by animateColorAsState(
-        if (numberSelection == 0) MaterialTheme.colors.primary else MaterialTheme.colors.secondary
+        if (numberSelection == 0) MaterialTheme.colors.primary else MaterialTheme.colors.secondary,
+        label = ""
     )
     val contextColor by animateColorAsState(
-        if(numberSelection == 0) Color.White else Color.Black
+        if(numberSelection == 0) Color.White else Color.Black, label = ""
     )
 
     TopAppBar(

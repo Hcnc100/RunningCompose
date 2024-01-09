@@ -43,7 +43,7 @@ fun MapTracking(
         // ! is different to the lines draw
 
         // * this for no draw Unnecessary polyline and only update the last polyline points
-        if (listPolyline.size != drawPolyData.listLocation.size || currentConfig != drawPolyData.mapConfig) {
+        if ((listPolyline.size != drawPolyData.listLocation.size) || (currentConfig != drawPolyData.mapConfig)) {
             Timber.d("Disparity: clear map and update styles ")
             currentConfig = drawPolyData.mapConfig
             listPolyline.clear()

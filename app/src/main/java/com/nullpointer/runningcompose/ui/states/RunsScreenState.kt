@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -19,17 +20,13 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
-class RunsScreenState constructor(
+@Stable
+class RunsScreenState(
     context: Context,
     scaffoldState: ScaffoldState,
     val lazyListState: LazyListState,
     val locationPermissionState: PermissionState
 ) : SimpleScreenState(context, scaffoldState) {
-
-    val isScrollInProgress get() = lazyListState.isScrollInProgress
-    val permissionState get() = locationPermissionState.status
-
-
     fun showDialogPermission() {
         locationPermissionState.launchPermissionRequest()
     }

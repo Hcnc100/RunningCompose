@@ -37,6 +37,8 @@ import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestinat
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
 import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.*
+import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermission
+import com.nullpointer.runningcompose.ui.screens.runs.componets.DropFilterAndOrder
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
 import com.nullpointer.runningcompose.ui.share.BlockProgress
 import com.nullpointer.runningcompose.ui.share.ButtonToggleAddRemove
@@ -88,7 +90,6 @@ fun RunsScreens(
         lazyListState = runsState.lazyListState,
         changeSort = configViewModel::changeSortConfig,
         isSelectEnable = listRunsSelected.isNotEmpty(),
-        isScrollInProgress = runsState.isScrollInProgress,
         permissionState = runsState.locationPermissionState,
         isFirstRequestPermission = Resource.Success(isFirstDialogRequest),
         actionRunScreen = { action, itemRun ->
@@ -123,7 +124,6 @@ fun RunsScreens(
     sortConfig: SortConfig,
     changeSort: (SortType?, Boolean?) -> Unit,
     isFirstRequestPermission: Resource<Boolean>,
-    isScrollInProgress: Boolean,
     isSelectEnable: Boolean,
     trackingState: TrackingState,
     lazyListState: LazyListState,
@@ -143,7 +143,6 @@ fun RunsScreens(
                     scaffoldState = scaffoldState,
                     floatingActionButton = {
                         ButtonToggleAddRemove(
-//                            isVisible = !isScrollInProgress,
                             isSelectedEnable = isSelectEnable,
                             descriptionButtonAdd = stringResource(R.string.description_button_add_run),
                             trackingState = trackingState,
@@ -159,62 +158,24 @@ fun RunsScreens(
                         listRuns = listRuns,
                         isSelectEnable = isSelectEnable,
                         metricType = metricType,
-                        sortConfig = sortConfig,
-                        changeSort = changeSort,
                         actionRun = actionRunScreen,
                         numberRuns = numberRuns,
-                        listRunSelected = listRunsSelected
+                        listRunSelected = listRunsSelected,
+                        headerOrderAndFilter ={
+                            DropFilterAndOrder(
+                                sortConfig = sortConfig,
+                                changeSort = changeSort
+                            )
+                        }
                     )
                 }
             } else {
-                val (text, action) = remember(isFirstRequestPermission) {
-                    if (isFirstRequestPermission.data) {
-                        R.string.need_permissions_tracking to {
-                            actionRunScreen(
-                                LAUNCH_PERMISSION,
-                                null
-                            )
-                        }
-                    } else {
-                        R.string.setting_permissions_tracking to {
-                            actionRunScreen(
-                                OPEN_SETTING,
-                                null
-                            )
-                        }
-                    }
-                }
                 ContainerPermission(
-                    textExplanation = stringResource(id = text),
-                    actionLaunchPermission = action
+                    isFirstRequestPermission = isFirstRequestPermission.data,
+                    actionRunScreen = actionRunScreen,
                 )
             }
         }
     }
 }
 
-@Composable
-fun ContainerPermission(
-    textExplanation: String,
-    actionLaunchPermission: () -> Unit,
-) {
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            LottieContainer(modifier = Modifier.size(250.dp), animation = R.raw.location)
-            Text(text = textExplanation, textAlign = TextAlign.Center)
-            Button(onClick = actionLaunchPermission) {
-                Text(text = stringResource(id = R.string.action_accept))
-            }
-        }
-    }
-
-}

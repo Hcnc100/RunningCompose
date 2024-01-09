@@ -10,11 +10,12 @@ import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleCo
 
 @Composable
 fun MetricConfig(metrics: MetricType, changeMetric: (MetricType) -> Unit) {
-    val listMetrics = remember { MetricType.values().toList() }
+
     TitleConfig(text = stringResource(R.string.title_others_config))
     SelectOptionConfig(textField = stringResource(R.string.title_metrics),
         selected = stringResource(id = metrics.stringRes),
-        listItems = listMetrics,
-        listNamed = listMetrics.map { stringResource(id = it.stringRes) },
-        onChange = changeMetric)
+        listItems = MetricType.values().toList(),
+        listNamed = MetricType.values().map { stringResource(id = it.stringRes) },
+        onChange = changeMetric
+    )
 }

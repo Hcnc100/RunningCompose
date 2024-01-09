@@ -22,14 +22,9 @@ fun InfoUserConfig(
     authData: Resource<AuthData>,
     actionGoEditInfo: () -> Unit,
 ) {
+    val name = if (authData is Resource.Success) authData.data.name else ""
 
-    val name = remember(authData) {
-        if (authData is Resource.Success) authData.data.name else ""
-    }
-    val weight = remember(authData) {
-        if (authData is Resource.Success) authData.data.weight.toString() else ""
-    }
-
+    val weight = if (authData is Resource.Success) authData.data.weight.toString() else ""
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)

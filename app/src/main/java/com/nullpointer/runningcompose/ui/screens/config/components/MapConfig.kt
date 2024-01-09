@@ -93,7 +93,7 @@ private fun SelectMapWeight(
     currentWeightMap: Int,
     changeWeight: (Int) -> Unit,
 ) {
-    val listWeight = remember { listOf(3, 4, 5, 6, 7, 8, 9, 10) }
+    val listWeight = listOf(3, 4, 5, 6, 7, 8, 9, 10)
     SelectOptionConfig(
         textField = stringResource(R.string.title_weight_map_line),
         selected = currentWeightMap.toString(),
@@ -106,7 +106,7 @@ private fun SelectMapStyle(
     currentStyle: MapStyle,
     changeStyleMap: (MapStyle) -> Unit,
 ) {
-    val listMaps = remember { MapStyle.values().toList() }
+    val listMaps =  MapStyle.values().toList()
     SelectOptionConfig(
         textField = stringResource(R.string.title_map_style),
         selected = stringResource(id = currentStyle.string),
