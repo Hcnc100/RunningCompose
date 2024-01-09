@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
@@ -34,39 +35,27 @@ fun InfoUserConfig(
             contentAlignment = Alignment.Center
         ) {
             when (orientation) {
-                Configuration.ORIENTATION_PORTRAIT -> {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        TextShowOnlyInfo(
-                            textLabel = stringResource(R.string.label_name_user),
-                            textShow = name
-                        )
-                        TextShowOnlyInfo(
-                            textLabel = stringResource(R.string.label_weight_user),
-                            textShow = weight
-                        )
-                    }
-                }
-                else -> {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        TextShowOnlyInfo(
-                            textLabel = stringResource(R.string.label_name_user),
-                            textShow = name,
-                            modifier = Modifier.weight(.5f)
-                        )
-                        TextShowOnlyInfo(
-                            textLabel = stringResource(R.string.label_weight_user),
-                            textShow = weight,
-                            modifier = Modifier.weight(.5f)
-                        )
-                    }
-                }
+                Configuration.ORIENTATION_PORTRAIT -> InfoUserConfigPortrait(
+                    name = name,
+                    weight = weight,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
+                )
+
+                Configuration.ORIENTATION_LANDSCAPE -> InfoUserConfigLandscape(
+                    name = name,
+                    weight = weight,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
+                )
+
+                else -> InfoUserConfigLandscape(
+                    name = name,
+                    weight = weight
+                )
             }
-            if (authData is Resource.Loading)
+            if (authData is Resource.Loading) {
                 CircularProgressIndicator()
+            }
+
         }
         ButtonEditInfo(
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -74,31 +63,77 @@ fun InfoUserConfig(
         )
     }
 }
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFF
+)
+@Composable
+private fun InfoUserConfigPortraitPreview() {
+    InfoUserConfigPortrait(
+        weight = "80",
+        name = "Juanito"
+    )
+}
+
+@Composable
+private fun InfoUserConfigPortrait(
+    name: String,
+    weight: String,
+    modifier: Modifier=Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier
+    ) {
+        TextShowOnlyInfo(
+            textLabel = stringResource(R.string.label_name_user),
+            textShow = name
+        )
+        TextShowOnlyInfo(
+            textLabel = stringResource(R.string.label_weight_user),
+            textShow = weight
+        )
+    }
+}
 
 
 @Composable
-private fun ButtonEditInfo(
-    modifier: Modifier = Modifier,
-    actionGoEditInfo: () -> Unit,
+fun InfoUserConfigLandscape(
+    name: String,
+    weight: String,
+    modifier: Modifier=Modifier
 ) {
-    Button(
-        onClick = actionGoEditInfo,
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier
     ) {
-        Row {
-            Icon(
-                tint = Color.White.copy(alpha = .8f),
-                painter = painterResource(id = R.drawable.ic_edit),
-                contentDescription = stringResource(R.string.description_icon_edit_info),
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(
-                text = stringResource(R.string.text_edit_info_user),
-                color = Color.White.copy(alpha = .8f)
-            )
-        }
+        TextShowOnlyInfo(
+            textLabel = stringResource(R.string.label_name_user),
+            textShow = name,
+            modifier = Modifier.weight(.5f)
+        )
+        TextShowOnlyInfo(
+            textLabel = stringResource(R.string.label_weight_user),
+            textShow = weight,
+            modifier = Modifier.weight(.5f)
+        )
     }
 }
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFF
+)
+@Composable
+private fun InfoUserConfigLandscapePreview() {
+    InfoUserConfigLandscape(
+        weight = "80",
+        name = "Juanito"
+    )
+}
+
+
+
 
 @Composable
 private fun TextShowOnlyInfo(
@@ -113,8 +148,6 @@ private fun TextShowOnlyInfo(
         maxLines = 1,
         label = { Text(text = textLabel) },
         onValueChange = {},
-        modifier = modifier
-            .padding(vertical = 10.dp, horizontal = 15.dp)
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     )
 }

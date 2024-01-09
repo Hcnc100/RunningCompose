@@ -30,7 +30,7 @@ fun ConfigScreen(
     configState:OrientationScreenState = rememberOrientationScreenState()
 ) {
     val mapConfig by configViewModel.mapConfig.collectAsState()
-    val userConfig by configViewModel.authData.collectAsState()
+    val authData by configViewModel.authData.collectAsState()
     val metricsMap by configViewModel.metrics.collectAsState()
 
     Scaffold { paddingValues ->
@@ -40,7 +40,7 @@ fun ConfigScreen(
                 .padding(paddingValues)
         ) {
             InfoUserConfig(
-                authData = userConfig,
+                authData = authData,
                 orientation = configState.orientation,
                 actionGoEditInfo = {
                     actionRootDestinations.changeRoot(EditInfoScreenDestination(isAuth = true))

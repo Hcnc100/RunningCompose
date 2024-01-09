@@ -6,8 +6,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -113,8 +115,8 @@ private fun MainButtonNavigation(
                 },
                 icon = {
                     Icon(
-                        painterResource(id = destination.iconNavigation),
-                        stringResource(id = destination.titleShow)
+                        imageVector = ImageVector.vectorResource(id = destination.iconNavigation),
+                        contentDescription = stringResource(id = destination.titleShow)
                     )
                 },
                 label = { Text(stringResource(id = destination.titleShow)) },

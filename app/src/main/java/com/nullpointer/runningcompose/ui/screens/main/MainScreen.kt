@@ -32,26 +32,23 @@ fun MainScreen(
 
     val stateAuth by authViewModel.authData.collectAsState()
 
-    MainScreenState(
+    MainScreen(
         authDataState = stateAuth,
         actionSuccess = actionSuccess,
         scaffoldState = mainScreenState.scaffoldState,
         navController = mainScreenState.navController,
         actionsRootDestinations = mainScreenState.rootActions,
-        authViewModel = authViewModel
     )
 
 }
 
 @Composable
-fun MainScreenState(
+fun MainScreen(
     authDataState: Resource<AuthData?>,
     actionSuccess: () -> Unit,
     scaffoldState: ScaffoldState,
     navController: NavHostController,
     actionsRootDestinations: ActionRootDestinations,
-    configViewModel: ConfigViewModel = hiltViewModel(),
-    authViewModel: AuthViewModel
 ) {
     Scaffold(
         scaffoldState = scaffoldState
@@ -71,8 +68,6 @@ fun MainScreenState(
                 modifier = Modifier.padding(innerPadding),
                 dependenciesContainerBuilder = {
                     dependency(actionsRootDestinations)
-                    dependency(configViewModel)
-                    dependency(authViewModel)
                 }
             )
         }
