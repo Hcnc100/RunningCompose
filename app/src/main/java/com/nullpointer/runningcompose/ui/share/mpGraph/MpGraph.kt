@@ -24,7 +24,6 @@ fun MpGraphAndroid(
     list: List<RunData>,
     modifier: Modifier = Modifier,
     metricType: MetricType,
-    context: Context= LocalContext.current
 ) {
     val textColor = MaterialTheme.colors.onBackground.toArgb()
 

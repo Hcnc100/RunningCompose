@@ -45,7 +45,7 @@ fun MainScreen(
 
 @Composable
 fun MainScreenState(
-    authDataState: Resource<AuthData>,
+    authDataState: Resource<AuthData?>,
     actionSuccess: () -> Unit,
     scaffoldState: ScaffoldState,
     navController: NavHostController,
@@ -59,7 +59,7 @@ fun MainScreenState(
         when (authDataState) {
             Resource.Loading -> null
             Resource.Failure -> EditInfoScreenDestination
-            is Resource.Success -> if (authDataState.data.isAuth) HomeScreenDestination else EditInfoScreenDestination
+            is Resource.Success -> if (authDataState.data?.isAuth == true) HomeScreenDestination else EditInfoScreenDestination
         }?.let { startDestination ->
             LaunchedEffect(key1 = Unit) {
                 actionSuccess()

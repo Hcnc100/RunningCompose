@@ -8,7 +8,7 @@ class AuthRepoImpl(
     private val authLocalDataSource: AuthLocalDataSource
 ) : AuthRepository {
 
-    override val authData: Flow<AuthData> =
+    override val authData: Flow<AuthData?> =
         authLocalDataSource.getUserData()
 
     override suspend fun saveUserData(authData: AuthData) =

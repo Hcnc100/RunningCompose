@@ -13,7 +13,7 @@ class AuthLocalDataSourceImpl(
     override suspend fun saveUserData(name: String?, weight: Float?, photo: String?) =
         authDataStore.saveUserData(name, weight, photo)
 
-    override fun getUserData(): Flow<AuthData> =
+    override fun getUserData(): Flow<AuthData?> =
         authDataStore.getAuthData()
 
 

@@ -61,8 +61,6 @@ class RunRepoImpl(
 
     override fun getAllListRunOrdered(
         sortType: SortType,isReverse:Boolean
-    ): PagingSource<Int, RunEntity> {
-        return runsLocalDataSource.getListForTypeSort(sortType,isReverse)
-    }
+    ): PagingSource<Int, RunEntity> = runsLocalDataSource.getListForTypeSort(sortType,isReverse)
 
 }

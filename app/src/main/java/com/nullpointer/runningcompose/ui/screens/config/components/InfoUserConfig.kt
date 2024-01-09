@@ -19,12 +19,12 @@ import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleCo
 @Composable
 fun InfoUserConfig(
     orientation: Int,
-    authData: Resource<AuthData>,
+    authData: Resource<AuthData?>,
     actionGoEditInfo: () -> Unit,
 ) {
-    val name = if (authData is Resource.Success) authData.data.name else ""
+    val name = if (authData is Resource.Success) authData.data?.name.orEmpty() else ""
 
-    val weight = if (authData is Resource.Success) authData.data.weight.toString() else ""
+    val weight = if (authData is Resource.Success) authData.data?.weight.toString() else ""
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp)

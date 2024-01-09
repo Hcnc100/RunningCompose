@@ -35,7 +35,7 @@ class ConfigViewModel @Inject constructor(
         MapConfig()
     )
 
-    val authData = authRepo.authData.transform<AuthData, Resource<AuthData>> {
+    val authData = authRepo.authData.transform<AuthData?, Resource<AuthData?>> {
         emit(Resource.Success(it))
     }.catch {
         Timber.e("Error to load auth data")

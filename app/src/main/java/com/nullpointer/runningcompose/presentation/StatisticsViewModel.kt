@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.domain.runs.RunRepository
-import com.nullpointer.runningcompose.models.types.StatisticsData
+import com.nullpointer.runningcompose.models.data.StatisticsData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -27,7 +27,9 @@ class StatisticsViewModel @Inject constructor(
         runsRepository.listRunsOrderByDate,
         runsRepository.totalStatisticRuns
     ) { list, statistics ->
-        Resource.Success(Pair(list, statistics))
+        Resource.Success(
+            StatisticsData(list, statistics))
+
     }.catch<Resource<StatisticsData>> {
         Timber.e("Error when load run $it")
         _messageStatistics.trySend(R.string.error_load_runs_by_date)

@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.nullpointer.runningcompose.models.data.AuthData
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -28,13 +29,15 @@ class AuthDataStore(
         }
     }
 
-    fun getAuthData() = dataStore.data.map { pref ->
-        val authDataEncode = pref[keyAuthData].orEmpty()
-        if (authDataEncode.isEmpty()) AuthData() else Json.decodeFromString(authDataEncode)
+    fun getAuthData():Flow<AuthData?> = dataStore.data.map { pref ->
+        val authDataEncode = pref[keyAuthData]
+        return@map authDataEncode?.let {
+            Json.decodeFromString(authDataEncode)
+        }
     }
 
     suspend fun saveUserData(name: String? = null, weight: Float? = null, photo: String? = null) {
-        val authData = getAuthData().first()
+        val authData = getAuthData().first() ?: AuthData()
         val newAuthData = authData.copy(
             name = name ?: authData.name,
             weight = weight ?: authData.weight,

@@ -59,7 +59,7 @@ class EditInfoViewModel @Inject constructor(
 
     fun restoreSaveData() = launchSafeIO {
         val userData = withContext(Dispatchers.IO) { authRepository.authData.first() }
-        nameUser.changeValue(userData.name, isInit = true)
+        nameUser.changeValue(userData!!.name, isInit = true)
         weightUser.changeValue(userData.weight.toString(), isInit = true)
     }
 

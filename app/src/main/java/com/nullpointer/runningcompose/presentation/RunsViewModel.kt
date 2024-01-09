@@ -93,7 +93,7 @@ class RunsViewModel @Inject constructor(
         // ? Se estima que el costo energético de cada kilómetro que corres,
         // ? es de 1 kcal (1000 calorías) por cada kilogramo de peso corporal del corredo
 
-        val weightUser = authRepository.authData.first().weight
+        val weightUser = authRepository.authData.first()!!.weight
         val mapConfig = configRepository.mapConfig.first()
         val currentTime = System.currentTimeMillis()
 

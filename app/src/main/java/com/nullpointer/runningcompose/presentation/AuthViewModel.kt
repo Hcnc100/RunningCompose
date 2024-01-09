@@ -20,7 +20,7 @@ class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    val authData = authRepository.authData.transform<AuthData, Resource<AuthData>> {
+    val authData = authRepository.authData.transform<AuthData?, Resource<AuthData?>> {
         emit(Resource.Success(it))
     }.catch {
         emit(Resource.Failure)
