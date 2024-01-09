@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.presentation
+package com.nullpointer.runningcompose.ui.screens.main.viewModel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

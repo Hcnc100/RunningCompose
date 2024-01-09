@@ -3,17 +3,13 @@ package com.nullpointer.runningcompose.ui.screens.runs
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -23,19 +19,17 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import com.nullpointer.runningcompose.models.types.TrackingState
-import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
-import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.*
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermission
 import com.nullpointer.runningcompose.ui.screens.runs.componets.DropFilterAndOrder
@@ -52,7 +46,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun RunsScreens(
     selectViewModel: SelectViewModel,
-    configViewModel: ConfigViewModel,
+    configViewModel: ConfigViewModel= hiltViewModel(),
     actionRootDestinations: ActionRootDestinations,
     runsViewModel: RunsViewModel = shareViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState(

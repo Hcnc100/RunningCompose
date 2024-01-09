@@ -18,5 +18,5 @@ fun TitleConfig(
         fontWeight = FontWeight.W500,
         style = MaterialTheme.typography.caption,
         fontSize = 16.sp,
-        modifier = modifier.padding(vertical = 10.dp, horizontal = 20.dp))
+        modifier = modifier.padding(10.dp))
 }

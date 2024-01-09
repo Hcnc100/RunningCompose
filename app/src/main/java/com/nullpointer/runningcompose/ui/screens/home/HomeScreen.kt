@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,7 +15,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeDestinations
@@ -34,7 +32,6 @@ import com.ramcosta.composedestinations.navigation.navigate
 @Destination
 @Composable
 fun HomeScreen(
-    configViewModel: ConfigViewModel,
     actionRootDestinations: ActionRootDestinations,
     selectViewModel: SelectViewModel = hiltViewModel(),
     mainState: HomeScreenState = rememberHomeScreenState(),
@@ -45,7 +42,6 @@ fun HomeScreen(
         sizeSelected = selectViewModel.listRunsSelected.size,
         clearSelected = selectViewModel::clearSelect,
         actionRootDestinations = actionRootDestinations,
-        configViewModel = configViewModel,
         selectViewModel = selectViewModel
     )
 }
@@ -56,7 +52,6 @@ fun HomeScreen(
     sizeSelected: Int,
     clearSelected: () -> Unit,
     scaffoldState: ScaffoldState,
-    configViewModel: ConfigViewModel,
     selectViewModel: SelectViewModel,
     navHostController: NavHostController,
     actionRootDestinations: ActionRootDestinations
@@ -85,7 +80,6 @@ fun HomeScreen(
             navController = navHostController,
             dependenciesContainerBuilder = {
                 dependency(actionRootDestinations)
-                dependency(configViewModel)
                 dependency(selectViewModel)
             }
         )

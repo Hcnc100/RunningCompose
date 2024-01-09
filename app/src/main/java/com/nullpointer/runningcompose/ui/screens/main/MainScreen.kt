@@ -12,8 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.data.AuthData
-import com.nullpointer.runningcompose.presentation.AuthViewModel
-import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.screens.main.viewModel.AuthViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination

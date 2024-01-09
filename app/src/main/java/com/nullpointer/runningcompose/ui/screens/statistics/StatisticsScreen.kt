@@ -16,10 +16,9 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.data.StatisticsData
-import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.StatisticsViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen

@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.presentation
+package com.nullpointer.runningcompose.ui.screens.config.viewModel
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel

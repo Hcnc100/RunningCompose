@@ -32,24 +32,17 @@ fun InfoUserConfig(
     ) {
         TitleConfig(text = stringResource(R.string.title_info_personal))
         Box(
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.padding(horizontal = 10.dp)
         ) {
             when (orientation) {
                 Configuration.ORIENTATION_PORTRAIT -> InfoUserConfigPortrait(
                     name = name,
                     weight = weight,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
                 )
-
-                Configuration.ORIENTATION_LANDSCAPE -> InfoUserConfigLandscape(
-                    name = name,
-                    weight = weight,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
-                )
-
                 else -> InfoUserConfigLandscape(
                     name = name,
-                    weight = weight
+                    weight = weight,
                 )
             }
             if (authData is Resource.Loading) {
@@ -82,7 +75,7 @@ private fun InfoUserConfigPortrait(
     modifier: Modifier=Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = modifier
     ) {
         TextShowOnlyInfo(
@@ -104,7 +97,7 @@ fun InfoUserConfigLandscape(
     modifier: Modifier=Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
         modifier = modifier
     ) {
         TextShowOnlyInfo(

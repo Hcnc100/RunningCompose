@@ -9,12 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.nullpointer.runningcompose.presentation.ConfigViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
-import com.nullpointer.runningcompose.ui.screens.config.components.MetricConfig
+import com.nullpointer.runningcompose.ui.screens.config.components.selectors.SelectMetricConfig
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
@@ -25,7 +27,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun ConfigScreen(
-    configViewModel: ConfigViewModel,
+    configViewModel: ConfigViewModel = hiltViewModel(),
     actionRootDestinations: ActionRootDestinations,
     configState:OrientationScreenState = rememberOrientationScreenState()
 ) {
@@ -52,7 +54,7 @@ fun ConfigScreen(
                 changeStyleMap = { configViewModel.changeMapConfig(style = it) },
                 changeColorMap = { configViewModel.changeMapConfig(color = it) }
             )
-            MetricConfig(
+            SelectMetricConfig(
                 metrics = metricsMap,
                 changeMetric = { configViewModel.changeMetrics(it) })
         }

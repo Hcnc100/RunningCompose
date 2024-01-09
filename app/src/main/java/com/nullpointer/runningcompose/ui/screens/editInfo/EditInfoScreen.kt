@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
-import com.nullpointer.runningcompose.presentation.AuthViewModel
+import com.nullpointer.runningcompose.ui.screens.main.viewModel.AuthViewModel
 import com.nullpointer.runningcompose.ui.actions.EditInfoAction
 import com.nullpointer.runningcompose.ui.actions.EditInfoAction.*
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
