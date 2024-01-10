@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
+import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 
 
 @Composable
@@ -52,7 +52,7 @@ fun DialogExplainPermission(
                     if (isFirstRequestPermission) R.string.need_permissions_tracking else R.string.setting_permissions_tracking
                 Text(stringResource(id = idText),
                     style = MaterialTheme.typography.h6)
-                LottieContainer(modifier = Modifier.size(250.dp),
+                LottieContainerForever(modifier = Modifier.size(250.dp),
                     animation = if (isFirstRequestPermission) R.raw.location else R.raw.work)
             }
         }

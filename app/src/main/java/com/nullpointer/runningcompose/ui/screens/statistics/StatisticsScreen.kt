@@ -15,14 +15,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.StatisticsData
 import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.StatisticsViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
-import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
+import com.nullpointer.runningcompose.ui.share.empty.EmptySection
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.LoadingStatistics
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
@@ -67,7 +66,7 @@ fun StatisticsScreen(
     ) {
         when (fullStatistics) {
             Resource.Failure -> {
-                EmptyScreen(
+                EmptySection(
                     animation = R.raw.empty2,
                     textEmpty = stringResource(R.string.message_empty_statisctis),
                     modifier = Modifier.padding(it)
@@ -79,7 +78,7 @@ fun StatisticsScreen(
             is Resource.Success -> {
                 val (listRuns, statistics) = fullStatistics.data
                 if (listRuns.isEmpty()) {
-                    EmptyScreen(
+                    EmptySection(
                         animation = R.raw.empty2,
                         textEmpty = stringResource(R.string.message_empty_statisctis),
                         modifier = Modifier.padding(it)

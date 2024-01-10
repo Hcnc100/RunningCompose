@@ -35,7 +35,6 @@ import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
-import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.*
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermission
 import com.nullpointer.runningcompose.ui.screens.runs.componets.DropFilterAndOrder

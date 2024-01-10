@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
+import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
 
 @Composable
@@ -60,7 +60,7 @@ private fun PermissionBox(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            LottieContainer(modifier = Modifier.size(250.dp), animation = R.raw.location)
+            LottieContainerForever(modifier = Modifier.size(250.dp), animation = R.raw.location)
             Text(text = textExplanation, textAlign = TextAlign.Center)
             Button(onClick = actionPermission) {
                 Text(text = buttonText)

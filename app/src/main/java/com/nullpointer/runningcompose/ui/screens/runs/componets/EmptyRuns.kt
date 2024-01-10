@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
+import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 
 @Composable
 fun EmptyRuns() {
@@ -27,7 +27,7 @@ fun EmptyRuns() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            LottieContainer(
+            LottieContainerForever(
                 modifier = Modifier.size(250.dp),
                 animation = R.raw.empty1
             )
