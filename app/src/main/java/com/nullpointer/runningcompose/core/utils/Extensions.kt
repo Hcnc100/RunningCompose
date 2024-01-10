@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,9 +25,14 @@ import com.nullpointer.runningcompose.models.types.MetricType.Kilo
 import com.nullpointer.runningcompose.models.types.MetricType.Meters
 import com.valentinilk.shimmer.Shimmer
 import com.valentinilk.shimmer.shimmer
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 fun Long.toFullFormat(context: Context): String {
@@ -156,4 +162,8 @@ fun Modifier.myShimmer(
     shimmer: Shimmer,
 ): Modifier = composed {
     shimmer(shimmer).background(getGrayColor())
+}
+
+fun Color.toHex(): String {
+    return String.format("#%06X", (0xFFFFFF and this.toArgb()))
 }

@@ -127,7 +127,7 @@ dependencies {
     implementation("androidx.savedstate:savedstate-ktx:1.2.1")
 
     // * number picker
-    implementation("com.github.StephenVinouze:MaterialNumberPicker:1.0.5")
+    implementation("com.github.StephenVinouze:MaterialNumberPicker:1.0.7")
 
     // * image compressor
     implementation("com.github.Shouheng88:compressor:1.6.0")

@@ -14,7 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfig
-import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
+import com.nullpointer.runningcompose.ui.screens.config.components.mapConfig.MapSettings
 import com.nullpointer.runningcompose.ui.screens.config.components.selectors.SelectMetricConfig
 import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
