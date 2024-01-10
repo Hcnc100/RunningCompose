@@ -1,48 +1,71 @@
 package com.nullpointer.runningcompose.ui.screens.tracking.componets
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.types.TrackingState
+import com.nullpointer.runningcompose.models.types.TrackingState.PAUSE
+import com.nullpointer.runningcompose.models.types.TrackingState.TRACKING
+import com.nullpointer.runningcompose.models.types.TrackingState.WAITING
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.PauseButton
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.PlayButton
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.StopButton
 
 @Composable
 fun ButtonsServices(
     actionServices: (TrackingActions) -> Unit,
     servicesState: TrackingState
 ) {
-    if (servicesState == TrackingState.WAITING || servicesState == TrackingState.PAUSE) {
-        FloatingActionButton(onClick = { actionServices(TrackingActions.START) }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_play),
-                contentDescription = stringResource(id = R.string.description_button_play_tracking)
-            )
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        when (servicesState) {
+            WAITING, PAUSE -> PlayButton(actionServices)
+            TRACKING -> PauseButton(actionServices)
+        }
+        if (servicesState != WAITING) {
+            StopButton(actionServices)
         }
     }
+}
 
-    if (servicesState == TrackingState.TRACKING) {
-        FloatingActionButton(onClick = { actionServices(TrackingActions.RESUME) }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_pause),
-                contentDescription = stringResource(id = R.string.description_button_resume)
-            )
-        }
-    }
+@Preview(
+    backgroundColor = 0xFFFFFF,
+    showBackground = true
+)
+@Composable
+private fun ButtonsServicesPausePreview() {
+    ButtonsServices(
+        actionServices = {},
+        servicesState = PAUSE,
+    )
+}
 
-    if (servicesState != TrackingState.WAITING) {
-        Spacer(modifier = Modifier.size(20.dp))
-        FloatingActionButton(onClick = { actionServices(TrackingActions.SAVED) }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_stop),
-                contentDescription = stringResource(id = R.string.description_button_stop_and_save_tracking)
-            )
-        }
-    }
+
+@Preview(
+    backgroundColor = 0xFFFFFF,
+    showBackground = true
+)
+@Composable
+private fun ButtonsServicesTrackingPreview() {
+    ButtonsServices(
+        actionServices = {},
+        servicesState = TRACKING,
+    )
+}
+
+
+@Preview(
+    backgroundColor = 0xFFFFFF,
+    showBackground = true
+)
+@Composable
+private fun ButtonsServicesWaitingPreview() {
+    ButtonsServices(
+        actionServices = {},
+        servicesState = WAITING,
+    )
 }
