@@ -5,12 +5,14 @@ import android.content.res.Configuration
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
 
+@Stable
 class OrientationScreenState(
     context: Context,
     val scope: CoroutineScope,

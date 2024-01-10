@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
@@ -15,6 +16,7 @@ import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.spec.Direction
 import kotlinx.coroutines.CoroutineScope
 
+@Stable
 class MainScreenState(
     context: Context,
     scaffoldState: ScaffoldState,
