@@ -125,5 +125,6 @@
     <string name="title_tracking">Tracking</string>
     <string name="description_arrow_statistics">Open the tracking statistics</string>
     <string name="message_data_updated">Data updated successfully</string>
+    <string name="save_data_user">Save data</string>
 
 </resources>

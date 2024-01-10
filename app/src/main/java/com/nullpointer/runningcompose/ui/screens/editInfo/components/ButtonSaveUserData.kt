@@ -33,7 +33,7 @@ fun ButtonSaveUserInfo(
                     painter = painterResource(id = R.drawable.ic_save),
                     contentDescription = stringResource(R.string.description_icon_save_info)
                 )
-                Text(text = "Guardar datos")
+                Text(text = stringResource(R.string.save_data_user))
             }
         },
     )
