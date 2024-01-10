@@ -9,14 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.InfoUserConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.MapSettings
 import com.nullpointer.runningcompose.ui.screens.config.components.selectors.SelectMetricConfig
+import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
@@ -40,6 +40,7 @@ fun ConfigScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
+                .padding(horizontal = 10.dp, vertical = 20.dp)
         ) {
             InfoUserConfig(
                 authData = authData,

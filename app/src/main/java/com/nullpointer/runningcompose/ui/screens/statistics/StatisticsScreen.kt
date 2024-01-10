@@ -1,32 +1,30 @@
 package com.nullpointer.runningcompose.ui.screens.statistics
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.data.RunData
+import com.nullpointer.runningcompose.models.data.StatisticsData
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.models.types.StatisticsData
-import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.StatisticsViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
+import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
+import com.nullpointer.runningcompose.ui.screens.statistics.componets.statisticsAndGraph.StatisticsAndGraph
+import com.nullpointer.runningcompose.ui.share.BlockProgress
 import com.nullpointer.runningcompose.ui.share.empty.EmptySection
-import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
-import com.nullpointer.runningcompose.ui.screens.statistics.componets.LoadingStatistics
-import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
-import com.nullpointer.runningcompose.ui.screens.statistics.desing.StatisticsAndGraphLandScape
-import com.nullpointer.runningcompose.ui.screens.statistics.desing.StatisticsAndGraphPortrait
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -57,7 +55,7 @@ fun StatisticsScreen(
 
 
 @Composable
-fun StatisticsScreen(
+private fun StatisticsScreen(
     orientation: Int,
     metricType: MetricType,
     scaffoldState: ScaffoldState,
@@ -75,7 +73,9 @@ fun StatisticsScreen(
                 )
             }
             Resource.Loading -> {
-                LoadingStatistics(modifier = Modifier.padding(it))
+                BlockProgress(
+                    modifier = Modifier.padding(it)
+                )
             }
             is Resource.Success -> {
                 val (listRuns, statistics) = fullStatistics.data
@@ -99,34 +99,55 @@ fun StatisticsScreen(
     }
 }
 
+@Preview(
+    backgroundColor = 0xFFFFF,
+    showBackground = true
+)
 @Composable
-private fun StatisticsAndGraph(
-    orientation: Int,
-    listRunEntities: List<RunData>,
-    statistics: StatisticsRun,
-    metricType: MetricType,
-    modifier: Modifier = Modifier
-) {
-
-    when (orientation) {
-        Configuration.ORIENTATION_PORTRAIT -> {
-            StatisticsAndGraphPortrait(
-                metricType = metricType,
-                listRunEntities = listRunEntities,
-                statistics = statistics,
-                modifier = modifier
-            )
-        }
-        else -> {
-            StatisticsAndGraphLandScape(
-                metricType = metricType,
-                listRunEntities = listRunEntities,
-                statistics = statistics,
-                modifier = modifier
-            )
-        }
-    }
+private fun StatisticsScreenFailPreview() {
+    StatisticsScreen(
+        metricType = MetricType.Meters,
+        orientation = Configuration.ORIENTATION_PORTRAIT,
+        scaffoldState = rememberScaffoldState(),
+        fullStatistics = Resource.Failure
+    )
 }
+
+
+@Preview(
+    backgroundColor = 0xFFFFF,
+    showBackground = true
+)
+@Composable
+private fun StatisticsScreenLoadingPreview() {
+    StatisticsScreen(
+        metricType = MetricType.Meters,
+        orientation = Configuration.ORIENTATION_PORTRAIT,
+        scaffoldState = rememberScaffoldState(),
+        fullStatistics = Resource.Loading
+    )
+}
+
+
+@Preview(
+    backgroundColor = 0xFFFFF,
+    showBackground = true
+)
+@Composable
+private fun StatisticsScreenSuccessPreview() {
+    StatisticsScreen(
+        metricType = MetricType.Meters,
+        orientation = Configuration.ORIENTATION_PORTRAIT,
+        scaffoldState = rememberScaffoldState(),
+        fullStatistics = Resource.Success(
+            StatisticsData(
+                lastRunEntities = RunData.listRunsExample,
+                totalStatisticRuns = StatisticsRun()
+            )
+        )
+    )
+}
+
 
 
 

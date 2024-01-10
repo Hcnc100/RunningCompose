@@ -1,7 +1,5 @@
 package com.nullpointer.runningcompose.models.data
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.nullpointer.runningcompose.models.data.config.MapConfig
 import com.nullpointer.runningcompose.models.entities.RunEntity
 
@@ -18,6 +16,54 @@ data class RunData(
     val timestamp: Long = System.currentTimeMillis()
 ){
     companion object{
+
+        val listRunsExample = listOf(
+            RunData(
+                0,
+                mapConfig = MapConfig(),
+                caloriesBurned = 100F,
+                timeRunInMillis = 53000,
+                pathImgRun = null,
+                avgSpeedInMeters = 150F,
+                distanceInMeters = 2500F,
+                listPolyLineEncode = emptyList(),
+                timestamp = 100023
+            ),
+            RunData(
+                1,
+                mapConfig = MapConfig(),
+                caloriesBurned = 200F,
+                timeRunInMillis = 53020,
+                pathImgRun = null,
+                avgSpeedInMeters = 130F,
+                distanceInMeters = 2500F,
+                listPolyLineEncode = emptyList(),
+                timestamp = 100023
+            ),
+            RunData(
+                2,
+                mapConfig = MapConfig(),
+                caloriesBurned = 2500F,
+                timeRunInMillis = 51000,
+                pathImgRun = null,
+                avgSpeedInMeters = 123F,
+                distanceInMeters = 2500F,
+                listPolyLineEncode = emptyList(),
+                timestamp = 100023
+            ),
+            RunData(
+                3,
+                mapConfig = MapConfig(),
+                caloriesBurned = 100F,
+                timeRunInMillis = 53000,
+                pathImgRun = null,
+                avgSpeedInMeters = 320F,
+                distanceInMeters = 2500F,
+                listPolyLineEncode = emptyList(),
+                timestamp = 100023
+            )
+        )
+
         fun fromRunEntity(runEntity: RunEntity): RunData {
             return RunData(
                 id = runEntity.id,

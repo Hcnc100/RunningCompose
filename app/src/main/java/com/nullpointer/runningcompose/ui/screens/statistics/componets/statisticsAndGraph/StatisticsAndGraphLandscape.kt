@@ -1,14 +1,11 @@
-package com.nullpointer.runningcompose.ui.screens.statistics.desing
+package com.nullpointer.runningcompose.ui.screens.statistics.componets.statisticsAndGraph
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -16,40 +13,41 @@ import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
 
 @Composable
-fun StatisticsAndGraphPortrait(
+fun StatisticsAndGraphLandScape(
     metricType: MetricType,
     statistics: StatisticsRun,
     modifier: Modifier = Modifier,
     listRunEntities: List<RunData>,
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
+    Row(modifier = modifier) {
         StatisticsRuns(
             statisticsRun = statistics,
             metricType = metricType,
             modifier = Modifier
-                .weight(2F)
-                .fillMaxWidth()
+                .weight(.5F)
+                .fillMaxHeight()
         )
         GraphRuns(
             list = listRunEntities,
             metricType = metricType,
             modifier = Modifier
-                .weight(6F)
-                .fillMaxWidth()
+                .weight(.5f)
+                .fillMaxHeight()
         )
     }
 }
 
+
 @Preview(
     showBackground = true,
-    backgroundColor = 0xFFFFFF
+    backgroundColor = 0xFFFFFF,
+    device = Devices.AUTOMOTIVE_1024p,
+    widthDp = 720,
+    heightDp = 360
 )
 @Composable
-private fun StatisticsAndGraphPortraitPreview() {
-    StatisticsAndGraphPortrait(
+fun StatisticsAndGraphLandScapePreview() {
+    StatisticsAndGraphLandScape(
         metricType = MetricType.Kilo,
         listRunEntities = listOf(),
         statistics = StatisticsRun(

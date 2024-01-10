@@ -31,9 +31,11 @@ import com.nullpointer.runningcompose.R
             Icon(
                 painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = stringResource(R.string.description_icon_edit_info),
+                tint = Color.White
             )
             Text(
                 text = stringResource(R.string.text_edit_info_user),
+                color = Color.White
             )
         }
     }
