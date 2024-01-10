@@ -16,8 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
+import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 
 @Composable
 fun ContainerPermission(
@@ -47,8 +47,8 @@ fun ContainerPermission(
 
 @Composable
 private fun PermissionBox(
-    textExplanation: String,
     buttonText: String,
+    textExplanation: String,
     actionPermission: () -> Unit
 ) {
     Box(

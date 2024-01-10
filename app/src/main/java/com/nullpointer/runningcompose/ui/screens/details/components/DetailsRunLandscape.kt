@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.ui.screens.runs.componets.MapRunItem
 
 @Composable
 fun DetailsRunLandscape(

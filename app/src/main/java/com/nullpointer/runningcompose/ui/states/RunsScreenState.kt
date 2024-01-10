@@ -7,8 +7,8 @@ import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -24,7 +24,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 class RunsScreenState(
     context: Context,
     scaffoldState: ScaffoldState,
-    val lazyListState: LazyListState,
+    val lazyGridState: LazyGridState,
     val locationPermissionState: PermissionState
 ) : SimpleScreenState(context, scaffoldState) {
     fun showDialogPermission() {
@@ -49,7 +49,7 @@ class RunsScreenState(
 fun rememberRunsScreenState(
     actionAfterPermission: () -> Unit,
     context: Context = LocalContext.current,
-    lazyState: LazyListState = rememberLazyListState(),
+    lazyState: LazyGridState = rememberLazyGridState(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     locationPermissionState: PermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_FINE_LOCATION,

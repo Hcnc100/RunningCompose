@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.ui.screens.runs.componets
+package com.nullpointer.runningcompose.ui.screens.details.components
 
 import android.content.Context
 import androidx.compose.foundation.layout.Box
@@ -16,7 +16,6 @@ import com.google.maps.android.ktx.addPolyline
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.ui.screens.config.components.includeAll
 import com.nullpointer.runningcompose.ui.screens.config.components.rememberMapWithLifecycle
-import com.nullpointer.runningcompose.ui.screens.details.components.ButtonCenterLocation
 
 @Composable
 fun MapRunItem(

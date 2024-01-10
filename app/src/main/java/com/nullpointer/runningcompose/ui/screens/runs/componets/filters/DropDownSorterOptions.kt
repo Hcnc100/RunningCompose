@@ -1,12 +1,9 @@
-package com.nullpointer.runningcompose.ui.screens.runs.componets
+package com.nullpointer.runningcompose.ui.screens.runs.componets.filters
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
@@ -33,73 +30,7 @@ import com.nullpointer.runningcompose.models.types.SortType
 
 
 @Composable
-fun DropFilterAndOrder(
-    sortConfig: SortConfig,
-    changeSort: (SortType?, Boolean?) -> Unit,
-) {
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-    ) {
-        DropDownSorterOptions(sortConfig = sortConfig, changeSort = { changeSort(it, null) })
-        DropDownOrder(isReverse = sortConfig.isReverse, changeSort = { changeSort(null, it) })
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-private fun DropFilterAndOrderPreview() {
-    DropFilterAndOrder(
-        sortConfig = SortConfig(),
-        changeSort = {_,_->}
-    )
-}
-
-
-
-@Composable
-private fun DropDownOrder(
-    isReverse: Boolean,
-    changeSort: (Boolean)->Unit,
-) {
-    val textOrderRes = when (isReverse) {
-        true -> R.string.text_asc_order
-        false -> R.string.text_desc_order
-    }
-    val iconOrderRes = when (isReverse) {
-        true -> R.drawable.ic_arrow_upward
-        false -> R.drawable.ic_arrow_downward
-    }
-
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.clickable { changeSort(!isReverse) },
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        Text(stringResource(id = textOrderRes))
-        Icon(
-            imageVector = ImageVector.vectorResource(id =iconOrderRes),
-            contentDescription = stringResource(R.string.description_order_sort_asc_or_desc),
-            modifier = Modifier.size(15.dp)
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun DropDownOrderPreview() {
-    DropDownOrder(isReverse = false, changeSort ={} )
-}
-
-
-
-
-@Composable
-private fun DropDownSorterOptions(
+fun DropDownSorterOptions(
     sortConfig: SortConfig,
     changeSort: (SortType) -> Unit,
 ) {
@@ -117,7 +48,7 @@ private fun DropDownSorterOptions(
         )
         Box(
             modifier = Modifier.clickable {
-                isDropSelect= !isDropSelect
+                isDropSelect = !isDropSelect
             }
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -153,8 +84,14 @@ private fun DropDownSorterOptions(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFF
+)
 @Composable
 private fun MenuDropDownPreview() {
-    DropDownSorterOptions(sortConfig = SortConfig(), changeSort = {})
+    DropDownSorterOptions(
+        sortConfig = SortConfig(),
+        changeSort = {}
+    )
 }

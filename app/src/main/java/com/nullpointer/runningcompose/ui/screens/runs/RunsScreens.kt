@@ -1,11 +1,14 @@
 package com.nullpointer.runningcompose.ui.screens.runs
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,17 +26,22 @@ import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.models.types.SortType
 import com.nullpointer.runningcompose.models.types.TrackingState
-import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
+import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.*
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.DELETER
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.DETAILS
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.GO_TO_RUN
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.LAUNCH_PERMISSION
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.OPEN_SETTING
+import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.SELECT
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermission
-import com.nullpointer.runningcompose.ui.screens.runs.componets.DropFilterAndOrder
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
+import com.nullpointer.runningcompose.ui.screens.runs.componets.filters.DropFilterAndOrder
 import com.nullpointer.runningcompose.ui.share.BlockProgress
 import com.nullpointer.runningcompose.ui.share.ButtonToggleAddRemove
 import com.nullpointer.runningcompose.ui.states.RunsScreenState
@@ -81,7 +89,7 @@ fun RunsScreens(
         sortConfig = sortConfig,
         numberRuns = numberRuns,
         trackingState = stateTracking,
-        lazyListState = runsState.lazyListState,
+        lazyGridState = runsState.lazyGridState,
         changeSort = configViewModel::changeSortConfig,
         isSelectEnable = listRunsSelected.isNotEmpty(),
         permissionState = runsState.locationPermissionState,
@@ -112,18 +120,18 @@ fun RunsScreens(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RunsScreens(
-    scaffoldState: ScaffoldState,
-    listRuns: LazyPagingItems<RunData>,
+    numberRuns: Int,
     metricType: MetricType,
     sortConfig: SortConfig,
-    changeSort: (SortType?, Boolean?) -> Unit,
-    isFirstRequestPermission: Resource<Boolean>,
     isSelectEnable: Boolean,
     trackingState: TrackingState,
-    lazyListState: LazyListState,
+    scaffoldState: ScaffoldState,
+    lazyGridState: LazyGridState,
     permissionState: PermissionState,
+    listRuns: LazyPagingItems<RunData>,
+    changeSort: (SortType?, Boolean?) -> Unit,
+    isFirstRequestPermission: Resource<Boolean>,
     actionRunScreen: (ActionRun, RunData?) -> Unit,
-    numberRuns: Int,
     listRunsSelected: SnapshotStateMap<Long, RunData>,
 ) {
 
@@ -148,14 +156,14 @@ fun RunsScreens(
                 ) {
                     ListRuns(
                         modifier = Modifier.padding(it),
-                        listState = lazyListState,
+                        listState = lazyGridState,
                         listRuns = listRuns,
                         isSelectEnable = isSelectEnable,
                         metricType = metricType,
                         actionRun = actionRunScreen,
                         numberRuns = numberRuns,
                         listRunSelected = listRunsSelected,
-                        headerOrderAndFilter ={
+                        headerOrderAndFilter = {
                             DropFilterAndOrder(
                                 sortConfig = sortConfig,
                                 changeSort = changeSort

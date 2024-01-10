@@ -65,9 +65,26 @@ import com.nullpointer.runningcompose.models.types.MetricType
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun InfoRunPreviewKilo(){
+private fun DetailsRunText(
+    text: String,
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.caption,
+        fontSize = 14.sp,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
+}
+
+
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFF
+)
+@Composable
+private fun InfoRunPreviewKilo() {
     InfoRun(
         itemRun = RunData(
             id = 1,
@@ -85,7 +102,10 @@ private fun InfoRunPreviewKilo(){
 }
 
 
-@Preview(showBackground = true)
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFF
+)
 @Composable
 private fun InfoRunPreviewMeters(){
     InfoRun(
@@ -104,23 +124,3 @@ private fun InfoRunPreviewMeters(){
     )
 }
 
-@Composable
-private fun DetailsRunText(
-    text: String,
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.caption,
-        fontSize = 14.sp,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis
-    )
-}
-
-@Preview(
-    showBackground = true
-)
-@Composable
-fun DetailsRunTextPreview() {
-    DetailsRunText(text = "Este es un texto de prueba")
-}
