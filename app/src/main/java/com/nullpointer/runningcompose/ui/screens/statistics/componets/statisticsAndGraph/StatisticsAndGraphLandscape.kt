@@ -1,11 +1,13 @@
 package com.nullpointer.runningcompose.ui.screens.statistics.componets.statisticsAndGraph
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -19,7 +21,10 @@ fun StatisticsAndGraphLandScape(
     modifier: Modifier = Modifier,
     listRunEntities: List<RunData>,
 ) {
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
         StatisticsRuns(
             statisticsRun = statistics,
             metricType = metricType,
@@ -49,7 +54,7 @@ fun StatisticsAndGraphLandScape(
 fun StatisticsAndGraphLandScapePreview() {
     StatisticsAndGraphLandScape(
         metricType = MetricType.Kilo,
-        listRunEntities = listOf(),
+        listRunEntities = RunData.listRunsExample,
         statistics = StatisticsRun(
             timeRun = 1000L,
             distance = 1000F,

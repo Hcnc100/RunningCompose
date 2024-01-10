@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
@@ -33,7 +34,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @HomeNavGraph
 @Destination
 fun StatisticsScreen(
-    configViewModel: ConfigViewModel,
+    configViewModel: ConfigViewModel = hiltViewModel(),
     statisticsViewModel: StatisticsViewModel = hiltViewModel(),
     statisticsState: OrientationScreenState = rememberOrientationScreenState()
 ) {
@@ -91,7 +92,7 @@ private fun StatisticsScreen(
                         listRunEntities = listRuns.reversed(),
                         statistics = statistics,
                         metricType = metricType,
-                        modifier = Modifier
+                        modifier = Modifier.padding(10.dp)
                     )
                 }
             }

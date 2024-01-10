@@ -1,6 +1,10 @@
 package com.nullpointer.runningcompose.ui.screens.statistics.componets
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,10 +15,9 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.share.mpGraph.MpGraphAndroid
 
@@ -24,39 +27,58 @@ fun GraphRuns(
     modifier: Modifier = Modifier,
     metricType: MetricType,
 ) {
-    Column(modifier = modifier) {
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Text(
             stringResource(R.string.title_graph_statisctis),
-            modifier = Modifier
-                .padding(5.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center)
-        Row(verticalAlignment = Alignment.CenterVertically) {
+            textAlign = TextAlign.Center,
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1F)
+        ) {
             Text(
                 modifier = Modifier
                     .vertical()
-                    .rotate(-90f)
-                    .padding(1.dp).fillMaxWidth(.4f),
+                    .rotate(-90f),
                 text = stringResource(R.string.title_avg_speed_run_graph),
                 style = MaterialTheme.typography.caption,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
             )
-            MpGraphAndroid(list = list,
+            MpGraphAndroid(
+                list = list,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(.9f),
-                metricType = metricType)
+                    .fillMaxHeight(),
+                metricType = metricType
+            )
         }
-        Text(text = stringResource(R.string.title_runs_order_date_graph),
+        Text(
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.caption,
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-            )
+            text = stringResource(R.string.title_runs_order_date_graph)
+        )
 
     }
+}
+
+@Preview(
+    backgroundColor = 0XFFFFFF,
+    showBackground = true
+)
+@Composable
+private fun GraphRunsPreview() {
+    GraphRuns(
+        list = RunData.listRunsExample,
+        metricType = MetricType.Meters,
+    )
 }
 
 

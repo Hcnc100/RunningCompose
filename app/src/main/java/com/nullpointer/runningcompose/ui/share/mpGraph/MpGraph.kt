@@ -1,12 +1,14 @@
 package com.nullpointer.runningcompose.ui.share.mpGraph
 
-import android.content.Context
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
@@ -15,7 +17,6 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 
 
@@ -62,10 +63,45 @@ fun MpGraphAndroid(
 }
 
 
+@Preview(
+    backgroundColor = 0xFFFF,
+    showBackground = true,
+    device = Devices.NEXUS_5,
+    showSystemUi = true
+)
+@Composable
+private fun MpGraphAndroidPortraitPreview() {
+    MpGraphAndroid(
+        list = RunData.listRunsExample,
+        metricType = MetricType.Meters,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.6F)
+    )
+}
 
 
+@Preview(
+    backgroundColor = 0xFFFF,
+    showBackground = true,
+    device = Devices.AUTOMOTIVE_1024p,
+    showSystemUi = true,
+    heightDp = 360,
+    widthDp = 720
+)
+@Composable
+private fun MpGraphAndroidLandscapePreview() {
+    MpGraphAndroid(
+        list = RunData.listRunsExample,
+        metricType = MetricType.Meters,
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(0.5F)
+    )
+}
 
-fun setupGraph(graph: BarChart) = with(graph) {
+
+private fun setupGraph(graph: BarChart) = with(graph) {
     // * config graph and hidden labels
     description.isEnabled = false
     legend.isEnabled = false

@@ -2,9 +2,9 @@ package com.nullpointer.runningcompose.ui.screens.statistics.componets.statistic
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.data.RunData
@@ -27,29 +27,25 @@ fun StatisticsAndGraphPortrait(
         StatisticsRuns(
             statisticsRun = statistics,
             metricType = metricType,
-            modifier = Modifier
-                .weight(2F)
-                .fillMaxWidth()
         )
         GraphRuns(
             list = listRunEntities,
             metricType = metricType,
-            modifier = Modifier
-                .weight(6F)
-                .fillMaxWidth()
+            modifier = Modifier.weight(1F)
         )
     }
 }
 
 @Preview(
     showBackground = true,
-    backgroundColor = 0xFFFFFF
+    backgroundColor = 0xFFFFFF,
+    device = Devices.NEXUS_7
 )
 @Composable
 private fun StatisticsAndGraphPortraitPreview() {
     StatisticsAndGraphPortrait(
         metricType = MetricType.Kilo,
-        listRunEntities = listOf(),
+        listRunEntities = RunData.listRunsExample,
         statistics = StatisticsRun(
             timeRun = 1000L,
             distance = 1000F,
