@@ -16,6 +16,17 @@ data class RunData(
     val timestamp: Long = System.currentTimeMillis()
 ){
     companion object{
+        val runDataExample = RunData(
+            0,
+            mapConfig = MapConfig(),
+            caloriesBurned = 100F,
+            timeRunInMillis = 53000,
+            pathImgRun = null,
+            avgSpeedInMeters = 150F,
+            distanceInMeters = 2500F,
+            listPolyLineEncode = emptyList(),
+            timestamp = 100023
+        )
 
         val listRunsExample = listOf(
             RunData(
