@@ -15,14 +15,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
+import com.nullpointer.runningcompose.ui.actions.PermissionActions
 import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 
 @Composable
 fun ContainerPermission(
     isFirstRequestPermission: Boolean,
-    actionRunScreen: (ActionRun, RunData?) -> Unit,
+    permissionAction: (PermissionActions) -> Unit,
 ) {
     val textExplanation = if (isFirstRequestPermission){
         stringResource(id = R.string.need_permissions_tracking)
@@ -33,9 +32,9 @@ fun ContainerPermission(
     val buttonText = stringResource(id = R.string.action_accept)
 
     val actionPermission = if (isFirstRequestPermission){
-        { actionRunScreen(ActionRun.LAUNCH_PERMISSION, null) }
+        { permissionAction(PermissionActions.LAUNCH_PERMISSION) }
     }else{
-        { actionRunScreen(ActionRun.OPEN_SETTING, null) }
+        { permissionAction(PermissionActions.OPEN_SETTING) }
     }
 
     PermissionBox(

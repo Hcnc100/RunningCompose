@@ -22,23 +22,18 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.models.types.SortType
-import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.SelectViewModel
+import com.nullpointer.runningcompose.ui.actions.PermissionActions
+import com.nullpointer.runningcompose.ui.actions.RunActions
+import com.nullpointer.runningcompose.ui.actions.RunActions.DETAILS
+import com.nullpointer.runningcompose.ui.actions.RunActions.SELECT
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.DELETER
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.DETAILS
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.GO_TO_RUN
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.LAUNCH_PERMISSION
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.OPEN_SETTING
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun.SELECT
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermission
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
 import com.nullpointer.runningcompose.ui.screens.runs.componets.filters.DropFilterAndOrder
@@ -54,9 +49,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun RunsScreens(
     selectViewModel: SelectViewModel,
-    configViewModel: ConfigViewModel= hiltViewModel(),
     actionRootDestinations: ActionRootDestinations,
     runsViewModel: RunsViewModel = shareViewModel(),
+    configViewModel: ConfigViewModel = hiltViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState(
         actionAfterPermission = configViewModel::changeFirstRequestPermission
     )
@@ -68,7 +63,8 @@ fun RunsScreens(
     val stateTracking by runsViewModel.stateTracking.collectAsState()
     val listRuns = runsViewModel.listRunsOrdered.collectAsLazyPagingItems()
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
-    val listRunsSelected= selectViewModel.listRunsSelected
+    val listRunsSelected = selectViewModel.listRunsSelected
+    val isEnableSelected = listRunsSelected.isEmpty()
 
     BackHandler(
         enabled = listRunsSelected.isNotEmpty(),
@@ -82,37 +78,49 @@ fun RunsScreens(
 
 
     RunsScreens(
+        listRuns = listRuns,
+        numberRuns = numberRuns,
+        metricType = metricType,
+        isSelectEnable = isEnableSelected,
         listRunsSelected = listRunsSelected,
         scaffoldState = runsState.scaffoldState,
-        listRuns = listRuns,
-        metricType = metricType,
-        sortConfig = sortConfig,
-        numberRuns = numberRuns,
-        trackingState = stateTracking,
         lazyGridState = runsState.lazyGridState,
-        changeSort = configViewModel::changeSortConfig,
-        isSelectEnable = listRunsSelected.isNotEmpty(),
         permissionState = runsState.locationPermissionState,
         isFirstRequestPermission = Resource.Success(isFirstDialogRequest),
         actionRunScreen = { action, itemRun ->
             when (action) {
-                DETAILS -> {
-                    itemRun?.let {
-                        actionRootDestinations.changeRoot(
-                            DetailsRunDestination(itemRun, metricType)
-                        )
-                    }
-                }
-                SELECT -> itemRun?.let { selectViewModel.changeSelect(it) }
-                OPEN_SETTING -> runsState.openSettings()
-                LAUNCH_PERMISSION -> runsState.showDialogPermission()
-                GO_TO_RUN -> actionRootDestinations.changeRoot(TrackingScreenDestination)
-                DELETER -> {
+                DETAILS -> actionRootDestinations.changeRoot(
+                    DetailsRunDestination(itemRun, metricType)
+                )
+
+                SELECT -> selectViewModel.changeSelect(itemRun)
+            }
+        },
+        permissionAction = { permissionAction ->
+            when (permissionAction) {
+                PermissionActions.OPEN_SETTING -> runsState.openSettings()
+                PermissionActions.LAUNCH_PERMISSION -> runsState.showDialogPermission()
+            }
+        },
+        headerSorterAndFilter = {
+            DropFilterAndOrder(
+                sortConfig = sortConfig,
+                changeSort = configViewModel::changeSortConfig
+            )
+        },
+        buttonPauseResume = {
+            ButtonToggleAddRemove(
+                trackingState = stateTracking,
+                isSelectedEnable = isEnableSelected,
+                descriptionButtonAdd = stringResource(R.string.description_button_add_run),
+                descriptionButtonRemove = stringResource(R.string.description_deleter_select_runs),
+                actionAdd = { actionRootDestinations.changeRoot(TrackingScreenDestination) },
+                actionRemove = {
                     val listIds = selectViewModel.getListForDeleter()
                     runsViewModel.deleterListRun(listIds)
                 }
-            }
-        }
+            )
+        },
     )
 }
 
@@ -122,17 +130,17 @@ fun RunsScreens(
 fun RunsScreens(
     numberRuns: Int,
     metricType: MetricType,
-    sortConfig: SortConfig,
     isSelectEnable: Boolean,
-    trackingState: TrackingState,
     scaffoldState: ScaffoldState,
     lazyGridState: LazyGridState,
     permissionState: PermissionState,
     listRuns: LazyPagingItems<RunData>,
-    changeSort: (SortType?, Boolean?) -> Unit,
+    buttonPauseResume: @Composable () -> Unit,
     isFirstRequestPermission: Resource<Boolean>,
-    actionRunScreen: (ActionRun, RunData?) -> Unit,
-    listRunsSelected: SnapshotStateMap<Long, RunData>,
+    headerSorterAndFilter: @Composable () -> Unit,
+    actionRunScreen: (RunActions, RunData) -> Unit,
+    permissionAction: (PermissionActions) -> Unit,
+    listRunsSelected: SnapshotStateMap<Long, RunData>
 ) {
 
 
@@ -143,16 +151,7 @@ fun RunsScreens(
             if (permissionState.status.isGranted) {
                 Scaffold(
                     scaffoldState = scaffoldState,
-                    floatingActionButton = {
-                        ButtonToggleAddRemove(
-                            isSelectedEnable = isSelectEnable,
-                            descriptionButtonAdd = stringResource(R.string.description_button_add_run),
-                            trackingState = trackingState,
-                            actionAdd = { actionRunScreen(GO_TO_RUN, null) },
-                            descriptionButtonRemove = stringResource(R.string.description_deleter_select_runs),
-                            actionRemove = { actionRunScreen(DELETER, null) }
-                        )
-                    }
+                    floatingActionButton = buttonPauseResume
                 ) {
                     ListRuns(
                         modifier = Modifier.padding(it),
@@ -163,18 +162,13 @@ fun RunsScreens(
                         actionRun = actionRunScreen,
                         numberRuns = numberRuns,
                         listRunSelected = listRunsSelected,
-                        headerOrderAndFilter = {
-                            DropFilterAndOrder(
-                                sortConfig = sortConfig,
-                                changeSort = changeSort
-                            )
-                        }
+                        headerOrderAndFilter = headerSorterAndFilter
                     )
                 }
             } else {
                 ContainerPermission(
-                    isFirstRequestPermission = isFirstRequestPermission.data,
-                    actionRunScreen = actionRunScreen,
+                    permissionAction = permissionAction,
+                    isFirstRequestPermission = isFirstRequestPermission.data
                 )
             }
         }

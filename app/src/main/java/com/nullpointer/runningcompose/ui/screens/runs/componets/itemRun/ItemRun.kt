@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
+import com.nullpointer.runningcompose.ui.actions.RunActions
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -28,7 +28,7 @@ fun ItemRun(
     isSelectEnable: Boolean,
     metricType: MetricType,
     modifier: Modifier = Modifier,
-    actionRun: (ActionRun) -> Unit,
+    actionRun: (RunActions) -> Unit,
 ) {
 
     val colorSelect by animateColorAsState(
@@ -43,10 +43,10 @@ fun ItemRun(
         modifier = modifier
             .combinedClickable(
                 onClick = {
-                    val action = if (isSelectEnable) ActionRun.SELECT else ActionRun.DETAILS
+                    val action = if (isSelectEnable) RunActions.SELECT else RunActions.DETAILS
                     actionRun(action)
                 },
-                onLongClick = { if (!isSelectEnable) actionRun(ActionRun.SELECT) }
+                onLongClick = { if (!isSelectEnable) actionRun(RunActions.SELECT) }
             )
     ) {
         Row(

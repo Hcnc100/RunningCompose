@@ -7,18 +7,25 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.ui.screens.runs.ActionRun
+import com.nullpointer.runningcompose.ui.actions.RunActions
 import com.nullpointer.runningcompose.ui.screens.runs.componets.itemRun.ItemRun
 import com.nullpointer.runningcompose.ui.share.BlockProgress
+import kotlinx.coroutines.flow.MutableStateFlow
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -29,7 +36,7 @@ fun ListRuns(
     listState: LazyGridState,
     modifier: Modifier = Modifier,
     listRuns: LazyPagingItems<RunData>,
-    actionRun: (ActionRun, RunData?) -> Unit,
+    actionRun: (RunActions, RunData) -> Unit,
     listRunSelected: SnapshotStateMap<Long, RunData>,
     headerOrderAndFilter: @Composable () -> Unit
 ) {
@@ -69,3 +76,98 @@ fun ListRuns(
         }
     }
 }
+
+
+@Preview(
+    backgroundColor = 0xFFFFFF,
+    showBackground = true,
+)
+@Composable
+private fun ListRunsLandscapePreview() {
+    val pagingData = PagingData.from(RunData.listRunsExample)
+    val fakeDataFlow = MutableStateFlow(pagingData).collectAsLazyPagingItems()
+
+    ListRuns(
+        listRuns = fakeDataFlow,
+        listRunSelected = SnapshotStateMap(),
+        listState = rememberLazyGridState(),
+        actionRun = { _, _ -> },
+        isSelectEnable = false,
+        numberRuns = RunData.listRunsExample.size,
+        headerOrderAndFilter = {},
+        metricType = MetricType.Meters
+
+    )
+}
+
+@Preview(
+    backgroundColor = 0xFFFFFF,
+    showBackground = true,
+    device = Devices.AUTOMOTIVE_1024p,
+    widthDp = 720,
+    heightDp = 360
+)
+@Composable
+private fun ListRunsPortraitPreview() {
+    val pagingData = PagingData.from(RunData.listRunsExample)
+    val fakeDataFlow = MutableStateFlow(pagingData).collectAsLazyPagingItems()
+
+    ListRuns(
+        listRuns = fakeDataFlow,
+        listRunSelected = SnapshotStateMap(),
+        listState = rememberLazyGridState(),
+        actionRun = { _, _ -> },
+        isSelectEnable = false,
+        numberRuns = RunData.listRunsExample.size,
+        headerOrderAndFilter = {},
+        metricType = MetricType.Meters
+
+    )
+}
+
+
+@Preview(
+    backgroundColor = 0xFFFFFF,
+    showBackground = true,
+)
+@Composable
+private fun ListRunsPortraitEmptyPreview() {
+    val pagingData = PagingData.from(emptyList<RunData>())
+    val fakeDataFlow = MutableStateFlow(pagingData).collectAsLazyPagingItems()
+
+    ListRuns(
+        listRuns = fakeDataFlow,
+        listRunSelected = SnapshotStateMap(),
+        listState = rememberLazyGridState(),
+        actionRun = { _, _ -> },
+        isSelectEnable = false,
+        numberRuns = 0,
+        headerOrderAndFilter = {},
+        metricType = MetricType.Meters
+
+    )
+}
+
+
+@Preview(
+    backgroundColor = 0xFFFFFF,
+    showBackground = true,
+)
+@Composable
+private fun ListRunsPortraitLoadPreview() {
+    val pagingData = PagingData.from(emptyList<RunData>())
+    val fakeDataFlow = MutableStateFlow(pagingData).collectAsLazyPagingItems()
+
+    ListRuns(
+        listRuns = fakeDataFlow,
+        listRunSelected = SnapshotStateMap(),
+        listState = rememberLazyGridState(),
+        actionRun = { _, _ -> },
+        isSelectEnable = false,
+        numberRuns = -1,
+        headerOrderAndFilter = {},
+        metricType = MetricType.Meters
+
+    )
+}
+
