@@ -15,16 +15,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.data.StatisticsData
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
+import com.nullpointer.runningcompose.models.types.StatisticsData
+import com.nullpointer.runningcompose.presentation.ConfigViewModel
 import com.nullpointer.runningcompose.presentation.StatisticsViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
-import com.nullpointer.runningcompose.ui.screens.empty.EmptyScreen
+import com.nullpointer.runningcompose.ui.share.empty.EmptySection
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.LoadingStatistics
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
+import com.nullpointer.runningcompose.ui.screens.statistics.desing.StatisticsAndGraphLandScape
+import com.nullpointer.runningcompose.ui.screens.statistics.desing.StatisticsAndGraphPortrait
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -66,7 +68,7 @@ fun StatisticsScreen(
     ) {
         when (fullStatistics) {
             Resource.Failure -> {
-                EmptyScreen(
+                EmptySection(
                     animation = R.raw.empty2,
                     textEmpty = stringResource(R.string.message_empty_statisctis),
                     modifier = Modifier.padding(it)
@@ -78,7 +80,7 @@ fun StatisticsScreen(
             is Resource.Success -> {
                 val (listRuns, statistics) = fullStatistics.data
                 if (listRuns.isEmpty()) {
-                    EmptyScreen(
+                    EmptySection(
                         animation = R.raw.empty2,
                         textEmpty = stringResource(R.string.message_empty_statisctis),
                         modifier = Modifier.padding(it)
@@ -108,44 +110,25 @@ private fun StatisticsAndGraph(
 
     when (orientation) {
         Configuration.ORIENTATION_PORTRAIT -> {
-            Column(modifier = modifier) {
-                StatisticsRuns(
-                    statisticsRun = statistics,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(2F)
-                        .fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                GraphRuns(
-                    list = listRunEntities,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(6F)
-                        .fillMaxWidth()
-                )
-            }
+            StatisticsAndGraphPortrait(
+                metricType = metricType,
+                listRunEntities = listRunEntities,
+                statistics = statistics,
+                modifier = modifier
+            )
         }
         else -> {
-            Row(modifier = modifier) {
-                StatisticsRuns(
-                    statisticsRun = statistics,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(.5F)
-                        .fillMaxHeight()
-                )
-                GraphRuns(
-                    list = listRunEntities,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(.5f)
-                        .fillMaxHeight()
-                )
-            }
+            StatisticsAndGraphLandScape(
+                metricType = metricType,
+                listRunEntities = listRunEntities,
+                statistics = statistics,
+                modifier = modifier
+            )
         }
     }
 }
+
+
 
 
 

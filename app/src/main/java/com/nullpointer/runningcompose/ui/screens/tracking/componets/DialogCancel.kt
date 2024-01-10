@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.ui.screens.empty.LottieContainer
+import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 
 @Composable
 fun DialogCancel(
@@ -44,7 +44,7 @@ fun DialogCancel(
                     text = stringResource(R.string.title_dialog_cancel_tracking),
                     style = MaterialTheme.typography.h6
                 )
-                LottieContainer(
+                LottieContainerForever(
                     modifier = Modifier
                         .size(150.dp),
                     animation = R.raw.clear
@@ -71,7 +71,7 @@ fun DialogSaved() {
                     style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Center
                 )
-                LottieContainer(
+                LottieContainerForever(
                     modifier = Modifier
                         .size(200.dp),
                     animation = R.raw.map
