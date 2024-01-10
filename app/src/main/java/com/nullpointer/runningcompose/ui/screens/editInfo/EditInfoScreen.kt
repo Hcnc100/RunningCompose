@@ -1,29 +1,34 @@
 package com.nullpointer.runningcompose.ui.screens.editInfo
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
-import com.nullpointer.runningcompose.ui.screens.main.viewModel.AuthViewModel
 import com.nullpointer.runningcompose.ui.actions.EditInfoAction
-import com.nullpointer.runningcompose.ui.actions.EditInfoAction.*
+import com.nullpointer.runningcompose.ui.actions.EditInfoAction.ACTION_BACK
+import com.nullpointer.runningcompose.ui.actions.EditInfoAction.CHANGE_DATA
+import com.nullpointer.runningcompose.ui.actions.EditInfoAction.MOVE_NEXT_FOCUS
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
+import com.nullpointer.runningcompose.ui.screens.editInfo.components.ButtonSaveUserInfo
+import com.nullpointer.runningcompose.ui.screens.editInfo.components.ToolbarEditInfo
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
+import com.nullpointer.runningcompose.ui.screens.main.viewModel.AuthViewModel
 import com.nullpointer.runningcompose.ui.share.BlockProgress
 import com.nullpointer.runningcompose.ui.share.EditableTextSavable
-import com.nullpointer.runningcompose.ui.share.ToolbarBack
-import com.nullpointer.runningcompose.ui.share.ToolbarSimple
 import com.nullpointer.runningcompose.ui.states.EditInfoScreenState
 import com.nullpointer.runningcompose.ui.states.rememberEditInfoScreenState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -61,7 +66,7 @@ fun EditInfoScreen(
                     editInfoScreenState.hiddenKeyBoard()
                     editInfoViewModel.validateDataUser()?.let { authData ->
                         authViewModel.saveAuthData(authData).invokeOnCompletion {
-                            if(it==null && isAuth){
+                            if (it == null && isAuth) {
                                 editInfoViewModel.addMessage(R.string.message_data_updated)
                             }
                         }
@@ -91,11 +96,9 @@ fun EditInfoScreen(
                 actionBack = { actionEditInfo(ACTION_BACK) })
         },
         floatingActionButton = {
-            ButtonSaveInfo(
+            ButtonSaveUserInfo(
                 isEnable = !isSavingData,
-                actionClick = {
-                    actionEditInfo(CHANGE_DATA)
-                }
+                actionClick = { actionEditInfo(CHANGE_DATA) }
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -130,38 +133,4 @@ fun EditInfoScreen(
         if (isSavingData) BlockProgress()
     }
 }
-
-
-@Composable
-private fun ButtonSaveInfo(
-    isEnable: Boolean,
-    actionClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        enabled = isEnable,
-        modifier = modifier,
-        onClick = actionClick,
-        content = {
-            Row(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_save),
-                    contentDescription = stringResource(R.string.description_icon_save_info)
-                )
-                Text(text = "Guardar datos")
-            }
-        },
-    )
-}
-
-@Composable
-private fun ToolbarEditInfo(isAuth: Boolean, actionBack: () -> Unit) {
-    if (isAuth) ToolbarBack(
-        title = stringResource(R.string.title_edit_data), actionBack = actionBack
-    ) else ToolbarSimple(title = stringResource(R.string.title_complete_data))
-}
-
 
