@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.ui.screens.tracking.componets
+package com.nullpointer.runningcompose.ui.screens.tracking.componets.dialogs.dialogCancel
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
@@ -59,25 +58,4 @@ fun DialogCancel(
     )
 }
 
-@Composable
-fun DialogSaved() {
-    AlertDialog(
-        onDismissRequest = {},
-        buttons = {},
-        title = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = stringResource(R.string.message_info_saved_tracking),
-                    style = MaterialTheme.typography.h6,
-                    textAlign = TextAlign.Center
-                )
-                LottieContainerForever(
-                    modifier = Modifier
-                        .size(200.dp),
-                    animation = R.raw.map
-                )
-            }
-        },
-        )
-}
 

@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.ui.screens.tracking.componets
+package com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,9 +10,6 @@ import com.nullpointer.runningcompose.models.types.TrackingState.PAUSE
 import com.nullpointer.runningcompose.models.types.TrackingState.TRACKING
 import com.nullpointer.runningcompose.models.types.TrackingState.WAITING
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.PauseButton
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.PlayButton
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.StopButton
 
 @Composable
 fun ButtonsServices(

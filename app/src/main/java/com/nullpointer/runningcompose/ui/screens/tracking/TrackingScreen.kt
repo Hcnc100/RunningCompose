@@ -2,7 +2,13 @@ package com.nullpointer.runningcompose.ui.screens.tracking
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -34,11 +40,13 @@ import com.nullpointer.runningcompose.services.TrackingServices
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.components.rememberMapWithLifecycle
-import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.*
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.ButtonsServices
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogCancel
-import com.nullpointer.runningcompose.ui.screens.tracking.componets.DialogSaved
+import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.RESUME
+import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.SAVED
+import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.START
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.MapTracking
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.ButtonsServices
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.dialogs.dialogCancel.DialogCancel
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.dialogs.dialogSaved.DialogSaved
 import com.nullpointer.runningcompose.ui.share.ToolbarBackWithAction
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
