@@ -25,6 +25,8 @@ import com.nullpointer.runningcompose.ui.share.empty.EmptySection
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.LoadingStatistics
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
+import com.nullpointer.runningcompose.ui.screens.statistics.desing.StatisticsAndGraphLandScape
+import com.nullpointer.runningcompose.ui.screens.statistics.desing.StatisticsAndGraphPortrait
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -108,44 +110,25 @@ private fun StatisticsAndGraph(
 
     when (orientation) {
         Configuration.ORIENTATION_PORTRAIT -> {
-            Column(modifier = modifier) {
-                StatisticsRuns(
-                    statisticsRun = statistics,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(2F)
-                        .fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                GraphRuns(
-                    list = listRunEntities,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(6F)
-                        .fillMaxWidth()
-                )
-            }
+            StatisticsAndGraphPortrait(
+                metricType = metricType,
+                listRunEntities = listRunEntities,
+                statistics = statistics,
+                modifier = modifier
+            )
         }
         else -> {
-            Row(modifier = modifier) {
-                StatisticsRuns(
-                    statisticsRun = statistics,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(.5F)
-                        .fillMaxHeight()
-                )
-                GraphRuns(
-                    list = listRunEntities,
-                    metricType = metricType,
-                    modifier = Modifier
-                        .weight(.5f)
-                        .fillMaxHeight()
-                )
-            }
+            StatisticsAndGraphLandScape(
+                metricType = metricType,
+                listRunEntities = listRunEntities,
+                statistics = statistics,
+                modifier = modifier
+            )
         }
     }
 }
+
+
 
 
 
