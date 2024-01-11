@@ -10,7 +10,6 @@ import com.github.mikephil.charting.utils.MPPointF
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.*
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.MetricType
 
 
@@ -41,7 +40,7 @@ class CustomMarkerView(
         }
         val currentIndex = e.x.toInt()
         with(listRunEntities[currentIndex]) {
-            textDate.text = timestamp.toDateFormat()
+            textDate.text = createAt.toDateFormat()
             textAvgSpeed.text = avgSpeedInMeters.toAVGSpeed(metricType)
             textCalories.text = caloriesBurned.toCaloriesBurned(metricType)
             textDistance.text = distanceInMeters.toMeters(metricType)

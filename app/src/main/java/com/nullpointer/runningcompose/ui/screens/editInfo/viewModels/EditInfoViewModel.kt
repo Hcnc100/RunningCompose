@@ -1,5 +1,8 @@
 package com.nullpointer.runningcompose.ui.screens.editInfo.viewModels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.nullpointer.runningcompose.R
@@ -13,6 +16,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -85,7 +89,19 @@ class EditInfoViewModel @Inject constructor(
         }
     }
 
-    fun addMessage(message: Int) {
-        _messageEditInfo.trySend(message)
-    }
+    var isSavingData by mutableStateOf(false)
+        private set
+
+
+    fun saveAuthData(authData: AuthData) = launchSafeIO(
+        blockBefore = { isSavingData = true },
+        blockAfter = { isSavingData = false },
+        blockException = {
+            Timber.e("Error saving auth data: $it")
+        },
+        blockIO = {
+            authRepository.saveUserData(authData)
+            _messageEditInfo.trySend(R.string.message_data_updated)
+        }
+    )
 }

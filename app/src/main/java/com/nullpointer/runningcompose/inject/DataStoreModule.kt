@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataStoreSettings {
+object DataStoreModule {
 
     private const val NAME_SETTINGS = "RUN_SETTINGS"
 

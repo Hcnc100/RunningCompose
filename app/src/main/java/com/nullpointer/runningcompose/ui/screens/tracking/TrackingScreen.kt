@@ -4,19 +4,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.ktx.awaitMap
-import com.google.maps.android.ktx.awaitSnapshot
-import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.core.utils.shareViewModel
-import com.nullpointer.runningcompose.models.types.TrackingState.WAITING
-import com.nullpointer.runningcompose.presentation.RunsViewModel
 import com.nullpointer.runningcompose.presentation.TrackingViewModel
 import com.nullpointer.runningcompose.services.TrackingServices
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
@@ -25,12 +20,12 @@ import com.nullpointer.runningcompose.ui.screens.config.components.rememberMapWi
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.RESUME
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.SAVED
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions.START
+import com.nullpointer.runningcompose.ui.screens.tracking.componets.ToolbarTracking
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.dialogs.dialogCancel.DialogCancel
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.dialogs.dialogSaved.DialogSavingRun
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.mapAndTime.MapAndTime
-import com.nullpointer.runningcompose.ui.share.ToolbarBackWithAction
-import com.nullpointer.runningcompose.ui.states.OrientationScreenState
-import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
+import com.nullpointer.runningcompose.ui.states.TrackingScreenState
+import com.nullpointer.runningcompose.ui.states.rememberTrackingScreenState
 import com.ramcosta.composedestinations.annotation.DeepLink
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.launch
@@ -45,31 +40,36 @@ import kotlinx.coroutines.launch
 @Composable
 fun TrackingScreen(
     actionRootDestinations: ActionRootDestinations,
-    runsViewModel: RunsViewModel = shareViewModel(),
     trackingViewModel: TrackingViewModel = hiltViewModel(),
-    trackingState: OrientationScreenState = rememberOrientationScreenState()
+    trackingState: TrackingScreenState = rememberTrackingScreenState()
 ) {
     val lastLocation by trackingViewModel.lastLocation.collectAsState()
     val drawPolyData by trackingViewModel.drawLinesData.collectAsState()
     val timeRun by trackingViewModel.timeRun.collectAsState()
     val servicesState by trackingViewModel.stateTracking.collectAsState()
     val mapViewState = rememberMapWithLifecycle()
+    var showDialogCancel by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        trackingViewModel.message.collect(trackingState::showSnackMessage)
+    }
 
 
     Scaffold(
+        scaffoldState = trackingState.scaffoldState,
         topBar = {
-            ToolbarBackWithAction(title = stringResource(R.string.title_tracking_screen),
+            ToolbarTracking(
+                servicesState = servicesState,
                 actionBack = actionRootDestinations::backDestination,
-                actionCancel = if (servicesState != WAITING) {
-                    { trackingViewModel.changeDialogCancel(true) }
-                } else null
+                actionCancel = trackingState::finishTracking
             )
         },
     ) {
 
         MapAndTime(
             modifier = Modifier.padding(it),
-            orientation = trackingState.orientation,
             drawPolyData = drawPolyData,
             timeRun = timeRun,
             lastLocation = lastLocation,
@@ -77,33 +77,23 @@ fun TrackingScreen(
             mapViewState = mapViewState,
             actionServices = { action ->
                 when (action) {
-                    START -> TrackingServices.startServicesOrResume(trackingState.context)
-                    RESUME -> TrackingServices.pauseServices(trackingState.context)
+                    START -> trackingState.startOrResumeTracking()
+                    RESUME -> trackingState.pauseTracking()
                     SAVED -> {
-                        trackingViewModel.changeDialogSaved(true)
                         trackingState.scope.launch {
-                            val map = mapViewState.awaitMap()
-                            // * disable animation to last location
-                            TrackingServices.pauseServices(trackingState.context)
-                            trackingViewModel.changeAnimation(false)
-                            val bounds = LatLngBounds.builder().apply {
-                                drawPolyData.listLocation.forEach { list ->
-                                    list.forEach { latLng ->
-                                        include(latLng)
-                                    }
+                            trackingState.pauseTracking()
+                            trackingViewModel.insertNewRun(
+                                getMapBitmap = {
+                                    trackingState.getSnapshotMap(
+                                        mapView = mapViewState,
+                                        drawPolyData = drawPolyData
+                                    )
+                                },
+                                onSuccess = {
+                                    trackingState.finishTracking()
+                                    actionRootDestinations.backDestination()
                                 }
-                            }.build()
-                            val cameraUpdate =
-                                CameraUpdateFactory.newLatLngBounds(bounds, 500, 500, 10)
-                            map.moveCamera(cameraUpdate)
-                            val bitmapMap = map.awaitSnapshot()
-                            runsViewModel.insertNewRun(
-                                timeRun = timeRun,
-                                listPoints = drawPolyData.listLocation,
-                               bitmap = bitmapMap
                             )
-                            TrackingServices.finishServices(trackingState.context)
-                            actionRootDestinations.backDestination()
                         }
                     }
                 }
@@ -111,13 +101,13 @@ fun TrackingScreen(
         )
         Text(text = lastLocation.toString())
 
-        if (trackingViewModel.isShowDialogSave) {
+        if (trackingViewModel.isSavingRun) {
             DialogSavingRun()
         }
 
-        if (trackingViewModel.isShowDialogCancel) {
+        if (showDialogCancel) {
             DialogCancel(
-                actionCancel = { trackingViewModel.changeDialogCancel(false) },
+                actionCancel = { showDialogCancel = false },
                 acceptAction = {
                     TrackingServices.finishServices(trackingState.context)
                     actionRootDestinations.backDestination()

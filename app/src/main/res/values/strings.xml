@@ -145,5 +145,6 @@
     <string name="description_arrow_statistics">Abre las estadísticas del recorrido</string>
     <string name="message_data_updated">Datos actualizados correctamente</string>
     <string name="save_data_user">Guardar datos</string>
+    <string name="error_saving_run">Error al guardar los datos del recorrido</string>
 
 </resources>

@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.PropertySavableString
 import com.nullpointer.runningcompose.ui.actions.EditInfoAction
 import com.nullpointer.runningcompose.ui.actions.EditInfoAction.ACTION_BACK
@@ -26,7 +25,6 @@ import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.editInfo.components.ButtonSaveUserInfo
 import com.nullpointer.runningcompose.ui.screens.editInfo.components.ToolbarEditInfo
 import com.nullpointer.runningcompose.ui.screens.editInfo.viewModels.EditInfoViewModel
-import com.nullpointer.runningcompose.ui.screens.main.viewModel.AuthViewModel
 import com.nullpointer.runningcompose.ui.share.BlockProgress
 import com.nullpointer.runningcompose.ui.share.EditableTextSavable
 import com.nullpointer.runningcompose.ui.states.EditInfoScreenState
@@ -38,7 +36,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 fun EditInfoScreen(
     isAuth: Boolean = false,
-    authViewModel: AuthViewModel,
     actionRootDestinations: ActionRootDestinations,
     editInfoViewModel: EditInfoViewModel = hiltViewModel(),
     editInfoScreenState: EditInfoScreenState = rememberEditInfoScreenState(),
@@ -54,7 +51,7 @@ fun EditInfoScreen(
 
     EditInfoScreen(
         isAuth = isAuth,
-        isSavingData = authViewModel.isUpdatedData,
+        isSavingData = editInfoViewModel.isSavingData,
         nameUserProperty = editInfoViewModel.nameUser,
         scaffoldState = editInfoScreenState.scaffoldState,
         weightUserProperty = editInfoViewModel.weightUser,
@@ -65,11 +62,7 @@ fun EditInfoScreen(
                 CHANGE_DATA -> {
                     editInfoScreenState.hiddenKeyBoard()
                     editInfoViewModel.validateDataUser()?.let { authData ->
-                        authViewModel.saveAuthData(authData).invokeOnCompletion {
-                            if (it == null && isAuth) {
-                                editInfoViewModel.addMessage(R.string.message_data_updated)
-                            }
-                        }
+                        editInfoViewModel.saveAuthData(authData)
                     }
                 }
             }

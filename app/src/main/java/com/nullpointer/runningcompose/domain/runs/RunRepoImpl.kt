@@ -1,26 +1,28 @@
 package com.nullpointer.runningcompose.domain.runs
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.paging.PagingSource
-import com.nullpointer.runningcompose.core.utils.ImageUtils
+import com.google.android.gms.maps.model.LatLng
+import com.nullpointer.runningcompose.datasource.auth.local.AuthLocalDataSource
 import com.nullpointer.runningcompose.datasource.config.local.ConfigLocalDataSource
+import com.nullpointer.runningcompose.datasource.images.local.ImagesLocalDataSource
 import com.nullpointer.runningcompose.datasource.run.local.RunsLocalDataSource
+import com.nullpointer.runningcompose.models.data.DistanceListPolyline
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.data.StatisticsRun
+import com.nullpointer.runningcompose.models.entities.RunEntity
 import com.nullpointer.runningcompose.models.types.SortType
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import me.shouheng.compress.Compress
-import me.shouheng.compress.concrete
-import me.shouheng.compress.strategy.config.ScaleMode
+import kotlinx.coroutines.flow.first
 
 
 class RunRepoImpl(
     private val configLocalDataSource: ConfigLocalDataSource,
     private val runsLocalDataSource: RunsLocalDataSource,
-    private val context: Context
+    private val authLocalDataSource: AuthLocalDataSource,
+    private val imagesLocalDataSource: ImagesLocalDataSource
 ) : RunRepository {
 
     override val countRuns: Flow<Int> = runsLocalDataSource.getCountRun()
@@ -33,34 +35,67 @@ class RunRepoImpl(
 
     override suspend fun deleterListRuns(listIds: List<Long>) {
         runsLocalDataSource.getListRunsById(listIds).forEach {
-            it.pathImgRun?.let { pathImg -> ImageUtils.deleterImgFromStorage(pathImg, context) }
+            it.pathImgRun?.let { imagesLocalDataSource::deleterImgFromStorage }
         }
         runsLocalDataSource.deleterListRuns(listIds)
-
     }
 
     override suspend fun deleterRun(runData: RunData) =
         runsLocalDataSource.deleterRun(runData)
 
-    override suspend fun insertNewRun(runData: RunData, bitmap: Bitmap?) {
-        val fileCompress = bitmap?.let {
-            Compress.with(context, it)
-                .setQuality(80)
-                .concrete {
-                    withMaxWidth(500f)
-                    withMaxHeight(500f)
-                    withScaleMode(ScaleMode.SCALE_HEIGHT)
-                    withIgnoreIfSmaller(true)
-                }.get(Dispatchers.IO)
+    override suspend fun insertNewRun(
+        bitmap: Bitmap?,
+        timeRunInMillis: Long,
+        listPoints: List<List<LatLng>>,
+    ) = coroutineScope {
+
+        val weightUser = authLocalDataSource.getUserData().first()!!.weight
+        val mapConfig = configLocalDataSource.mapConfig.first()
+        val createAt = System.currentTimeMillis()
+
+        val compressImageAndSavedTask = bitmap?.let {
+            async { compressImageAndSaved(imageMap = bitmap, createAt = createAt) }
         }
-        val nameFile = "img-map-${runData.timestamp}.png"
-        val pathImg = fileCompress?.let { ImageUtils.saveToInternalStorage(it, nameFile, context) }
-        fileCompress?.delete()
-        runsLocalDataSource.insertNewRun(runData.copy(pathImgRun = pathImg))
+
+        val distanceListPolylineDeferred =
+            async { DistanceListPolyline.fromListPolyline(listPoints) }
+
+        val (distanceInMeters, listPolylineEncode) = distanceListPolylineDeferred.await()
+
+        val avgSpeedInMS = distanceInMeters / (timeRunInMillis / 1000f)
+        val caloriesBurned = distanceInMeters * (weightUser / 1000f)
+
+        val pathImageCompress = compressImageAndSavedTask?.await()
+
+        val runData = RunData(
+            createAt = createAt,
+            mapConfig = mapConfig,
+            timeRunInMillis = timeRunInMillis,
+            caloriesBurned = caloriesBurned,
+            distanceInMeters = distanceInMeters,
+            pathImgRun = pathImageCompress,
+            avgSpeedInMeters = avgSpeedInMS,
+            listPolyLineEncode = listPolylineEncode
+        )
+        runsLocalDataSource.insertNewRun(runData)
+    }
+
+
+    private suspend fun compressImageAndSaved(
+        createAt: Long,
+        imageMap: Bitmap,
+    ): String? {
+        val imageCompress = imagesLocalDataSource.compressBitmap(imageMap)
+        val imageSaved = imagesLocalDataSource.saveToInternalStorage(
+            nameFile = "img-run-$createAt.jpg",
+            fileImg = imageCompress
+        )
+        imageCompress.delete()
+        return imageSaved
     }
 
     override fun getAllListRunOrdered(
-        sortType: SortType,isReverse:Boolean
-    ): PagingSource<Int, RunEntity> = runsLocalDataSource.getListForTypeSort(sortType,isReverse)
+        sortType: SortType, isReverse: Boolean
+    ): PagingSource<Int, RunEntity> = runsLocalDataSource.getListForTypeSort(sortType, isReverse)
 
 }

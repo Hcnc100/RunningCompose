@@ -19,7 +19,6 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.states.Resource
-import com.nullpointer.runningcompose.core.utils.shareViewModel
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.presentation.RunsViewModel
@@ -49,7 +48,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun RunsScreens(
     selectViewModel: SelectViewModel,
     actionRootDestinations: ActionRootDestinations,
-    runsViewModel: RunsViewModel = shareViewModel(),
+    runsViewModel: RunsViewModel = hiltViewModel(),
     configViewModel: ConfigViewModel = hiltViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState(
         actionAfterPermission = configViewModel::changeFirstRequestPermission

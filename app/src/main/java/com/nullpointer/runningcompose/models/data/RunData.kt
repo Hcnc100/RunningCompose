@@ -13,7 +13,7 @@ data class RunData(
     val distanceInMeters: Float,
     val pathImgRun: String? = null,
     val listPolyLineEncode: List<String>,
-    val timestamp: Long = System.currentTimeMillis()
+    val createAt: Long = System.currentTimeMillis()
 ){
     companion object{
         val runDataExample = RunData(
@@ -25,7 +25,7 @@ data class RunData(
             avgSpeedInMeters = 150F,
             distanceInMeters = 2500F,
             listPolyLineEncode = emptyList(),
-            timestamp = 100023
+            createAt = 100023
         )
 
         val listRunsExample = listOf(
@@ -38,7 +38,7 @@ data class RunData(
                 avgSpeedInMeters = 150F,
                 distanceInMeters = 2500F,
                 listPolyLineEncode = emptyList(),
-                timestamp = 100023
+                createAt = 100023
             ),
             RunData(
                 1,
@@ -49,7 +49,7 @@ data class RunData(
                 avgSpeedInMeters = 130F,
                 distanceInMeters = 2500F,
                 listPolyLineEncode = emptyList(),
-                timestamp = 100023
+                createAt = 100023
             ),
             RunData(
                 2,
@@ -60,7 +60,7 @@ data class RunData(
                 avgSpeedInMeters = 123F,
                 distanceInMeters = 2500F,
                 listPolyLineEncode = emptyList(),
-                timestamp = 100023
+                createAt = 100023
             ),
             RunData(
                 3,
@@ -71,7 +71,7 @@ data class RunData(
                 avgSpeedInMeters = 320F,
                 distanceInMeters = 2500F,
                 listPolyLineEncode = emptyList(),
-                timestamp = 100023
+                createAt = 100023
             )
         )
 
@@ -79,7 +79,7 @@ data class RunData(
             return RunData(
                 id = runEntity.id,
                 mapConfig = runEntity.mapConfig,
-                timestamp = runEntity.timestamp,
+                createAt = runEntity.timestamp,
                 pathImgRun = runEntity.pathImgRun,
                 caloriesBurned = runEntity.caloriesBurned,
                 timeRunInMillis = runEntity.timeRunInMillis,

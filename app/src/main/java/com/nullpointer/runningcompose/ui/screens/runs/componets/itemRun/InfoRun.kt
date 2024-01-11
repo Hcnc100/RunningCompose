@@ -36,8 +36,8 @@ import com.nullpointer.runningcompose.ui.preview.states.MetrictTypeProvider
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current
 ) {
-    val date = remember { itemRun.timestamp.toDateFormat() }
-    val timeDay = remember { itemRun.timestamp.toDateOnlyTime(context) }
+    val date = remember { itemRun.createAt.toDateFormat() }
+    val timeDay = remember { itemRun.createAt.toDateOnlyTime(context) }
     val timeRun = remember { itemRun.timeRunInMillis.toFullFormatTime(false) }
     val distance = remember { itemRun.distanceInMeters.toMeters(metricType) }
     val calories = remember { itemRun.caloriesBurned.toCaloriesBurned(metricType) }

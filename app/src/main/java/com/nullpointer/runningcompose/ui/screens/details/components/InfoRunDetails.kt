@@ -38,8 +38,8 @@ fun InfoRunDetails(
     modifier: Modifier = Modifier,
     context: Context = LocalContext.current
 ) {
-    val date = remember { runData.timestamp.toDateFormat() }
-    val timeDay = remember { runData.timestamp.toDateOnlyTime(context) }
+    val date = remember { runData.createAt.toDateFormat() }
+    val timeDay = remember { runData.createAt.toDateOnlyTime(context) }
     val speed = remember { runData.avgSpeedInMeters.toAVGSpeed(metricType) }
     val distance = remember { runData.distanceInMeters.toMeters(metricType) }
     val calories = remember { runData.caloriesBurned.toCaloriesBurned(metricType) }

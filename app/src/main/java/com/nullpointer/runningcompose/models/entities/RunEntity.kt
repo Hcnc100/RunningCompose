@@ -22,7 +22,7 @@ data class RunEntity(
         fun fromRunData(runData: RunData):RunEntity{
             return RunEntity(
                 mapConfig = runData.mapConfig,
-                timestamp = runData.timestamp,
+                timestamp = runData.createAt,
                 pathImgRun = runData.pathImgRun,
                 caloriesBurned = runData.caloriesBurned,
                 timeRunInMillis = runData.timeRunInMillis,
