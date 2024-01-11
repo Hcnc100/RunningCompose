@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.toAVGSpeed
@@ -22,6 +21,7 @@ import com.nullpointer.runningcompose.core.utils.toFullFormatTime
 import com.nullpointer.runningcompose.core.utils.toMeters
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 
 @Composable
 fun StatisticsRuns(
@@ -71,10 +71,7 @@ fun StatisticsRuns(
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF
-)
+@SimplePreview
 @Composable
 private fun StatisticsRunsPreview() {
     StatisticsRuns(

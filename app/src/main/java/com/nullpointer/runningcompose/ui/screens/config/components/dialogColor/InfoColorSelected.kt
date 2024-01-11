@@ -1,6 +1,5 @@
 package com.nullpointer.runningcompose.ui.screens.config.components.dialogColor
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -16,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
 
 @Composable
 fun InfoColorSelected(
@@ -50,26 +49,9 @@ fun InfoColorSelected(
     }
 }
 
-@Preview(
-    backgroundColor = 0x000000,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
+@ThemePreviews
 @Composable
 private fun InfoColorSelectedBlackPreview() {
-    InfoColorSelected(
-        colorValue = Color.Cyan,
-        textColor = "FFFFFF",
-    )
-}
-
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
-@Composable
-private fun InfoColorSelectedWhitePreview() {
     InfoColorSelected(
         colorValue = Color.Cyan,
         textColor = "FFFFFF",

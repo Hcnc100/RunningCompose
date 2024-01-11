@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,6 +17,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.maps.android.ktx.addPolyline
 import com.google.maps.android.ktx.awaitMap
 import com.nullpointer.runningcompose.models.data.config.MapConfig
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -71,10 +71,7 @@ fun MapFromConfig(
     )
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF
-)
+@SimplePreview
 @Composable
 fun MapFromConfigPreview() {
     MapFromConfig(

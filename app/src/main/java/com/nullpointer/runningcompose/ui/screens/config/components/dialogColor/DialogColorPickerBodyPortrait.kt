@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.github.skydoves.colorpicker.compose.ColorPickerController
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.preview.config.PortraitPreview
 
 @Composable
 fun DialogColorPickerBodyPortrait(
@@ -32,12 +33,19 @@ fun DialogColorPickerBodyPortrait(
                 .size(250.dp)
                 .padding(10.dp),
             controller = controller,
-
             )
         InfoColorSelected(
             textColor = textColor,
             colorValue = controller.selectedColor.value
         )
     }
+}
 
+@PortraitPreview
+@Composable
+private fun DialogColorPickerBodyPortraitPreview() {
+    DialogColorPickerBodyPortrait(
+        controller = ColorPickerController(),
+        textColor = "#FFFFF"
+    )
 }

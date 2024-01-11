@@ -5,12 +5,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.LandscapePreview
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.GraphRuns
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.StatisticsRuns
 
@@ -43,13 +42,7 @@ fun StatisticsAndGraphLandScape(
 }
 
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF,
-    device = Devices.AUTOMOTIVE_1024p,
-    widthDp = 720,
-    heightDp = 360
-)
+@LandscapePreview
 @Composable
 fun StatisticsAndGraphLandScapePreview() {
     StatisticsAndGraphLandScape(

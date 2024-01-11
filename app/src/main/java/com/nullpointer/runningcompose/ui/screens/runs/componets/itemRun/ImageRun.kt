@@ -12,13 +12,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.getGrayColor
 import com.nullpointer.runningcompose.core.utils.isSuccess
+import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
 
 @Composable
 fun ImageRun(
@@ -47,10 +47,7 @@ fun ImageRun(
 }
 
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true,
-)
+@ThemePreviews
 @Composable
 private fun ImageRunPreview() {
     ImageRun(

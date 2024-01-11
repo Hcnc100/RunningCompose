@@ -12,12 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.skydoves.colorpicker.compose.ColorPickerController
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.preview.config.LandscapePreview
 
 @Composable
 fun DialogColorPickerBodyLandscape(
@@ -54,13 +53,7 @@ fun DialogColorPickerBodyLandscape(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true,
-    device = Devices.AUTOMOTIVE_1024p,
-    heightDp = 360,
-    widthDp = 720
-)
+@LandscapePreview
 @Composable
 private fun DialogColorPickerBodyLandscapePreview() {
     DialogColorPickerBodyLandscape(

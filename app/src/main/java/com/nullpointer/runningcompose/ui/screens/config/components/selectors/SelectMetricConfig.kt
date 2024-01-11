@@ -3,9 +3,9 @@ package com.nullpointer.runningcompose.ui.screens.config.components.selectors
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 import com.nullpointer.runningcompose.ui.screens.config.components.share.SelectOptionConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.share.TitleConfig
 
@@ -29,10 +29,7 @@ fun SelectMetricConfig(
 
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF
-)
+@SimplePreview
 @Composable
 fun SelectMetricConfigPreview() {
     SelectMetricConfig(

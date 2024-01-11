@@ -27,9 +27,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun ConfigScreen(
-    configViewModel: ConfigViewModel = hiltViewModel(),
     actionRootDestinations: ActionRootDestinations,
-    configState:OrientationScreenState = rememberOrientationScreenState()
+    configViewModel: ConfigViewModel = hiltViewModel(),
+    configState: OrientationScreenState = rememberOrientationScreenState()
 ) {
     val mapConfig by configViewModel.mapConfig.collectAsState()
     val authData by configViewModel.authData.collectAsState()

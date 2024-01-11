@@ -3,19 +3,22 @@ package com.nullpointer.runningcompose.ui.screens.statistics.componets.statistic
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
+import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
+import com.nullpointer.runningcompose.ui.preview.states.MetrictTypeProvider
 
 @Composable
 fun StatisticsAndGraph(
-    orientation: Int,
     metricType: MetricType,
     statistics: StatisticsRun,
     listRunEntities: List<RunData>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    orientation: Int = LocalConfiguration.current.orientation,
 ) {
 
     when (orientation) {
@@ -39,33 +42,16 @@ fun StatisticsAndGraph(
     }
 }
 
-@Preview(
-    backgroundColor = 0XFFFFFF,
-    showBackground = true
-)
-@Composable
-private fun StatisticsAndGraphPortraitPreview() {
-    StatisticsAndGraph(
-        metricType = MetricType.Meters,
-        listRunEntities = RunData.listRunsExample,
-        statistics = StatisticsRun(),
-        orientation = Configuration.ORIENTATION_PORTRAIT
-    )
-}
 
-@Preview(
-    backgroundColor = 0XFFFFFF,
-    showBackground = true,
-    device = Devices.AUTOMOTIVE_1024p,
-    widthDp = 720,
-    heightDp = 360
-)
+@ThemePreviews
+@OrientationPreviews
 @Composable
-private fun StatisticsAndGraphLandscapePreview() {
+private fun StatisticsAndGraphPreview(
+    @PreviewParameter(MetrictTypeProvider::class) metricType: MetricType
+) {
     StatisticsAndGraph(
-        metricType = MetricType.Meters,
         listRunEntities = RunData.listRunsExample,
         statistics = StatisticsRun(),
-        orientation = Configuration.ORIENTATION_LANDSCAPE
+        metricType = metricType,
     )
 }

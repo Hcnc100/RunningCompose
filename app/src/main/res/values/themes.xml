@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.RunningCompose" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/color_primary_dark</item>
-        <item name="android:windowBackground">@color/color_primary_dark</item>
-    </style>
+    <style name="Theme.MyApplication" parent="android:Theme.Material.NoActionBar" />
 
     <style name="Theme.AppSplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="splashScreenIconSize">200dp</item>
         <item name="windowSplashScreenBackground">@color/color_primary</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
-        <item name="postSplashScreenTheme">@style/Theme.RunningCompose</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
     </style>
 </resources>

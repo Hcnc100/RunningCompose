@@ -5,8 +5,8 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions
 
 @Composable
@@ -24,10 +24,7 @@ fun PlayButton(
 }
 
 
-@Preview(
-    backgroundColor = 0XFFFFFF,
-    showBackground = true,
-)
+@SimplePreview
 @Composable
 private fun PlayButtonPreview() {
     PlayButton {}

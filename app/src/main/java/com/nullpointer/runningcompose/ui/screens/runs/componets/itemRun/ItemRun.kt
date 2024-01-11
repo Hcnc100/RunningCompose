@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.actions.RunActions
+import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
+import com.nullpointer.runningcompose.ui.preview.states.MetrictTypeProvider
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -69,33 +71,32 @@ fun ItemRun(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+
+@ThemePreviews
 @Composable
-private fun ItemRunUnselectPreview() {
+private fun ItemRunUnselectPreview(
+    @PreviewParameter(MetrictTypeProvider::class) metricType: MetricType
+) {
     ItemRun(
         isSelect = false,
         runData = RunData.runDataExample,
         isSelectEnable = false,
-        metricType = MetricType.Meters,
+        metricType = metricType,
         actionRun = {}
     )
 }
 
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@ThemePreviews
 @Composable
-private fun ItemRunSelectPreview() {
+private fun ItemRunSelectPreview(
+    @PreviewParameter(MetrictTypeProvider::class) metricType: MetricType
+) {
     ItemRun(
         isSelect = true,
         runData = RunData.runDataExample,
-        isSelectEnable = false,
-        metricType = MetricType.Meters,
+        isSelectEnable = true,
+        metricType = metricType,
         actionRun = {}
     )
 }

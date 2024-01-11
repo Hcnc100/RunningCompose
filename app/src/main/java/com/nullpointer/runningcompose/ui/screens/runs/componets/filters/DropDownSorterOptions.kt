@@ -21,17 +21,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.runningcompose.R
-import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.SortType
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
+import com.nullpointer.runningcompose.ui.preview.states.SortTypeProvider
 
 
 @Composable
 fun DropDownSorterOptions(
-    sortConfig: SortConfig,
+    sortType: SortType,
     changeSort: (SortType) -> Unit,
 ) {
 
@@ -53,7 +54,7 @@ fun DropDownSorterOptions(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = stringResource(id = sortConfig.sortType.idName),
+                    text = stringResource(id = sortType.idName),
                     style = MaterialTheme.typography.caption,
                     fontWeight = FontWeight.W500,
                     fontSize = 14.sp,
@@ -84,14 +85,13 @@ fun DropDownSorterOptions(
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF
-)
+@SimplePreview
 @Composable
-private fun MenuDropDownPreview() {
+private fun MenuDropDownPreview(
+    @PreviewParameter(SortTypeProvider::class) sortType: SortType
+) {
     DropDownSorterOptions(
-        sortConfig = SortConfig(),
+        sortType = sortType,
         changeSort = {}
     )
 }

@@ -15,10 +15,10 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
 import com.nullpointer.runningcompose.ui.share.mpGraph.MpGraphAndroid
 
 @Composable
@@ -69,10 +69,7 @@ fun GraphRuns(
     }
 }
 
-@Preview(
-    backgroundColor = 0XFFFFFF,
-    showBackground = true
-)
+@ThemePreviews
 @Composable
 private fun GraphRunsPreview() {
     GraphRuns(

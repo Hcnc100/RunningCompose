@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
 
 @Composable
 fun EmptySection(
@@ -47,10 +47,7 @@ fun EmptySection(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@ThemePreviews
 @Composable
 fun EmptySectionPreview() {
     EmptySection(

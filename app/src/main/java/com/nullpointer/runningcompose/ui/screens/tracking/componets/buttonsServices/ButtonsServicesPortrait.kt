@@ -3,20 +3,25 @@ package com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServ
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.models.types.TrackingState.PAUSE
 import com.nullpointer.runningcompose.models.types.TrackingState.TRACKING
 import com.nullpointer.runningcompose.models.types.TrackingState.WAITING
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
+import com.nullpointer.runningcompose.ui.preview.states.TrackingStateProvider
 import com.nullpointer.runningcompose.ui.screens.tracking.TrackingActions
 
 @Composable
-fun ButtonsServices(
+fun ButtonsServicesPortrait(
+    modifier: Modifier = Modifier,
     actionServices: (TrackingActions) -> Unit,
-    servicesState: TrackingState
+    servicesState: TrackingState,
 ) {
     Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         when (servicesState) {
@@ -29,40 +34,14 @@ fun ButtonsServices(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
-private fun ButtonsServicesPausePreview() {
-    ButtonsServices(
+private fun ButtonsServicesPortraitPreview(
+    @PreviewParameter(TrackingStateProvider::class) state: TrackingState
+) {
+    ButtonsServicesPortrait(
         actionServices = {},
-        servicesState = PAUSE,
+        servicesState = state,
     )
 }
 
-
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
-@Composable
-private fun ButtonsServicesTrackingPreview() {
-    ButtonsServices(
-        actionServices = {},
-        servicesState = TRACKING,
-    )
-}
-
-
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
-@Composable
-private fun ButtonsServicesWaitingPreview() {
-    ButtonsServices(
-        actionServices = {},
-        servicesState = WAITING,
-    )
-}

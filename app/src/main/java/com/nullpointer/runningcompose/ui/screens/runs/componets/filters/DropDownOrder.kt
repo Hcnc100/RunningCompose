@@ -12,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
+import com.nullpointer.runningcompose.ui.preview.states.BooleanValuesProvider
 
 @Composable
 fun DropDownOrder(
@@ -44,26 +46,13 @@ fun DropDownOrder(
     }
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF,
-)
+@ThemePreviews
 @Composable
-private fun DropDownOrderPreview() {
+private fun DropDownOrderPreview(
+    @PreviewParameter(BooleanValuesProvider::class) order: Boolean
+) {
     DropDownOrder(
-        isReverse = false,
-        changeSort = {}
-    )
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF,
-)
-@Composable
-private fun DropDownOrderReversePreview() {
-    DropDownOrder(
-        isReverse = true,
+        isReverse = order,
         changeSort = {}
     )
 }

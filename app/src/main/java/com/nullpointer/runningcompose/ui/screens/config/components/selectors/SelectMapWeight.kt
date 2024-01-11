@@ -2,8 +2,8 @@ package com.nullpointer.runningcompose.ui.screens.config.components.selectors
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 import com.nullpointer.runningcompose.ui.screens.config.components.share.SelectOptionConfig
 
 
@@ -22,10 +22,7 @@ private val listWeight = (3..10).associateBy({it}, {null} )
     )
 }
 
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFF
-)
+@SimplePreview
 @Composable
 fun SelectMapWeightPreview() {
     SelectMapWeight(

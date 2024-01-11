@@ -11,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nullpointer.runningcompose.R
@@ -22,6 +21,7 @@ import com.nullpointer.runningcompose.models.data.StatisticsRun
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.presentation.StatisticsViewModel
 import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.statistics.componets.statisticsAndGraph.StatisticsAndGraph
 import com.nullpointer.runningcompose.ui.share.BlockProgress
@@ -100,10 +100,7 @@ private fun StatisticsScreen(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
 private fun StatisticsScreenFailPreview() {
     StatisticsScreen(
@@ -115,10 +112,7 @@ private fun StatisticsScreenFailPreview() {
 }
 
 
-@Preview(
-    backgroundColor = 0xFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
 private fun StatisticsScreenLoadingPreview() {
     StatisticsScreen(
@@ -130,10 +124,7 @@ private fun StatisticsScreenLoadingPreview() {
 }
 
 
-@Preview(
-    backgroundColor = 0xFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
 private fun StatisticsScreenSuccessPreview() {
     StatisticsScreen(

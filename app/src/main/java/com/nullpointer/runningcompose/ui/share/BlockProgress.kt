@@ -8,8 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
 
 @Composable
 fun BlockProgress(
@@ -25,23 +24,9 @@ fun BlockProgress(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFF,
-    showBackground = true
-)
+@OrientationPreviews
 @Composable
 private fun BlockProgressPortraitPreview() {
     BlockProgress()
 }
 
-@Preview(
-    backgroundColor = 0xFFFFF,
-    showBackground = true,
-    device = Devices.AUTOMOTIVE_1024p,
-    widthDp = 720,
-    heightDp = 360
-)
-@Composable
-private fun BlockProgressLandscapePreview() {
-    BlockProgress()
-}

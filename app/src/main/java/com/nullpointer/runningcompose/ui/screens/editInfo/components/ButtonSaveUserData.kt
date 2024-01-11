@@ -10,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 
 @Composable
 fun ButtonSaveUserInfo(
@@ -39,10 +39,7 @@ fun ButtonSaveUserInfo(
     )
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
 private fun ButtonSaveUserInfoEnablePreview() {
     ButtonSaveUserInfo(
@@ -51,10 +48,7 @@ private fun ButtonSaveUserInfoEnablePreview() {
     )
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
 private fun ButtonSaveUserInfoDisablePreview() {
     ButtonSaveUserInfo(

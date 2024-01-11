@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,8 +27,8 @@ import com.nullpointer.runningcompose.core.utils.toDateOnlyTime
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
 import com.nullpointer.runningcompose.core.utils.toMeters
 import com.nullpointer.runningcompose.models.data.RunData
-import com.nullpointer.runningcompose.models.data.config.MapConfig
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 
 @Composable
 fun InfoRunDetails(
@@ -80,24 +79,11 @@ private fun TitleAndInfo(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
 fun InfoRunDetailsPreview() {
     InfoRunDetails(
-        runData = RunData(
-            mapConfig = MapConfig(),
-            caloriesBurned = 0F,
-            timestamp = 0,
-            listPolyLineEncode = emptyList(),
-            distanceInMeters = 0F,
-            pathImgRun = null,
-            timeRunInMillis = 0,
-            avgSpeedInMeters = 0F,
-            id = 0
-        ),
+        runData = RunData.runDataExample,
         fontSize = 12.sp,
         metricType = MetricType.Meters,
     )

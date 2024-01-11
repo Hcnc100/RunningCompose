@@ -7,11 +7,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.LandscapePreview
 
 @Composable
 fun DetailsRunLandscape(
@@ -43,10 +43,7 @@ fun DetailsRunLandscape(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@LandscapePreview
 @Composable
 fun DetailsRunLandscapePreview() {
     DetailsRunLandscape(

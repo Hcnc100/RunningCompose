@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -64,7 +63,7 @@ fun RunsScreens(
     val listRuns = runsViewModel.listRunsOrdered.collectAsLazyPagingItems()
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
     val listRunsSelected = selectViewModel.listRunsSelected
-    val isEnableSelected = listRunsSelected.isEmpty()
+    val isSelectEnable = listRunsSelected.isNotEmpty()
 
     BackHandler(
         enabled = listRunsSelected.isNotEmpty(),
@@ -81,7 +80,7 @@ fun RunsScreens(
         listRuns = listRuns,
         numberRuns = numberRuns,
         metricType = metricType,
-        isSelectEnable = isEnableSelected,
+        isSelectEnable = isSelectEnable,
         listRunsSelected = listRunsSelected,
         scaffoldState = runsState.scaffoldState,
         lazyGridState = runsState.lazyGridState,
@@ -111,7 +110,7 @@ fun RunsScreens(
         buttonPauseResume = {
             ButtonToggleAddRemove(
                 trackingState = stateTracking,
-                isSelectedEnable = isEnableSelected,
+                isSelectedEnable = isSelectEnable,
                 descriptionButtonAdd = stringResource(R.string.description_button_add_run),
                 descriptionButtonRemove = stringResource(R.string.description_deleter_select_runs),
                 actionAdd = { actionRootDestinations.changeRoot(TrackingScreenDestination) },
@@ -140,7 +139,7 @@ fun RunsScreens(
     headerSorterAndFilter: @Composable () -> Unit,
     actionRunScreen: (RunActions, RunData) -> Unit,
     permissionAction: (PermissionActions) -> Unit,
-    listRunsSelected: SnapshotStateMap<Long, RunData>
+    listRunsSelected: Map<Long, RunData>
 ) {
 
 

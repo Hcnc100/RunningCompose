@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.models.data.config.MapConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
+import com.nullpointer.runningcompose.ui.preview.config.PortraitPreview
 import com.nullpointer.runningcompose.ui.screens.config.components.MapFromConfig
 import com.nullpointer.runningcompose.ui.screens.config.components.selectors.SelectMapColor
 import com.nullpointer.runningcompose.ui.screens.config.components.selectors.SelectMapStyle
@@ -42,10 +42,7 @@ fun MapSettingsConfigPortrait(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true,
-)
+@PortraitPreview
 @Composable
 fun MapSettingsConfigPortraitPreview() {
     MapSettingsConfigPortrait(

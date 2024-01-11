@@ -12,12 +12,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
+import com.nullpointer.runningcompose.ui.preview.states.MetrictTypeProvider
 
 @Composable
 fun StatisticsRun(
@@ -53,33 +55,31 @@ fun StatisticsRun(
     }
 }
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
-private fun StatisticsRunCanExpandedPreview() {
+private fun StatisticsRunCanExpandedPreview(
+    @PreviewParameter(MetrictTypeProvider::class) metricType: MetricType
+) {
     StatisticsRun(
         canExpanded = true,
         fontSizeBody = 12.sp,
         fontSizeTitle = 12.sp,
-        metricType = MetricType.Meters,
+        metricType = metricType,
         itemRunEntity = RunData.runDataExample
     )
 }
 
 
-@Preview(
-    backgroundColor = 0xFFFFFF,
-    showBackground = true
-)
+@SimplePreview
 @Composable
-private fun StatisticsRunCannotExpandedPreview() {
+private fun StatisticsRunCannotExpandedPreview(
+    @PreviewParameter(MetrictTypeProvider::class) metricType: MetricType
+) {
     StatisticsRun(
         canExpanded = false,
         fontSizeBody = 12.sp,
         fontSizeTitle = 12.sp,
-        metricType = MetricType.Meters,
+        metricType = metricType,
         itemRunEntity = RunData.runDataExample
     )
 }
