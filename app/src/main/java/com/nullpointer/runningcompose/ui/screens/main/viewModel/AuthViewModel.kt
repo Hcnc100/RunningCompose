@@ -4,11 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.domain.auth.AuthRepository
-import com.nullpointer.runningcompose.models.data.AuthData
+import com.nullpointer.runningcompose.domain.config.ConfigRepository
+import com.nullpointer.runningcompose.models.data.InitAppData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.transform
@@ -16,20 +17,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    authRepository: AuthRepository,
+    configRepository: ConfigRepository
 ) : ViewModel() {
 
-    val authData = authRepository.authData.transform<AuthData?, Resource<AuthData?>> {
-        emit(Resource.Success(it))
-    }.catch {
-        emit(Resource.Failure)
-    }.flowOn(Dispatchers.IO)
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5_000),
-            Resource.Loading
-        )
-
+    val initAppData =
+        authRepository.authData.combine(configRepository.isFirstOpen) { authData, isFirstOpen ->
+            InitAppData(authData, isFirstOpen)
+        }.transform<InitAppData, Resource<InitAppData>> {
+            emit(Resource.Success(it))
+        }.flowOn(Dispatchers.IO)
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                Resource.Loading
+            )
 
 
 }

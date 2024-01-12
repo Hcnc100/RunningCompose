@@ -15,6 +15,7 @@ interface ConfigLocalDataSource {
     val metricsConfig:Flow<MetricType>
     val isFirstPermissionLocation: Flow<Boolean>
     val isFirstPermissionNotify: Flow<Boolean>
+    val isFirstOpen: Flow<Boolean>
 
     suspend fun changeMapConfig(style: MapStyle?, weight: Int?, color: Color?)
     suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
@@ -22,4 +23,5 @@ interface ConfigLocalDataSource {
     suspend fun changeIsFirstPermissionLocation()
     suspend fun changeIsFirstPermissionNotify()
     suspend fun changeNumberRunsGraph(numberRunsGraph: Int)
+    suspend fun changeIsFirstOpen()
 }

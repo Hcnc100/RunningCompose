@@ -4,7 +4,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.nullpointer.runningcompose.data.config.local.ConfigUserStore
 import com.nullpointer.runningcompose.models.data.config.MapConfig
-import com.nullpointer.runningcompose.models.data.config.SettingsData
 import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -25,8 +24,11 @@ class ConfigLocalDataSourceImpl(
     override val sortConfig: Flow<SortConfig> = configUserStore.getSettingsData().map { it.sortConfig }.distinctUntilChanged()
     override val metricsConfig: Flow<MetricType> = configUserStore.getSettingsData().map { it.metricConfig }.distinctUntilChanged()
     override val isFirstPermissionLocation: Flow<Boolean> = configUserStore.getSettingsData().map { it.isFirstRequestLocationPermission }.distinctUntilChanged()
-    override val isFirstPermissionNotify: Flow<Boolean> = configUserStore.getSettingsData().map { it.isFirstRequestNotifyPermission }.distinctUntilChanged()
-
+    override val isFirstPermissionNotify: Flow<Boolean> =
+        configUserStore.getSettingsData().map { it.isFirstRequestNotifyPermission }
+            .distinctUntilChanged()
+    override val isFirstOpen: Flow<Boolean> =
+        configUserStore.getSettingsData().map { it.isFirstOpen }.distinctUntilChanged()
     override suspend fun changeMapConfig(
         style: MapStyle?,
         weight: Int?,
@@ -61,9 +63,7 @@ class ConfigLocalDataSourceImpl(
     }
 
     override suspend fun changeMetricsConfig(metricType: MetricType) {
-        val newSettings = getSettingsDataFirst().let { settingsData ->
-            settingsData.copy(metricConfig = metricType)
-        }
+        val newSettings = getSettingsDataFirst().copy(metricConfig = metricType)
         configUserStore.updateSettingsData(newSettings)
     }
 
@@ -79,6 +79,11 @@ class ConfigLocalDataSourceImpl(
 
     override suspend fun changeNumberRunsGraph(numberRunsGraph: Int) {
         val newSettings = getSettingsDataFirst().copy(numberRunsGraph = numberRunsGraph)
+        configUserStore.updateSettingsData(newSettings)
+    }
+
+    override suspend fun changeIsFirstOpen() {
+        val newSettings = getSettingsDataFirst().copy(isFirstOpen = false)
         configUserStore.updateSettingsData(newSettings)
     }
 }

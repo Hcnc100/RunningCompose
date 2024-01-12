@@ -11,12 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.nullpointer.runningcompose.core.states.Resource
-import com.nullpointer.runningcompose.models.data.AuthData
-import com.nullpointer.runningcompose.ui.screens.main.viewModel.AuthViewModel
+import com.nullpointer.runningcompose.models.data.InitAppData
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.HomeScreenDestination
+import com.nullpointer.runningcompose.ui.screens.destinations.IntroductionScreenDestination
+import com.nullpointer.runningcompose.ui.screens.main.viewModel.AuthViewModel
 import com.nullpointer.runningcompose.ui.states.MainScreenState
 import com.nullpointer.runningcompose.ui.states.rememberMainScreenState
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -29,10 +30,10 @@ fun MainScreen(
     mainScreenState: MainScreenState = rememberMainScreenState(),
 ) {
 
-    val stateAuth by authViewModel.authData.collectAsState()
+    val initAppData by authViewModel.initAppData.collectAsState()
 
     MainScreen(
-        authDataState = stateAuth,
+        initAppData = initAppData,
         actionSuccess = actionSuccess,
         scaffoldState = mainScreenState.scaffoldState,
         navController = mainScreenState.navController,
@@ -43,19 +44,28 @@ fun MainScreen(
 
 @Composable
 fun MainScreen(
-    authDataState: Resource<AuthData?>,
     actionSuccess: () -> Unit,
     scaffoldState: ScaffoldState,
     navController: NavHostController,
+    initAppData: Resource<InitAppData?>,
     actionsRootDestinations: ActionRootDestinations,
 ) {
     Scaffold(
         scaffoldState = scaffoldState
     ) { innerPadding ->
-        when (authDataState) {
-            Resource.Loading -> null
-            Resource.Failure -> EditInfoScreenDestination
-            is Resource.Success -> if (authDataState.data?.isAuth == true) HomeScreenDestination else EditInfoScreenDestination
+        when (initAppData) {
+            is Resource.Success -> {
+                val authData = initAppData.data?.authData
+                val isFirst = initAppData.data?.isFirstOpen
+
+                when {
+                    isFirst == true -> IntroductionScreenDestination
+                    authData?.isAuth == false -> EditInfoScreenDestination
+                    else -> HomeScreenDestination
+                }
+            }
+
+            else -> null
         }?.let { startDestination ->
             LaunchedEffect(key1 = Unit) {
                 actionSuccess()

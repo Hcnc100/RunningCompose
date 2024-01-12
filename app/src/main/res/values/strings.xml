@@ -150,5 +150,12 @@
     <string name="save_data_user">Guardar datos</string>
     <string name="error_saving_run">Error al guardar los datos del recorrido</string>
 
+    <!-- introduction -->
+    <string name="description_map">Bienvenido a RunningApp, esta es una app sencilla que se encarga de hacer un seguimiento de un recorrido y trazarlo en un mapa de Google Maps</string>
+    <string name="title_location_permission">Permiso de ubicación precisa y en segundo plano</string>
+    <string name="title_description_permission">Para poder hacer el seguimiento de un recorrido, la app requiere el permiso de ubicación, además de permitir obtener la ubicación en segundo plano, esto para poder seguir haciendo el seguimiento, incluso si la app no está en primer plano</string>
+    <string name="title_notify_permission">Permiso de Notificación</string>
+    <string name="title_notify_description">Para poder hacer el seguimiento en segundo plano, en necesario el permiso de notificaciones solo si la versión de su sistema así lo requiere.</string>
+
 
 </resources>

@@ -18,6 +18,7 @@ class ConfigRepoImpl(
     override val isFirstPermissionLocation: Flow<Boolean> = configLocalDataSource.isFirstPermissionLocation
     override val isFirstPermissionNotify: Flow<Boolean> = configLocalDataSource.isFirstPermissionNotify
     override val numberRunsGraph: Flow<Int> = configLocalDataSource.numberRunsGraph
+    override val isFirstOpen: Flow<Boolean> = configLocalDataSource.isFirstOpen
 
 
     override suspend fun changeMapConfig(
@@ -39,7 +40,9 @@ class ConfigRepoImpl(
     override suspend fun changeIsFirstPermissionNotify() =
         configLocalDataSource.changeIsFirstPermissionNotify()
 
-    override suspend fun changeNumberRunsGraph(numberRunsGraph: Int)=
+    override suspend fun changeNumberRunsGraph(numberRunsGraph: Int) =
         configLocalDataSource.changeNumberRunsGraph(numberRunsGraph)
+
+    override suspend fun changeIsFirstOpen() = configLocalDataSource.changeIsFirstOpen()
 
 }
