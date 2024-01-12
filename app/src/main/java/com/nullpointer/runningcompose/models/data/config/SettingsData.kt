@@ -6,9 +6,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SettingsData(
+    val mapConfig: MapConfig = MapConfig(),
     val sortConfig: SortConfig= SortConfig(),
     val metricConfig: MetricType = MetricType.Meters,
-    val mapConfig: MapConfig = MapConfig(),
-    val isFirstRequestLocationPermission:Boolean = true,
     val isFirstRequestNotifyPermission:Boolean = true,
+    val isFirstRequestLocationPermission:Boolean = true,
+    val numberRunsGraph:Int = 10,
 )

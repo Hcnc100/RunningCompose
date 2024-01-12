@@ -127,5 +127,6 @@
     <string name="message_data_updated">Data updated successfully</string>
     <string name="save_data_user">Save data</string>
     <string name="error_saving_run">Error while saving run data</string>
+    <string name="number_runs_in_the_graph">Number runs in the graph</string>
 
 </resources>

@@ -9,6 +9,7 @@ import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.flow.Flow
 
 interface ConfigRepository {
+    val numberRunsGraph:Flow<Int>
     val mapConfig: Flow<MapConfig>
     val sortConfig: Flow<SortConfig>
     val metricsConfig:Flow<MetricType>
@@ -18,4 +19,5 @@ interface ConfigRepository {
     suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
     suspend fun changeMetricConfig(metricType:MetricType)
     suspend fun changeIsFirstPermissionLocation()
+    suspend fun changeNumberRunsGraph(numberRunsGraph: Int)
 }

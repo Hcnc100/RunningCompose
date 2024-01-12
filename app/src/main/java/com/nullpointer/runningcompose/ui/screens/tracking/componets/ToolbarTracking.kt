@@ -6,6 +6,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.types.TrackingState
+import com.nullpointer.runningcompose.models.types.TrackingState.PAUSE
+import com.nullpointer.runningcompose.models.types.TrackingState.TRACKING
 import com.nullpointer.runningcompose.models.types.TrackingState.WAITING
 import com.nullpointer.runningcompose.ui.preview.states.TrackingStateProvider
 import com.nullpointer.runningcompose.ui.share.ToolbarBack
@@ -19,13 +21,13 @@ fun ToolbarTracking(
 ) {
 
     when (servicesState) {
-        WAITING -> ToolbarBackWithAction(
+        PAUSE, TRACKING -> ToolbarBackWithAction(
             title = stringResource(R.string.title_tracking_screen),
             actionBack = actionBack,
             actionCancel = actionCancel
         )
 
-        else -> ToolbarBack(
+        WAITING -> ToolbarBack(
             title = stringResource(R.string.title_tracking_screen),
             actionBack = actionBack
         )

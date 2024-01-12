@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ConfigLocalDataSource {
     val mapConfig: Flow<MapConfig>
+    val numberRunsGraph:Flow<Int>
     val sortConfig: Flow<SortConfig>
     val metricsConfig:Flow<MetricType>
     val isFirstPermissionLocation: Flow<Boolean>
@@ -18,4 +19,5 @@ interface ConfigLocalDataSource {
     suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?)
     suspend fun changeMetricsConfig(metricType: MetricType)
     suspend fun changeIsFirstPermissionLocation()
+    suspend fun changeNumberRunsGraph(numberRunsGraph: Int)
 }

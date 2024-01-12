@@ -74,6 +74,7 @@
     <string name="text_edit_info_user">Editar información</string>
     <string name="meters" translatable="false">m/ms/cal</string>
     <string name="kilo" translatable="false">km/kmh/kcal</string>
+    <string name="number_runs_in_the_graph">Número de recorridos en el gráfico</string>
 
     <!-- statistics screen -->
     <string name="message_empty_statisctis">No hay estadísticas que mostrar</string>
@@ -146,5 +147,6 @@
     <string name="message_data_updated">Datos actualizados correctamente</string>
     <string name="save_data_user">Guardar datos</string>
     <string name="error_saving_run">Error al guardar los datos del recorrido</string>
+
 
 </resources>

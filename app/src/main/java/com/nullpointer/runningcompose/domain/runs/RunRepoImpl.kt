@@ -16,6 +16,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
 
 
 class RunRepoImpl(
@@ -28,7 +31,9 @@ class RunRepoImpl(
     override val countRuns: Flow<Int> = runsLocalDataSource.getCountRun()
 
     override val listRunsOrderByDate: Flow<List<RunData>> =
-        runsLocalDataSource.getListOrderByDate(10)
+        configLocalDataSource.numberRunsGraph.flatMapLatest {numberRunsGraph->
+            runsLocalDataSource.getListOrderByDate(numberRunsGraph)
+        }
 
     override val totalStatisticRuns: Flow<StatisticsRun> =
         runsLocalDataSource.totalStatisticRuns

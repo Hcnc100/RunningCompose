@@ -63,7 +63,7 @@ fun TrackingScreen(
             ToolbarTracking(
                 servicesState = servicesState,
                 actionBack = actionRootDestinations::backDestination,
-                actionCancel = trackingState::finishTracking
+                actionCancel = { showDialogCancel = true }
             )
         },
     ) {

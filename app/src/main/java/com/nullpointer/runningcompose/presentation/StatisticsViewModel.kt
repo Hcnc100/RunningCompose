@@ -28,7 +28,8 @@ class StatisticsViewModel @Inject constructor(
         runsRepository.totalStatisticRuns
     ) { list, statistics ->
         Resource.Success(
-            StatisticsData(list, statistics))
+            StatisticsData(list, statistics)
+        )
 
     }.catch<Resource<StatisticsData>> {
         Timber.e("Error when load run $it")

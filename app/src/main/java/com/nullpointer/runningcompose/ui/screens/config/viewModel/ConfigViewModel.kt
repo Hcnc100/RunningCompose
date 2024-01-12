@@ -66,6 +66,15 @@ class ConfigViewModel @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         SortConfig()
     )
+    val numberRunsGraph = configRepo.numberRunsGraph.flowOn(
+        Dispatchers.IO
+    ).catch {
+        Timber.e("Error to load metrics config")
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        10
+    )
 
 
     val isFirstLocationPermission = configRepo.isFirstPermissionLocation.catch {
@@ -100,6 +109,10 @@ class ConfigViewModel @Inject constructor(
         isReverse: Boolean? = null,
     ) = launchSafeIO {
         configRepo.changeSortConfig(sortType, isReverse)
+    }
+
+    fun changeNumberRunsGraph(numberRunsGraph: Int) = launchSafeIO {
+        configRepo.changeNumberRunsGraph(numberRunsGraph)
     }
 
 }
