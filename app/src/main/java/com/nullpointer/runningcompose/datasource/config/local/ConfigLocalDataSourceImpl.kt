@@ -25,6 +25,7 @@ class ConfigLocalDataSourceImpl(
     override val sortConfig: Flow<SortConfig> = configUserStore.getSettingsData().map { it.sortConfig }.distinctUntilChanged()
     override val metricsConfig: Flow<MetricType> = configUserStore.getSettingsData().map { it.metricConfig }.distinctUntilChanged()
     override val isFirstPermissionLocation: Flow<Boolean> = configUserStore.getSettingsData().map { it.isFirstRequestLocationPermission }.distinctUntilChanged()
+    override val isFirstPermissionNotify: Flow<Boolean> = configUserStore.getSettingsData().map { it.isFirstRequestNotifyPermission }.distinctUntilChanged()
 
     override suspend fun changeMapConfig(
         style: MapStyle?,
@@ -68,6 +69,11 @@ class ConfigLocalDataSourceImpl(
 
     override suspend fun changeIsFirstPermissionLocation() {
         val newSettings = getSettingsDataFirst().copy(isFirstRequestLocationPermission = true)
+        configUserStore.updateSettingsData(newSettings)
+    }
+
+    override suspend fun changeIsFirstPermissionNotify() {
+        val newSettings = getSettingsDataFirst().copy(isFirstRequestNotifyPermission = true)
         configUserStore.updateSettingsData(newSettings)
     }
 

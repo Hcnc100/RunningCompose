@@ -1,5 +1,6 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
+import android.support.annotation.RawRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,12 +17,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.ui.actions.PermissionActions
+import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 
 @Composable
-fun ContainerPermission(
+fun ContainerPermissionLocation(
     isFirstRequestPermission: Boolean,
     permissionAction: (PermissionActions) -> Unit,
+
 ) {
     val textExplanation = if (isFirstRequestPermission){
         stringResource(id = R.string.need_permissions_tracking)
@@ -32,7 +35,7 @@ fun ContainerPermission(
     val buttonText = stringResource(id = R.string.action_accept)
 
     val actionPermission = if (isFirstRequestPermission){
-        { permissionAction(PermissionActions.LAUNCH_PERMISSION) }
+        { permissionAction(PermissionActions.LAUNCH_LOCATION_PERMISSION) }
     }else{
         { permissionAction(PermissionActions.OPEN_SETTING) }
     }
@@ -40,15 +43,47 @@ fun ContainerPermission(
     PermissionBox(
         textExplanation = textExplanation,
         buttonText = buttonText,
-        actionPermission = actionPermission
+        actionPermission = actionPermission,
+        animation = R.raw.location
     )
 }
+
+@Composable
+fun ContainerPermissionNotify(
+    isFirstRequestPermission: Boolean,
+    permissionAction: (PermissionActions) -> Unit,
+
+    ) {
+    val textExplanation = if (isFirstRequestPermission){
+        stringResource(id = R.string.need_permissions_notify)
+    }else{
+        stringResource(id = R.string.setting_permissions_notify)
+    }
+
+    val buttonText = stringResource(id = R.string.action_accept)
+
+    val actionPermission = if (isFirstRequestPermission){
+        { permissionAction(PermissionActions.LAUNCH_NOTIFICATION_PERMISSION) }
+    }else{
+        { permissionAction(PermissionActions.OPEN_SETTING) }
+    }
+
+    PermissionBox(
+        textExplanation = textExplanation,
+        buttonText = buttonText,
+        actionPermission = actionPermission,
+        animation = R.raw.notify
+    )
+}
+
 
 @Composable
 private fun PermissionBox(
     buttonText: String,
     textExplanation: String,
-    actionPermission: () -> Unit
+    actionPermission: () -> Unit,
+    @RawRes
+    animation: Int
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -59,7 +94,7 @@ private fun PermissionBox(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            LottieContainerForever(modifier = Modifier.size(250.dp), animation = R.raw.location)
+            LottieContainerForever(modifier = Modifier.size(250.dp), animation = animation)
             Text(text = textExplanation, textAlign = TextAlign.Center)
             Button(onClick = actionPermission) {
                 Text(text = buttonText)
@@ -68,3 +103,20 @@ private fun PermissionBox(
     }
 }
 
+@SimplePreview
+@Composable
+private fun PermissionLocationPreview() {
+    ContainerPermissionLocation(
+        isFirstRequestPermission = true,
+        permissionAction = {}
+    )
+}
+
+@SimplePreview
+@Composable
+private fun PermissionNotifyPreview() {
+    ContainerPermissionNotify(
+        isFirstRequestPermission = true,
+        permissionAction = {}
+    )
+}

@@ -32,7 +32,8 @@ import com.nullpointer.runningcompose.ui.navigation.HomeNavGraph
 import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewModel
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
-import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermission
+import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermissionLocation
+import com.nullpointer.runningcompose.ui.screens.runs.componets.ContainerPermissionNotify
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
 import com.nullpointer.runningcompose.ui.screens.runs.componets.filters.DropFilterAndOrder
 import com.nullpointer.runningcompose.ui.share.BlockProgress
@@ -51,7 +52,8 @@ fun RunsScreens(
     runsViewModel: RunsViewModel = hiltViewModel(),
     configViewModel: ConfigViewModel = hiltViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState(
-        actionAfterPermission = configViewModel::changeFirstRequestPermission
+        actionAfterNotifyPermission = configViewModel::changeFirstRequestNotifyPermission,
+        actionAfterLocationPermission = configViewModel::changeFirstRequestLocationPermission
     )
 ) {
 
@@ -61,6 +63,7 @@ fun RunsScreens(
     val stateTracking by runsViewModel.stateTracking.collectAsState()
     val listRuns = runsViewModel.listRunsOrdered.collectAsLazyPagingItems()
     val isFirstDialogRequest by configViewModel.isFirstLocationPermission.collectAsState()
+    val isFirstNotifyPermission by configViewModel.isFirstNotifyPermission.collectAsState()
     val listRunsSelected = selectViewModel.listRunsSelected
     val isSelectEnable = listRunsSelected.isNotEmpty()
 
@@ -83,8 +86,10 @@ fun RunsScreens(
         listRunsSelected = listRunsSelected,
         scaffoldState = runsState.scaffoldState,
         lazyGridState = runsState.lazyGridState,
-        permissionState = runsState.locationPermissionState,
-        isFirstRequestPermission = Resource.Success(isFirstDialogRequest),
+        permissionLocationState = runsState.locationPermissionState,
+        permissionNotifyState = runsState.notifyPermissionState,
+        isFirstRequestLocationPermission = Resource.Success(isFirstDialogRequest),
+        isFirstRequestNotifyPermission = Resource.Success(isFirstNotifyPermission),
         actionRunScreen = { action, itemRun ->
             when (action) {
                 DETAILS -> actionRootDestinations.changeRoot(
@@ -97,7 +102,8 @@ fun RunsScreens(
         permissionAction = { permissionAction ->
             when (permissionAction) {
                 PermissionActions.OPEN_SETTING -> runsState.openSettings()
-                PermissionActions.LAUNCH_PERMISSION -> runsState.showDialogPermission()
+                PermissionActions.LAUNCH_LOCATION_PERMISSION -> runsState.showDialogLocationPermission()
+                PermissionActions.LAUNCH_NOTIFICATION_PERMISSION -> runsState.showDialogNotifyPermission()
             }
         },
         headerSorterAndFilter = {
@@ -131,10 +137,12 @@ fun RunsScreens(
     isSelectEnable: Boolean,
     scaffoldState: ScaffoldState,
     lazyGridState: LazyGridState,
-    permissionState: PermissionState,
+    permissionLocationState: PermissionState,
+    permissionNotifyState: PermissionState,
     listRuns: LazyPagingItems<RunData>,
     buttonPauseResume: @Composable () -> Unit,
-    isFirstRequestPermission: Resource<Boolean>,
+    isFirstRequestLocationPermission: Resource<Boolean>,
+    isFirstRequestNotifyPermission: Resource<Boolean>,
     headerSorterAndFilter: @Composable () -> Unit,
     actionRunScreen: (RunActions, RunData) -> Unit,
     permissionAction: (PermissionActions) -> Unit,
@@ -142,33 +150,51 @@ fun RunsScreens(
 ) {
 
 
-    when (isFirstRequestPermission) {
+    when (isFirstRequestLocationPermission) {
         Resource.Failure -> Unit
         Resource.Loading -> BlockProgress()
         is Resource.Success -> {
-            if (permissionState.status.isGranted) {
-                Scaffold(
-                    scaffoldState = scaffoldState,
-                    floatingActionButton = buttonPauseResume
-                ) {
-                    ListRuns(
-                        modifier = Modifier.padding(it),
-                        listState = lazyGridState,
-                        listRuns = listRuns,
-                        isSelectEnable = isSelectEnable,
-                        metricType = metricType,
-                        actionRun = actionRunScreen,
-                        numberRuns = numberRuns,
-                        listRunSelected = listRunsSelected,
-                        headerOrderAndFilter = headerSorterAndFilter
-                    )
+
+            when (isFirstRequestNotifyPermission) {
+                Resource.Failure -> Unit
+                Resource.Loading -> BlockProgress()
+                is Resource.Success -> {
+
+                    when {
+                        permissionLocationState.status.isGranted && permissionNotifyState.status.isGranted -> {
+                            Scaffold(
+                                scaffoldState = scaffoldState,
+                                floatingActionButton = buttonPauseResume
+                            ) {
+                                ListRuns(
+                                    modifier = Modifier.padding(it),
+                                    listState = lazyGridState,
+                                    listRuns = listRuns,
+                                    isSelectEnable = isSelectEnable,
+                                    metricType = metricType,
+                                    actionRun = actionRunScreen,
+                                    numberRuns = numberRuns,
+                                    listRunSelected = listRunsSelected,
+                                    headerOrderAndFilter = headerSorterAndFilter
+                                )
+                            }
+                        }
+                        permissionNotifyState.status.isGranted.not() -> {
+                            ContainerPermissionNotify(
+                                permissionAction = permissionAction,
+                                isFirstRequestPermission = isFirstRequestNotifyPermission.data
+                            )
+                        }
+                        permissionLocationState.status.isGranted.not() -> {
+                            ContainerPermissionLocation(
+                                permissionAction = permissionAction,
+                                isFirstRequestPermission = isFirstRequestLocationPermission.data
+                            )
+                        }
+                    }
                 }
-            } else {
-                ContainerPermission(
-                    permissionAction = permissionAction,
-                    isFirstRequestPermission = isFirstRequestPermission.data
-                )
             }
+
         }
     }
 }

@@ -85,7 +85,18 @@ class ConfigViewModel @Inject constructor(
         true
     )
 
-    fun changeFirstRequestPermission() = launchSafeIO {
+    val isFirstNotifyPermission = configRepo.isFirstPermissionLocation.catch {
+        Timber.e("Error in location permission state")
+    }.flowOn(Dispatchers.IO).stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        true
+    )
+
+    fun changeFirstRequestLocationPermission() = launchSafeIO {
+        configRepo.changeIsFirstPermissionLocation()
+    }
+    fun changeFirstRequestNotifyPermission() = launchSafeIO {
         configRepo.changeIsFirstPermissionLocation()
     }
 

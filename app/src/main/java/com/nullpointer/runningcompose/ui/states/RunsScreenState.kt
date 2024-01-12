@@ -25,10 +25,15 @@ class RunsScreenState(
     context: Context,
     scaffoldState: ScaffoldState,
     val lazyGridState: LazyGridState,
-    val locationPermissionState: PermissionState
+    val notifyPermissionState: PermissionState,
+    val locationPermissionState: PermissionState,
 ) : SimpleScreenState(context, scaffoldState) {
-    fun showDialogPermission() {
+    fun showDialogLocationPermission() {
         locationPermissionState.launchPermissionRequest()
+    }
+
+    fun showDialogNotifyPermission() {
+        notifyPermissionState.launchPermissionRequest()
     }
 
     fun openSettings() {
@@ -47,14 +52,29 @@ class RunsScreenState(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun rememberRunsScreenState(
-    actionAfterPermission: () -> Unit,
+    actionAfterLocationPermission: () -> Unit,
+    actionAfterNotifyPermission: () -> Unit,
     context: Context = LocalContext.current,
     lazyState: LazyGridState = rememberLazyGridState(),
     scaffoldState: ScaffoldState = rememberScaffoldState(),
     locationPermissionState: PermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_FINE_LOCATION,
-        onPermissionResult = { actionAfterPermission() }
+        onPermissionResult = { actionAfterLocationPermission() }
     ),
-) = remember(scaffoldState, lazyState,locationPermissionState) {
-    RunsScreenState(context, scaffoldState, lazyState, locationPermissionState)
+    notifyPermissionState: PermissionState = rememberPermissionState(
+        Manifest.permission.POST_NOTIFICATIONS,
+        onPermissionResult = { actionAfterNotifyPermission() }
+    ),
+) = remember(
+    lazyState,
+    scaffoldState,
+    locationPermissionState
+) {
+    RunsScreenState(
+        context = context,
+        lazyGridState = lazyState,
+        scaffoldState = scaffoldState,
+        notifyPermissionState = notifyPermissionState,
+        locationPermissionState = locationPermissionState,
+    )
 }
