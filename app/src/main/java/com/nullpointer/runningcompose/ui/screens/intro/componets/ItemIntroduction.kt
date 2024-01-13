@@ -2,6 +2,8 @@ package com.nullpointer.runningcompose.ui.screens.intro.componets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.nullpointer.runningcompose.R
+import com.nullpointer.runningcompose.ui.actions.PermissionActions
 import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 import com.nullpointer.runningcompose.ui.share.empty.LottieContainerForever
 
@@ -25,7 +28,7 @@ fun DescriptionScreen(
     ) {
 
         Text(
-            text = "Bienvenido",
+            text = stringResource(R.string.text_welcome),
             style = MaterialTheme.typography.h5,
             color = Color.White,
         )
@@ -46,8 +49,17 @@ fun DescriptionScreen(
 
 @Composable
 fun LocationScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    permissionAction: (PermissionActions) -> Unit,
+    isFirstLocationPermission: Boolean
 ) {
+
+    val textButtonPermission = if (isFirstLocationPermission) {
+        stringResource(R.string.title_grant_permission)
+    } else {
+        stringResource(R.string.title_open_setting)
+    }
+
     ContainerItemIntro(
         modifier = modifier
     ) {
@@ -62,6 +74,15 @@ fun LocationScreen(
             modifier = Modifier.size(250.dp)
         )
 
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.White,
+                contentColor = MaterialTheme.colors.primary
+            ),
+            onClick = { permissionAction( PermissionActions.LAUNCH_LOCATION_PERMISSION)}) {
+            Text(text = textButtonPermission)
+        }
+
         Text(
             text = stringResource(R.string.title_description_permission),
             color = Color.White
@@ -72,8 +93,18 @@ fun LocationScreen(
 
 @Composable
 fun NotifyScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    permissionAction: (PermissionActions) -> Unit,
+    isFirstNotificationPermission: Boolean
 ) {
+
+    val textButtonPermission = if (isFirstNotificationPermission) {
+        stringResource(R.string.title_grant_permission)
+    } else {
+        stringResource(R.string.title_open_setting)
+    }
+
+
     ContainerItemIntro(
         modifier = modifier
     ) {
@@ -87,6 +118,16 @@ fun NotifyScreen(
             animation = R.raw.notify,
             modifier = Modifier.size(250.dp)
         )
+
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.White,
+                contentColor = MaterialTheme.colors.primary
+            ),
+            onClick = {permissionAction( PermissionActions.LAUNCH_NOTIFICATION_PERMISSION)}
+        ) {
+            Text(text =textButtonPermission)
+        }
 
         Text(
             text = stringResource(R.string.title_notify_description),
@@ -106,11 +147,17 @@ fun DescriptionScreenPreview() {
 @SimplePreview
 @Composable
 fun LocationScreenPreview() {
-    LocationScreen()
+    LocationScreen(
+        permissionAction = {},
+        isFirstLocationPermission = false
+    )
 }
 
 @SimplePreview
 @Composable
 fun NotifyScreenPreview() {
-    NotifyScreen()
+    NotifyScreen(
+        permissionAction = {},
+        isFirstNotificationPermission = false
+    )
 }

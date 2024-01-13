@@ -157,5 +157,12 @@
     <string name="title_notify_permission">Permiso de Notificación</string>
     <string name="title_notify_description">Para poder hacer el seguimiento en segundo plano, en necesario el permiso de notificaciones solo si la versión de su sistema así lo requiere.</string>
 
+    <string name="title_start_button">Iniciar</string>
+    <string name="title_prev_button">Anterior</string>
+    <string name="title_next_button">Siguiente</string>
+    <string name="title_open_setting">Conceder en ajustes</string>
+    <string name="title_grant_permission">Conceder ahora</string>
+    <string name="text_welcome">Welcome</string>
+
 
 </resources>

@@ -87,7 +87,7 @@ class NotificationHelper(private val services: TrackingServices) {
         return NotificationCompat
             .Builder(services, NOTIFICATION_CHANNEL_ID)
             .setAutoCancel(false)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_run)
             .setContentText(services.getString(R.string.app_name))
             .setContentTitle(services.getString(R.string.title_tracking))
             .setContentText("00:00:00")

@@ -1,4 +1,4 @@
-package com.nullpointer.runningcompose.ui.screens.runs.componets
+package com.nullpointer.runningcompose.ui.screens.tracking.componets
 
 import android.support.annotation.RawRes
 import androidx.compose.foundation.layout.Arrangement

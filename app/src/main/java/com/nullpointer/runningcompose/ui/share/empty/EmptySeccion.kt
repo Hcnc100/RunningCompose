@@ -25,7 +25,7 @@ fun EmptySection(
 ) {
     Column(modifier = modifier) {
         LottieContainerForever(
-            modifier = Modifier.weight(.8f),
+            modifier = Modifier.weight(.8f).fillMaxWidth(),
             animation = animation
         )
         Box(

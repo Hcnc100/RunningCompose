@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.models.data.InitAppData
 import com.nullpointer.runningcompose.ui.interfaces.ActionRootDestinations
@@ -42,6 +43,7 @@ fun MainScreen(
 
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(
     actionSuccess: () -> Unit,
@@ -60,7 +62,7 @@ fun MainScreen(
 
                 when {
                     isFirst == true -> IntroductionScreenDestination
-                    authData?.isAuth == false -> EditInfoScreenDestination
+                    authData == null -> EditInfoScreenDestination
                     else -> HomeScreenDestination
                 }
             }

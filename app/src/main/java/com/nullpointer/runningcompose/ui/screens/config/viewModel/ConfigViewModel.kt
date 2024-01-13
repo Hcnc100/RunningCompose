@@ -8,6 +8,7 @@ import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.auth.AuthRepository
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.data.AuthData
+import com.nullpointer.runningcompose.models.data.PermissionsData
 import com.nullpointer.runningcompose.models.data.config.MapConfig
 import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
@@ -77,21 +78,29 @@ class ConfigViewModel @Inject constructor(
     )
 
 
-    val isFirstLocationPermission = configRepo.isFirstPermissionLocation.catch {
+    val permissionDataState = configRepo.isFirstPermissionLocation.combine(
+        configRepo.isFirstPermissionNotify
+    ) { location, notify ->
+        PermissionsData(
+            isFirstRequestLocation = location,
+            isFirstRequestNotification = notify
+        )
+    }.map {
+        Resource.Success(it)
+    }.catch {
         Timber.e("Error in location permission state")
-    }.flowOn(Dispatchers.IO).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        true
-    )
+        Resource.Failure
+    }
+        .flowOn(Dispatchers.IO)
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            Resource.Loading
+        )
 
-    val isFirstNotifyPermission = configRepo.isFirstPermissionLocation.catch {
-        Timber.e("Error in location permission state")
-    }.flowOn(Dispatchers.IO).stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        true
-    )
+
+
+
 
     fun changeFirstRequestLocationPermission() = launchSafeIO {
         configRepo.changeIsFirstPermissionLocation()

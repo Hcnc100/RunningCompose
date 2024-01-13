@@ -138,4 +138,11 @@
     <string name="title_notify_permission">Notification Permission</string>
     <string name="title_notify_description">To be able to track in the background, notifications permission is required only if your system version requires it.</string>
 
+    <string name="title_start_button">Start</string>
+    <string name="title_prev_button">Prev</string>
+    <string name="title_next_button">Next</string>
+    <string name="title_open_setting">Grant in settings</string>
+    <string name="title_grant_permission">Grant now</string>
+    <string name="text_welcome">Bienvenido</string>
+
 </resources>

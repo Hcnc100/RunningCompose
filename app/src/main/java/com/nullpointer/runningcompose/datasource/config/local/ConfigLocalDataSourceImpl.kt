@@ -68,12 +68,12 @@ class ConfigLocalDataSourceImpl(
     }
 
     override suspend fun changeIsFirstPermissionLocation() {
-        val newSettings = getSettingsDataFirst().copy(isFirstRequestLocationPermission = true)
+        val newSettings = getSettingsDataFirst().copy(isFirstRequestLocationPermission = false)
         configUserStore.updateSettingsData(newSettings)
     }
 
     override suspend fun changeIsFirstPermissionNotify() {
-        val newSettings = getSettingsDataFirst().copy(isFirstRequestNotifyPermission = true)
+        val newSettings = getSettingsDataFirst().copy(isFirstRequestNotifyPermission = false)
         configUserStore.updateSettingsData(newSettings)
     }
 

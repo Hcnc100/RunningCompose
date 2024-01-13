@@ -10,6 +10,8 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.ui.actions.IntroActions
 import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
 
@@ -28,20 +30,20 @@ fun ButtonsPrevAndNext(
             onClick = { actionIntro(IntroActions.PREV) },
             enabled = !isFirstPage
         ) {
-            Text(text = "Prev", color = Color.White)
+            Text(text = stringResource(R.string.title_prev_button), color = Color.White)
         }
         if (!isLastPage) {
             TextButton(
                 onClick = { actionIntro(IntroActions.NEXT) },
             ) {
-                Text(text = "Next", color = Color.White)
+                Text(text = stringResource(R.string.title_next_button), color = Color.White)
             }
         }
         if (isLastPage) {
             TextButton(
                 onClick = { actionIntro(IntroActions.START) },
             ) {
-                Text(text = "Iniciar", color = Color.White)
+                Text(text = stringResource(R.string.title_start_button), color = Color.White)
             }
         }
 

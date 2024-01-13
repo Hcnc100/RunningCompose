@@ -6,20 +6,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.SavableComposeState
+import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
 import com.nullpointer.runningcompose.models.data.DrawPolyData
+import com.nullpointer.runningcompose.models.data.PermissionsData
 import com.nullpointer.runningcompose.models.types.TrackingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
@@ -29,7 +33,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TrackingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    configRepository: ConfigRepository,
+    private val configRepository: ConfigRepository,
     private val locationRepository: TrackingRepository,
     private val runsRepository: RunRepository
 ) : ViewModel() {
