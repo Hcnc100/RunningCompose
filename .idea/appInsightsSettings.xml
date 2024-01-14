@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.nullpointer.runningcompose" />
+                  <option name="appId" value="com.d34th.blogapp" />
                 </ConnectionSetting>
               </option>
               <option name="failureTypes">

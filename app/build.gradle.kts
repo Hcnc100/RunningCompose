@@ -15,7 +15,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.nullpointer.runningcompose"
+        applicationId = "com.nullpointer.running"
         minSdk = 21
         targetSdk = 34
         versionCode = 3
