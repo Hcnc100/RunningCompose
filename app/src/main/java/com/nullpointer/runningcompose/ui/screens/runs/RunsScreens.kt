@@ -46,6 +46,7 @@ import com.nullpointer.runningcompose.ui.share.ButtonToggleAddRemove
 import com.nullpointer.runningcompose.ui.states.RunsScreenState
 import com.nullpointer.runningcompose.ui.states.rememberRunsScreenState
 import com.ramcosta.composedestinations.annotation.Destination
+import timber.log.Timber
 
 @OptIn(ExperimentalPermissionsApi::class)
 @HomeNavGraph(start = true)
@@ -55,21 +56,27 @@ fun RunsScreens(
     selectViewModel: SelectViewModel,
     actionRootDestinations: ActionRootDestinations,
     runsViewModel: RunsViewModel = hiltViewModel(),
-    configViewModel: ConfigViewModel = hiltViewModel(),
     runsState: RunsScreenState = rememberRunsScreenState(
-        actionAfterLocationPermission = configViewModel::changeFirstRequestLocationPermission,
-        actionAfterNotifyPermission = configViewModel::changeFirstRequestNotifyPermission
+        actionAfterLocationPermission = runsViewModel::changeFirstRequestLocationPermission,
+        actionAfterNotifyPermission = runsViewModel::changeFirstRequestNotifyPermission
     )
 ) {
 
-    val metricType by configViewModel.metrics.collectAsState()
+    val metricType by runsViewModel.metricType.collectAsState()
     val numberRuns by runsViewModel.numberRuns.collectAsState()
-    val sortConfig by configViewModel.sortConfig.collectAsState()
+    val sortConfig by runsViewModel.sortConfig.collectAsState()
     val stateTracking by runsViewModel.stateTracking.collectAsState()
     val listRuns = runsViewModel.listRunsOrdered.collectAsLazyPagingItems()
     val listRunsSelected = selectViewModel.listRunsSelected
     val isSelectEnable = listRunsSelected.isNotEmpty()
-    val permissionsDataState by configViewModel.permissionDataState.collectAsState()
+    val permissionsDataState by runsViewModel.permissionDataState.collectAsState()
+
+
+    LaunchedEffect(key1 = Unit){
+        runsViewModel.metricType.collect{
+            Timber.d("Metric type in screen $it")
+        }
+    }
 
 
     BackHandler(
@@ -103,7 +110,7 @@ fun RunsScreens(
             listRunsSelected = listRunsSelected,
             scaffoldState = runsState.scaffoldState,
             lazyGridState = runsState.lazyGridState,
-            changeSort = configViewModel::changeSortConfig,
+            changeSort = runsViewModel::changeSortConfig,
             actionAddRun = {
                 actionRootDestinations.changeRoot(TrackingScreenDestination)
             },

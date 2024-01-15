@@ -3,6 +3,7 @@ package com.nullpointer.runningcompose.domain.config
 import androidx.compose.ui.graphics.Color
 import com.nullpointer.runningcompose.datasource.config.local.ConfigLocalDataSource
 import com.nullpointer.runningcompose.models.data.config.MapConfig
+import com.nullpointer.runningcompose.models.data.config.SettingsData
 import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -12,14 +13,7 @@ import kotlinx.coroutines.flow.Flow
 class ConfigRepoImpl(
     private val configLocalDataSource: ConfigLocalDataSource,
 ) : ConfigRepository {
-    override val mapConfig: Flow<MapConfig> = configLocalDataSource.mapConfig
-    override val sortConfig: Flow<SortConfig> = configLocalDataSource.sortConfig
-    override val metricsConfig: Flow<MetricType> = configLocalDataSource.metricsConfig
-    override val isFirstPermissionLocation: Flow<Boolean> = configLocalDataSource.isFirstPermissionLocation
-    override val isFirstPermissionNotify: Flow<Boolean> = configLocalDataSource.isFirstPermissionNotify
-    override val numberRunsGraph: Flow<Int> = configLocalDataSource.numberRunsGraph
-    override val isFirstOpen: Flow<Boolean> = configLocalDataSource.isFirstOpen
-
+    override val settingsData: Flow<SettingsData> = configLocalDataSource.settingsData
 
     override suspend fun changeMapConfig(
         style: MapStyle?,

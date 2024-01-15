@@ -20,6 +20,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -41,12 +42,12 @@ class TrackingViewModel @Inject constructor(
         private const val KEY_DIALOG_SAVE = "KEY_DIALOG_SAVE"
     }
 
-    val drawLinesData = combine(
+    val drawLinesData =   configRepository.settingsData.combine(
         locationRepository.lastLocationSaved,
-        configRepository.mapConfig
-    ) { list, style ->
-        DrawPolyData(list, style)
-    }.flowOn(Dispatchers.IO).stateIn(
+    ) { settingsData,listPolylines ->
+        DrawPolyData(listPolylines, settingsData.mapConfig)
+    }.distinctUntilChanged()
+        .flowOn(Dispatchers.IO).stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
         DrawPolyData()

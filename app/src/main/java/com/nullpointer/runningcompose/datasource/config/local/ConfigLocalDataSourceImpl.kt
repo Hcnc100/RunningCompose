@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.nullpointer.runningcompose.data.config.local.ConfigUserStore
 import com.nullpointer.runningcompose.models.data.config.MapConfig
+import com.nullpointer.runningcompose.models.data.config.SettingsData
 import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
@@ -17,24 +18,13 @@ class ConfigLocalDataSourceImpl(
     private val configUserStore: ConfigUserStore,
 ) : ConfigLocalDataSource {
 
-    private suspend fun getSettingsDataFirst() = configUserStore.getSettingsData().first()
-
-    override val mapConfig: Flow<MapConfig> = configUserStore.getSettingsData().map { it.mapConfig }.distinctUntilChanged()
-    override val numberRunsGraph: Flow<Int> = configUserStore.getSettingsData().map { it.numberRunsGraph }.distinctUntilChanged()
-    override val sortConfig: Flow<SortConfig> = configUserStore.getSettingsData().map { it.sortConfig }.distinctUntilChanged()
-    override val metricsConfig: Flow<MetricType> = configUserStore.getSettingsData().map { it.metricConfig }.distinctUntilChanged()
-    override val isFirstPermissionLocation: Flow<Boolean> = configUserStore.getSettingsData().map { it.isFirstRequestLocationPermission }.distinctUntilChanged()
-    override val isFirstPermissionNotify: Flow<Boolean> =
-        configUserStore.getSettingsData().map { it.isFirstRequestNotifyPermission }
-            .distinctUntilChanged()
-    override val isFirstOpen: Flow<Boolean> =
-        configUserStore.getSettingsData().map { it.isFirstOpen }.distinctUntilChanged()
+    override val settingsData: Flow<SettingsData> = configUserStore.getSettingsData()
     override suspend fun changeMapConfig(
         style: MapStyle?,
         weight: Int?,
         color: Color?,
     ) {
-        val newSettings = getSettingsDataFirst().let { settingsData ->
+        val newSettings = settingsData.first().let { settingsData ->
             with(settingsData.mapConfig) {
                 settingsData.copy(
                     mapConfig = MapConfig(
@@ -48,8 +38,10 @@ class ConfigLocalDataSourceImpl(
         configUserStore.updateSettingsData(newSettings)
     }
 
-    override suspend fun changeSortConfig(sortType: SortType?, isReverse: Boolean?) {
-        val newSettings = getSettingsDataFirst().let { settingsData ->
+    override suspend fun changeSortConfig(
+        sortType: SortType?, isReverse: Boolean?
+    ) {
+        val newSettings = settingsData.first().let { settingsData ->
             with(settingsData.sortConfig) {
                 settingsData.copy(
                     sortConfig = SortConfig(
@@ -63,27 +55,27 @@ class ConfigLocalDataSourceImpl(
     }
 
     override suspend fun changeMetricsConfig(metricType: MetricType) {
-        val newSettings = getSettingsDataFirst().copy(metricConfig = metricType)
+        val newSettings = settingsData.first().copy(metricConfig = metricType)
         configUserStore.updateSettingsData(newSettings)
     }
 
     override suspend fun changeIsFirstPermissionLocation() {
-        val newSettings = getSettingsDataFirst().copy(isFirstRequestLocationPermission = false)
+        val newSettings = settingsData.first().copy(isFirstRequestLocationPermission = false)
         configUserStore.updateSettingsData(newSettings)
     }
 
     override suspend fun changeIsFirstPermissionNotify() {
-        val newSettings = getSettingsDataFirst().copy(isFirstRequestNotifyPermission = false)
+        val newSettings = settingsData.first().copy(isFirstRequestNotifyPermission = false)
         configUserStore.updateSettingsData(newSettings)
     }
 
     override suspend fun changeNumberRunsGraph(numberRunsGraph: Int) {
-        val newSettings = getSettingsDataFirst().copy(numberRunsGraph = numberRunsGraph)
+        val newSettings = settingsData.first().copy(numberRunsGraph = numberRunsGraph)
         configUserStore.updateSettingsData(newSettings)
     }
 
     override suspend fun changeIsFirstOpen() {
-        val newSettings = getSettingsDataFirst().copy(isFirstOpen = false)
+        val newSettings = settingsData.first().copy(isFirstOpen = false)
         configUserStore.updateSettingsData(newSettings)
     }
 }
