@@ -69,6 +69,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    testOptions.unitTests {
+        isReturnDefaultValues = true
+    }
 
 
     applicationVariants.all {
@@ -88,6 +91,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.lifecycle:lifecycle-service:2.6.2")
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.4")
@@ -181,6 +185,9 @@ dependencies {
 
     // * Desugaring
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+    testImplementation("io.mockk:mockk-android:1.13.9")
+    testImplementation("io.mockk:mockk-agent:1.13.9")
 
 
 }
