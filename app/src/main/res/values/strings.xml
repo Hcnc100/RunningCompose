@@ -19,7 +19,7 @@
     </plurals>
 
     <!-- type name sort running -->
-    <string name="app_name" translatable="false">RunningCompose</string>
+    <string name="app_name" translatable="false">RunningApp</string>
     <string name="date_type_name">Fecha</string>
     <string name="running_time_type_name">Tiempo del recorrido</string>
     <string name="avg_speed_type_name">Velocidad Media</string>

@@ -22,10 +22,8 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     val initAppData =
-        authRepository.authData.combine(configRepository.isFirstOpen) { authData, isFirstOpen ->
-            InitAppData(authData, isFirstOpen)
-        }.transform<InitAppData, Resource<InitAppData>> {
-            emit(Resource.Success(it))
+        authRepository.authData.combine(configRepository.settingsData) { authData, settings ->
+            Resource.Success( InitAppData(authData, settings.isFirstOpen))
         }.flowOn(Dispatchers.IO)
             .stateIn(
                 viewModelScope,

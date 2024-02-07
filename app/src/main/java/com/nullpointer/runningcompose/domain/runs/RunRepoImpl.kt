@@ -15,10 +15,10 @@ import com.nullpointer.runningcompose.models.types.SortType
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMap
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 
 
 class RunRepoImpl(
@@ -30,8 +30,10 @@ class RunRepoImpl(
 
     override val countRuns: Flow<Int> = runsLocalDataSource.getCountRun()
 
-    override val listRunsOrderByDate: Flow<List<RunData>> =
-        configLocalDataSource.numberRunsGraph.flatMapLatest {numberRunsGraph->
+    override val listRunsOrderByDate: Flow<List<RunData>> = configLocalDataSource.settingsData
+        .map { settingsData -> settingsData.numberRunsGraph }
+        .distinctUntilChanged()
+        .flatMapLatest { numberRunsGraph ->
             runsLocalDataSource.getListOrderByDate(numberRunsGraph)
         }
 
@@ -55,7 +57,7 @@ class RunRepoImpl(
     ) = coroutineScope {
 
         val weightUser = authLocalDataSource.getUserData().first()!!.weight
-        val mapConfig = configLocalDataSource.mapConfig.first()
+        val mapConfig = configLocalDataSource.settingsData.first().mapConfig
         val createAt = System.currentTimeMillis()
 
         val compressImageAndSavedTask = bitmap?.let {

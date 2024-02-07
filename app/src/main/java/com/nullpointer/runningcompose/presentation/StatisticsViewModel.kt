@@ -28,7 +28,10 @@ class StatisticsViewModel @Inject constructor(
         runsRepository.totalStatisticRuns
     ) { list, statistics ->
         Resource.Success(
-            StatisticsData(list, statistics)
+            StatisticsData(
+                lastRunEntities = list,
+                totalStatisticRuns = statistics
+            )
         )
 
     }.catch<Resource<StatisticsData>> {

@@ -8,36 +8,28 @@ import com.nullpointer.runningcompose.core.utils.launchSafeIO
 import com.nullpointer.runningcompose.domain.auth.AuthRepository
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.models.data.AuthData
-import com.nullpointer.runningcompose.models.data.PermissionsData
 import com.nullpointer.runningcompose.models.data.config.MapConfig
-import com.nullpointer.runningcompose.models.data.config.SortConfig
 import com.nullpointer.runningcompose.models.types.MapStyle
 import com.nullpointer.runningcompose.models.types.MetricType
-import com.nullpointer.runningcompose.models.types.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ConfigViewModel @Inject constructor(
-    private val configRepo: ConfigRepository,
-    private val authRepo: AuthRepository
+    private val configRepository: ConfigRepository,
+    authRepository: AuthRepository
 ) : ViewModel() {
 
-    val mapConfig = configRepo.mapConfig.flowOn(
-        Dispatchers.IO
-    ).catch {
-        Timber.e("Error to load map config")
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        MapConfig()
-    )
 
-    val authData = authRepo.authData.transform<AuthData?, Resource<AuthData?>> {
-        emit(Resource.Success(it))
+    val authData = authRepository.authData.map<AuthData?, Resource<AuthData?>> {
+        Resource.Success(it)
     }.catch {
         Timber.e("Error to load auth data")
         emit(Resource.Failure)
@@ -47,92 +39,64 @@ class ConfigViewModel @Inject constructor(
         Resource.Loading
     )
 
-
-    val metrics = configRepo.metricsConfig.flowOn(
+    val mapConfig = configRepository.settingsData.map {
+        it.mapConfig
+    }.flowOn(
         Dispatchers.IO
     ).catch {
-        Timber.e("Error to load metrics config")
+        Timber.e("Error to load map config")
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        MetricType.Meters
-    )
-
-    val sortConfig = configRepo.sortConfig.flowOn(
-        Dispatchers.IO
-    ).catch {
-        Timber.e("Error to load metrics config")
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        SortConfig()
-    )
-    val numberRunsGraph = configRepo.numberRunsGraph.flowOn(
-        Dispatchers.IO
-    ).catch {
-        Timber.e("Error to load metrics config")
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
-        10
+        MapConfig()
     )
 
 
-    val permissionDataState = configRepo.isFirstPermissionLocation.combine(
-        configRepo.isFirstPermissionNotify
-    ) { location, notify ->
-        PermissionsData(
-            isFirstRequestLocation = location,
-            isFirstRequestNotification = notify
-        )
-    }.map {
-        Resource.Success(it)
-    }.catch {
-        Timber.e("Error in location permission state")
-        Resource.Failure
+    val metrics = configRepository.settingsData.map {
+        it.metricConfig
     }
-        .flowOn(Dispatchers.IO)
-        .stateIn(
+        .flowOn(
+            Dispatchers.IO
+        ).catch {
+            Timber.e("Error to load metrics config")
+        }.stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000),
-            Resource.Loading
+            MetricType.Meters
         )
 
 
+    val numberRunsGraph = configRepository.settingsData
+        .map { it.numberRunsGraph }
+        .flowOn(
+            Dispatchers.IO
+        ).catch {
+            Timber.e("Error to load metrics config")
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5_000),
+            10
+        )
 
-
-
-    fun changeFirstRequestLocationPermission() = launchSafeIO {
-        configRepo.changeIsFirstPermissionLocation()
-    }
-    fun changeFirstRequestNotifyPermission() = launchSafeIO {
-        configRepo.changeIsFirstPermissionLocation()
-    }
 
     fun changeMapConfig(
         style: MapStyle? = null,
         weight: Int? = null,
         color: Color? = null,
     ) = launchSafeIO {
-        configRepo.changeMapConfig(style, weight, color)
+        configRepository.changeMapConfig(style, weight, color)
     }
 
 
     fun changeMetrics(
         metrics: MetricType,
     ) = launchSafeIO {
-        configRepo.changeMetricConfig(metrics)
+        configRepository.changeMetricConfig(metrics)
     }
 
-    fun changeSortConfig(
-        sortType: SortType? = null,
-        isReverse: Boolean? = null,
-    ) = launchSafeIO {
-        configRepo.changeSortConfig(sortType, isReverse)
-    }
 
     fun changeNumberRunsGraph(numberRunsGraph: Int) = launchSafeIO {
-        configRepo.changeNumberRunsGraph(numberRunsGraph)
+        configRepository.changeNumberRunsGraph(numberRunsGraph)
     }
 
 }

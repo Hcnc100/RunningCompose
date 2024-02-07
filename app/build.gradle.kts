@@ -15,11 +15,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.nullpointer.runningcompose"
+        applicationId = "com.nullpointer.running"
         minSdk = 21
         targetSdk = 34
-        versionCode = 3
-        versionName = "3.0.0"
+        versionCode = 4
+        versionName = "3.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

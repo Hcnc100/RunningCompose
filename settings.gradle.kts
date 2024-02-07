@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 
 
 rootProject.name = "RunningCompose"
-include ':app'
+include(":app")

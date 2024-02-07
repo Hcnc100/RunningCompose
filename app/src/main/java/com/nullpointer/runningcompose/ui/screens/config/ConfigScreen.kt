@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ import com.nullpointer.runningcompose.ui.screens.destinations.EditInfoScreenDest
 import com.nullpointer.runningcompose.ui.states.OrientationScreenState
 import com.nullpointer.runningcompose.ui.states.rememberOrientationScreenState
 import com.ramcosta.composedestinations.annotation.Destination
+import timber.log.Timber
 
 
 @HomeNavGraph
@@ -40,6 +42,24 @@ fun ConfigScreen(
     val authData by configViewModel.authData.collectAsState()
     val metricsMap by configViewModel.metrics.collectAsState()
     val numberRunsGraph by configViewModel.numberRunsGraph.collectAsState()
+
+    LaunchedEffect(key1 = Unit){
+        configViewModel.numberRunsGraph.collect{
+            Timber.d("numberRunsGraph: $it")
+        }
+    }
+
+    LaunchedEffect(key1 = Unit){
+        configViewModel.metrics.collect{
+            Timber.d("metrics: $it")
+        }
+    }
+
+    LaunchedEffect(key1 = Unit){
+        configViewModel.mapConfig.collect{
+            Timber.d("mapConfig: $it")
+        }
+    }
 
     Scaffold { paddingValues ->
         Column(
