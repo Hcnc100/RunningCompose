@@ -18,8 +18,8 @@ android {
         applicationId = "com.nullpointer.running"
         minSdk = 21
         targetSdk = 36
-        versionCode = 5
-        versionName = "4.0.1"
+        versionCode = 6
+        versionName = "4.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
