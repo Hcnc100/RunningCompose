@@ -2,22 +2,22 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.devtools.ksp" )
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
 }
 
 
 android {
 
     namespace = "com.nullpointer.runningcompose"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.nullpointer.running"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 4
         versionName = "3.0.1"
 
@@ -111,9 +111,11 @@ dependencies {
 
 
     // * dagger hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    val hiltVersion = "2.57"
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    ksp("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    ksp("com.google.dagger:hilt-compiler:$hiltVersion")
 
 
     // * room
