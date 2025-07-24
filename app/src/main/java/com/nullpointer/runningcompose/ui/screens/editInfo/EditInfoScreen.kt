@@ -118,7 +118,7 @@ fun EditInfoScreen(
                 singleLine = true,
                 valueProperty = weightUserProperty,
                 keyboardOptions = KeyboardOptions.Default.copy(
-                    autoCorrect = false, imeAction = ImeAction.Done
+                    autoCorrectEnabled = false, imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = { actionEditInfo(CHANGE_DATA) })
             )

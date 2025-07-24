@@ -159,30 +159,30 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     // * play services
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.android.gms:play-services-location:21.0.1")
-    implementation("androidx.lifecycle:lifecycle-service:2.6.2")
+    implementation("com.google.android.gms:play-services-maps:19.2.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.9.2")
 
     // * select color picker
-    implementation("com.github.skydoves:colorpicker-compose:1.0.0")
+    implementation("com.github.skydoves:colorpicker-compose:1.1.2")
 
     // * polyUtils
-    implementation("com.google.maps.android:android-maps-utils:2.2.3")
+    implementation("com.google.maps.android:android-maps-utils:3.14.0")
 
     // * permissions
-    implementation("com.google.accompanist:accompanist-permissions:0.28.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
 
     // * pagination
-    val pagingVersion = "3.2.1"
+    val pagingVersion = "3.3.6"
     implementation("androidx.paging:paging-runtime-ktx:$pagingVersion")
-    implementation("androidx.paging:paging-compose:3.2.1")
-    implementation("androidx.room:room-paging:$roomVersion")
+    implementation("androidx.paging:paging-compose:$pagingVersion")
+    implementation("androidx.room:room-paging:2.7.2")
 
     // * kotlin serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
     // * Desugaring
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 
 
 }
