@@ -100,10 +100,10 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
 
     // * coil
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // *lottie compose
-    implementation("com.airbnb.android:lottie-compose:5.1.1")
+    implementation("com.airbnb.android:lottie-compose:6.6.7")
 
     // * timber
     implementation("com.orhanobut:logger:2.2.0")
@@ -119,7 +119,7 @@ dependencies {
 
 
     // * room
-    val roomVersion = "2.5.0"
+    val roomVersion = "2.7.2"
     implementation("androidx.room:room-runtime:$roomVersion")
     // To use Kotlin Symbol Processing (KSP)
     ksp("androidx.room:room-compiler:$roomVersion")
@@ -127,10 +127,10 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // * save state
-    implementation("androidx.savedstate:savedstate-ktx:1.2.1")
+    implementation("androidx.savedstate:savedstate-ktx:1.3.1")
 
     // * number picker
-    implementation("com.github.StephenVinouze:MaterialNumberPicker:1.0.7")
+    implementation("com.github.StephenVinouze:MaterialNumberPicker:1.1.0")
 
     // * image compressor
     implementation("com.github.Shouheng88:compressor:1.6.0")
@@ -139,7 +139,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // * shimmer effect
-    implementation ("com.valentinilk.shimmer:compose-shimmer:1.0.3")
+    implementation ("com.valentinilk.shimmer:compose-shimmer:1.3.3")
 
     // * navigation
     val destinationsVersion = "1.8.42-beta"
@@ -148,15 +148,15 @@ dependencies {
 
 
     // * data store
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
 
     // * gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.13.1")
 
     // * maps
-    implementation("com.google.maps.android:maps-ktx:3.4.0")
-    implementation("com.google.maps.android:maps-utils-ktx:3.4.0")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.google.maps.android:maps-ktx:5.2.0")
+    implementation("com.google.maps.android:maps-utils-ktx:5.2.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.8")
 
     // * play services
     implementation("com.google.android.gms:play-services-maps:19.2.0")

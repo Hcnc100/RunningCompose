@@ -1,6 +1,5 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +27,6 @@ import com.nullpointer.runningcompose.ui.share.BlockProgress
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ListRuns(
     numberRuns: Int,
@@ -69,7 +67,7 @@ fun ListRuns(
                             actionRun = { actionRun(it, run) },
                             isSelectEnable = isSelectEnable,
                             metricType = metricType,
-                            modifier = Modifier.animateItemPlacement()
+                            modifier = Modifier.animateItem()
                         )
                     }
                 }
