@@ -8,6 +8,7 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.delegates.SavableComposeState
 import com.nullpointer.runningcompose.core.states.Resource
 import com.nullpointer.runningcompose.core.utils.launchSafeIO
+import com.nullpointer.runningcompose.core.utils.PolylineSimplifier
 import com.nullpointer.runningcompose.domain.config.ConfigRepository
 import com.nullpointer.runningcompose.domain.location.TrackingRepository
 import com.nullpointer.runningcompose.domain.runs.RunRepository
@@ -45,7 +46,10 @@ class TrackingViewModel @Inject constructor(
     val drawLinesData =   configRepository.settingsData.combine(
         locationRepository.lastLocationSaved,
     ) { settingsData,listPolylines ->
-        DrawPolyData(listPolylines, settingsData.mapConfig)
+        DrawPolyData(
+            listPolylines.map { PolylineSimplifier.simplify(it) },
+            settingsData.mapConfig
+        )
     }.distinctUntilChanged()
         .flowOn(Dispatchers.IO).stateIn(
         viewModelScope,

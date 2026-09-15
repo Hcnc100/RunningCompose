@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,7 +40,11 @@ class TrackingServices : LifecycleService() {
             Intent(context, TrackingServices::class.java).apply {
                 action = command
             }.let {
-                context.startService(it)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && command == START_OR_RESUME_COMMAND) {
+                    context.startForegroundService(it)
+                } else {
+                    context.startService(it)
+                }
             }
         }
 
@@ -88,11 +93,7 @@ class TrackingServices : LifecycleService() {
                 val (location, _) = it
                 locationRepository.addNewLocation(location)
             }
-            .onCompletion {
-                // When the flow completes, reset the timer values and clear the location repository values
-                timerTrackingRunningRunTracking.resetValues()
-                locationRepository.clearValues()
-            }.launchIn(lifecycleScope) // Launch the flow in the lifecycle scope of the service
+            .launchIn(lifecycleScope) // Keep the session data until an explicit STOP command.
     }
 
     /**
@@ -135,6 +136,8 @@ class TrackingServices : LifecycleService() {
                         timerTrackingRunningRunTracking.stopTimer()
                         // * reset state services to waiting
                         locationRepository.changeStateTracking(WAITING)
+                        // Explicit stop means the session is finished; remove its recovery snapshot.
+                        locationRepository.clearValues()
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                             stopForeground(STOP_FOREGROUND_REMOVE)
                         } else {
@@ -147,7 +150,7 @@ class TrackingServices : LifecycleService() {
                 }
             }
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
 
@@ -172,12 +175,17 @@ class TrackingServices : LifecycleService() {
 
         // Indicates if the timer is running
         private var isTimerRunning = false
+        private var timerJob: Job? = null
 
         /**
          * Stops the timer by setting isTimerRunning to false.
          */
         fun stopTimer() {
             isTimerRunning = false
+            timerJob?.cancel()
+            timerJob = null
+            totalTime += lastRecordedTimestamp
+            lastRecordedTimestamp = 0L
         }
 
         /**
@@ -194,7 +202,8 @@ class TrackingServices : LifecycleService() {
             isTimerRunning = true
 
             // Launch a coroutine on the main thread
-            lifecycleScope.launch(Dispatchers.IO) {
+            timerJob?.cancel()
+            timerJob = lifecycleScope.launch(Dispatchers.IO) {
                 // While the timer is running
                 while (isTimerRunning) {
                     // Update the last recorded time as the difference between the current time and the start time
@@ -223,8 +232,6 @@ class TrackingServices : LifecycleService() {
                 }
             }
 
-            // Add the last recorded time to the total time
-            totalTime += lastRecordedTimestamp
         }
 
         /**
@@ -233,6 +240,8 @@ class TrackingServices : LifecycleService() {
         fun resetValues() {
             totalTime = 0L
             isTimerRunning = false
+            timerJob?.cancel()
+            timerJob = null
             lastRecordedTimestamp = 0L
             totalTimeInSeconds = 0L
             currentSecondTimestamp = 0L

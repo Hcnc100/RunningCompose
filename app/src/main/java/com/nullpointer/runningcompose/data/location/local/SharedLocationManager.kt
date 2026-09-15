@@ -34,10 +34,11 @@ class SharedLocationManager(
         private const val LOCATION_UPDATE_INTERVAL = 5000L
 
         //        private const val FASTEST_LOCATION_INTERVAL = 2000L
-        private const val MINIMAL_DISTANCE_IN_METERS = 0F
+        private const val MINIMAL_DISTANCE_IN_METERS = 3F
     }
 
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    private val locationFilter = LocationFilter()
     private val locationRequest =
         LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, LOCATION_UPDATE_INTERVAL).apply {
             setMinUpdateDistanceMeters(MINIMAL_DISTANCE_IN_METERS)
@@ -57,7 +58,10 @@ class SharedLocationManager(
     private val _lastLocation = callbackFlow {
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
-                result.lastLocation?.let { trySend(it.toLatLng()) }
+                result.locations.forEach { location ->
+                    val sample = LocationSample(location.latitude, location.longitude, location.time, location.accuracy)
+                    if (locationFilter.accept(sample)) trySend(location.toLatLng())
+                }
             }
         }
         Timber.e("Starting location updates")
@@ -71,6 +75,7 @@ class SharedLocationManager(
         }
 
         awaitClose {
+            locationFilter.reset()
             Timber.e("Stopping location updates")
             fusedLocationClient.removeLocationUpdates(callback) // clean up when Flow collection ends
         }

@@ -1,7 +1,7 @@
 package com.nullpointer.runningcompose.core.utils
 
-import android.location.Location
 import com.google.android.gms.maps.model.LatLng
+import kotlin.math.*
 
 object Utility {
 
@@ -13,27 +13,23 @@ object Utility {
      */
     fun calculatePolylineLength(polyline: List<LatLng>): Float {
         // Initialize a variable to store the total distance.
-        var distance = 0F
+        var distance = 0.0
 
         // Iterate over each pair of consecutive points in the polyline.
         for ((pos1, pos2) in polyline.zipWithNext()) {
-            // Create a FloatArray to store the result of the distance calculation.
-            val result = FloatArray(1)
-
-            // Calculate the distance between the two points and store the result in the FloatArray.
-            Location.distanceBetween(
-                pos1.latitude,
-                pos1.longitude,
-                pos2.latitude,
-                pos2.longitude,
-                result
-            )
-
-            // Add the calculated distance to the total distance.
-            distance += result[0]
+            distance += haversineMeters(pos1, pos2)
         }
 
         // Return the total distance.
-        return distance
+        return distance.toFloat()
+    }
+
+    private fun haversineMeters(a: LatLng, b: LatLng): Double {
+        val radius = 6_371_000.0
+        val dLat = Math.toRadians(b.latitude - a.latitude)
+        val dLon = Math.toRadians(b.longitude - a.longitude)
+        val h = sin(dLat / 2).pow(2) + cos(Math.toRadians(a.latitude)) *
+            cos(Math.toRadians(b.latitude)) * sin(dLon / 2).pow(2)
+        return 2 * radius * asin(sqrt(h))
     }
 }

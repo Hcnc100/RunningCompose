@@ -11,6 +11,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -29,7 +30,12 @@ object LocationModule {
     @Singleton
     fun provideLocationDataSource(
         sharedLocationManager: SharedLocationManager,
-    ): TrackingDataSource = TrackingDataSourceImpl(sharedLocationManager)
+        @ApplicationContext context: Context,
+    ): TrackingDataSource = TrackingDataSourceImpl(
+        sharedLocationManager,
+        context,
+        (context.applicationContext as Application).applicationScope
+    )
 
     @Provides
     @Singleton

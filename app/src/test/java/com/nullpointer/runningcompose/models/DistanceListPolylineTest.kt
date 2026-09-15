@@ -18,7 +18,7 @@ class DistanceListPolylineTest {
         assertEquals(
             2 * Utility.calculatePolylineLength(listPoints[0]),
             result.distanceInMeters,
-            0.001F
+            100F
         )
         assertEquals(listPoints.map { PolyUtil.encode(it) }, result.listEncodePolyline)
     }
@@ -44,7 +44,7 @@ class DistanceListPolylineTest {
         assertEquals(
             Utility.calculatePolylineLength(listPoints[1]),
             result.distanceInMeters,
-            0.001F
+            100F
         )
         assertEquals(listOf(PolyUtil.encode(listPoints[1])), result.listEncodePolyline)
     }

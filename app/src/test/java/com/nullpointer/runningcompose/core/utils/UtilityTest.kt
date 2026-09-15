@@ -1,4 +1,3 @@
-import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 import com.nullpointer.runningcompose.core.utils.Utility
 import org.junit.Assert.assertEquals
@@ -22,27 +21,8 @@ class UtilityTest {
     fun `calculatePolylineLength returns correct distance for valid input`() {
         val result = Utility.calculatePolylineLength(listPoints)
 
-        val firstResult = FloatArray(1)
-        Location.distanceBetween(
-            pointA.latitude,
-            pointA.longitude,
-            pointB.latitude,
-            pointB.longitude,
-            firstResult
-        )
-
-        val secondResult = FloatArray(1)
-        Location.distanceBetween(
-            pointB.latitude,
-            pointB.longitude,
-            pointC.latitude,
-            pointC.longitude,
-            secondResult
-        )
-
-        val expectedDistance = firstResult[0] + secondResult[0]
-
-        assertEquals(expectedDistance, result, 0.001F)
+        // Two one-degree segments are approximately 222.4 km at the equator.
+        assertEquals(222_390f, result, 100f)
     }
 
     @Test
