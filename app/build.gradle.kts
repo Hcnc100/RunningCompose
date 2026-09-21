@@ -16,7 +16,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.nullpointer.running"
+        applicationId = "com.nullpointer.runningcompose"
         minSdk = 21
         targetSdk = 36
         versionCode = providers.gradleProperty("VERSION_CODE").orNull?.toIntOrNull() ?: 6
