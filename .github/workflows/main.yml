@@ -42,6 +42,7 @@ jobs:
             echo "KEY_PASSWORD=$KEY_PASSWORD"
             echo "VERSION_CODE=$((6 + GITHUB_RUN_NUMBER))"
           } >> gradle.properties
+          printf 'MAPS_API_KEY=%s\n' "${{ secrets.MAPS_API_KEY }}" > local.properties
 
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
