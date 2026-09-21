@@ -19,7 +19,7 @@ android {
         applicationId = "com.nullpointer.running"
         minSdk = 21
         targetSdk = 36
-        versionCode = 6
+        versionCode = providers.gradleProperty("VERSION_CODE").orNull?.toIntOrNull() ?: 6
         versionName = "4.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -39,6 +39,21 @@ android {
         multiDexEnabled = true
     }
 
+    signingConfigs {
+        create("release") {
+            val storeFilePath = providers.gradleProperty("STORE_FILE").orNull
+            if (storeFilePath != null) {
+                storeFile = file(storeFilePath)
+                storePassword = providers.gradleProperty("STORE_PASSWORD").orNull
+                keyAlias = providers.gradleProperty("KEY_ALIAS").orNull
+                keyPassword = providers.gradleProperty("KEY_PASSWORD").orNull
+            } else {
+                // Local builds remain possible without production credentials.
+                initWith(signingConfigs.getByName("debug"))
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -46,7 +61,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
