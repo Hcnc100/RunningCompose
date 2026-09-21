@@ -166,7 +166,8 @@ fun RunsScreens(
         }
     ) {
         ListRuns(
-            modifier = Modifier.padding(it),
+            modifier = Modifier,
+            contentPadding = it,
             listState = lazyGridState,
             listRuns = listRuns,
             isSelectEnable = isSelectEnable,

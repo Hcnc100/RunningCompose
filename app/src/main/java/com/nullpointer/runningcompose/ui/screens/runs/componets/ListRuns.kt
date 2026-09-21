@@ -3,6 +3,7 @@ package com.nullpointer.runningcompose.ui.screens.runs.componets
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -34,6 +35,7 @@ fun ListRuns(
     isSelectEnable: Boolean,
     listState: LazyGridState,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(4.dp),
     listRuns: LazyPagingItems<RunData>,
     actionRun: (RunActions, RunData) -> Unit,
     listRunSelected: Map<Long, RunData>,
@@ -43,13 +45,13 @@ fun ListRuns(
         -1 -> BlockProgress()
         0 -> EmptyRuns()
         else -> {
-            Column(modifier = modifier) {
+            Column(modifier = modifier.padding(top = contentPadding.calculateTopPadding())) {
                 if (!isSelectEnable) {
                     headerOrderAndFilter()
                 }
                 LazyVerticalGrid(
                     state = listState,
-                    contentPadding = PaddingValues(4.dp),
+                    contentPadding = contentPadding,
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     columns = GridCells.Adaptive(minSize = 350.dp)

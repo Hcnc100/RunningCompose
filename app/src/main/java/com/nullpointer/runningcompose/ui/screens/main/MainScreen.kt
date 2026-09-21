@@ -3,6 +3,7 @@ package com.nullpointer.runningcompose.ui.screens.main
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,7 +54,8 @@ fun MainScreen(
     actionsRootDestinations: ActionRootDestinations,
 ) {
     Scaffold(
-        scaffoldState = scaffoldState
+        scaffoldState = scaffoldState,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { innerPadding ->
         when (initAppData) {
             is Resource.Success -> {
