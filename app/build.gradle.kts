@@ -19,7 +19,7 @@ android {
         applicationId = "com.nullpointer.runningcompose"
         minSdk = 21
         targetSdk = 36
-        versionCode = providers.gradleProperty("VERSION_CODE").orNull?.toIntOrNull() ?: 6
+        versionCode = providers.gradleProperty("VERSION_CODE").orNull?.toIntOrNull() ?: 7
         versionName = "4.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
