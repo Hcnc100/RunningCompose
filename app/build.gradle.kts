@@ -47,9 +47,11 @@ android {
                 storePassword = providers.gradleProperty("STORE_PASSWORD").orNull
                 keyAlias = providers.gradleProperty("KEY_ALIAS").orNull
                 keyPassword = providers.gradleProperty("KEY_PASSWORD").orNull
+                logger.lifecycle("Release signing: storeFile=${storeFile?.absolutePath}, alias=$keyAlias, storePasswordPresent=${!storePassword.isNullOrBlank()}, keyPasswordPresent=${!keyPassword.isNullOrBlank()}")
             } else {
                 // Local builds remain possible without production credentials.
                 initWith(signingConfigs.getByName("debug"))
+                logger.lifecycle("Release signing: debug fallback (STORE_FILE not configured)")
             }
         }
     }
