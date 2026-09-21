@@ -34,6 +34,7 @@ jobs:
         run: |
           test -n "$KEYSTORE_BASE64"
           echo "$KEYSTORE_BASE64" | base64 --decode > app/release.keystore
+          printf '\n' >> gradle.properties
           {
             echo "STORE_FILE=release.keystore"
             echo "STORE_PASSWORD=$STORE_PASSWORD"
