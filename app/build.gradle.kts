@@ -16,10 +16,10 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.nullpointer.runningcompose"
+        applicationId = "com.nullpointer.running"
         minSdk = 21
         targetSdk = 36
-        versionCode = providers.gradleProperty("VERSION_CODE").orNull?.toIntOrNull() ?: 7
+        versionCode = providers.gradleProperty("VERSION_CODE").orNull?.toIntOrNull() ?: 9
         versionName = "4.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -47,11 +47,9 @@ android {
                 storePassword = providers.gradleProperty("STORE_PASSWORD").orNull
                 keyAlias = providers.gradleProperty("KEY_ALIAS").orNull
                 keyPassword = providers.gradleProperty("KEY_PASSWORD").orNull
-                logger.lifecycle("Release signing: storeFile=${storeFile?.absolutePath}, alias=$keyAlias, storePasswordPresent=${!storePassword.isNullOrBlank()}, keyPasswordPresent=${!keyPassword.isNullOrBlank()}")
             } else {
                 // Local builds remain possible without production credentials.
                 initWith(signingConfigs.getByName("debug"))
-                logger.lifecycle("Release signing: debug fallback (STORE_FILE not configured)")
             }
         }
     }
