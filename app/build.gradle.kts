@@ -19,8 +19,11 @@ android {
         applicationId = "com.nullpointer.running"
         minSdk = 21
         targetSdk = 36
-        versionCode = providers.gradleProperty("VERSION_CODE").orNull?.toIntOrNull() ?: 9
-        versionName = "4.0.2"
+        // CI injects a monotonically increasing value for Play uploads.
+        versionCode = providers.gradleProperty("versionCode")
+            .map(String::toInt)
+            .getOrElse(10)
+        versionName = "5.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

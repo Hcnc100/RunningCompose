@@ -11,6 +11,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ANDROID_KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,22 +27,26 @@ jobs:
       - name: Grant execute permission to Gradle wrapper
         run: chmod +x ./gradlew
 
+      - name: Validate Android signing secret
+        if: env.ANDROID_KEYSTORE_BASE64 == ''
+        run: |
+          echo "ANDROID_KEYSTORE_BASE64 is not configured"
+          exit 1
+
       - name: Prepare release properties
         env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        if: env.ANDROID_KEYSTORE_BASE64 != ''
         run: |
-          test -n "$KEYSTORE_BASE64"
-          echo "$KEYSTORE_BASE64" | base64 --decode > app/release.keystore
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > app/release.keystore
           printf '\n' >> gradle.properties
           {
             echo "STORE_FILE=release.keystore"
             echo "STORE_PASSWORD=$STORE_PASSWORD"
             echo "KEY_ALIAS=$KEY_ALIAS"
             echo "KEY_PASSWORD=$KEY_PASSWORD"
-            echo "VERSION_CODE=$((6 + GITHUB_RUN_NUMBER))"
           } >> gradle.properties
           printf 'MAPS_API_KEY=%s\n' "${{ secrets.MAPS_API_KEY }}" > local.properties
 
@@ -48,7 +54,10 @@ jobs:
         run: ./gradlew testDebugUnitTest
 
       - name: Build release AAB
-        run: ./gradlew bundleRelease
+        run: |
+          VERSION_CODE=$((1000 + ${{ github.run_number }}))
+          echo "Building versionCode $VERSION_CODE"
+          ./gradlew bundleRelease -PversionCode="$VERSION_CODE" --stacktrace
 
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
