@@ -41,3 +41,4 @@ Run the workflow after committing, inspect API/CI outcome, then verify review/li
 - Console showed **Cambios en la etapa de revisión**, with automated checks running and automatic submission after successful checks. Managed publishing is disabled. This is **not yet a live-release confirmation**.
 - Evidence: `docs/qa/play-release/play-console-review.jpg`, `play-release-result.json`.
 - Next action: wait for Google's checks/review; if approved, publication is automatic. If rejected, inspect the specific policy/quality finding before another release. Do not resend the same AAB or reuse its versionCode.
+- Rechecked after waiting 13 minutes: automated-check countdown disappeared and Console now states **"Tus cambios están en proceso de revisión"**. No version-conflict failure appeared. Google review remains the external blocker to confirming public availability.
