@@ -14,6 +14,8 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.RoundCap
+import com.google.android.gms.maps.model.JointType
 import com.google.maps.android.ktx.addPolyline
 import com.google.maps.android.ktx.awaitMap
 import com.nullpointer.runningcompose.models.data.config.MapConfig
@@ -23,10 +25,14 @@ import kotlinx.coroutines.launch
 
 
 private val listPointsMaps=listOf(
-    LatLng(53.3477, -6.2597),
-    LatLng(51.5008, -0.1224),
-    LatLng(48.8567, 2.3508),
-    LatLng(52.5166, 13.3833),
+    // A running-scale loop makes width and contrast easier to judge than a continental route.
+    LatLng(37.4220, -122.0840),
+    LatLng(37.4220, -122.0830),
+    LatLng(37.4226, -122.0830),
+    LatLng(37.4226, -122.0822),
+    LatLng(37.4230, -122.0822),
+    LatLng(37.4230, -122.0840),
+    LatLng(37.4220, -122.0840),
 )
 
 @Composable
@@ -65,6 +71,9 @@ fun MapFromConfig(
                     addAll(listPointsMaps)
                     color(mapConfig.colorValue)
                     width(mapConfig.weight.toFloat())
+                    startCap(RoundCap())
+                    endCap(RoundCap())
+                    jointType(JointType.ROUND)
                 }
             }
         }

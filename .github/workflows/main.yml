@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: play-production
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,6 +30,22 @@ jobs:
 
       - name: Grant execute permission to Gradle wrapper
         run: chmod +x ./gradlew
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Play API authentication dependencies
+        run: pip install google-auth==2.40.3 requests==2.32.4
+
+      - name: Test release tooling
+        run: python -m unittest discover -s scripts -p 'test_*.py'
+
+      - name: Check Play and allocate unused versionCode
+        id: play
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: python scripts/play_release.py preflight
 
       - name: Validate Android signing secret
         if: env.ANDROID_KEYSTORE_BASE64 == ''
@@ -55,7 +75,7 @@ jobs:
 
       - name: Build release AAB
         run: |
-          VERSION_CODE=$((1000 + ${{ github.run_number }}))
+          VERSION_CODE=${{ steps.play.outputs.version_code }}
           echo "Building versionCode $VERSION_CODE"
           ./gradlew bundleRelease -PversionCode="$VERSION_CODE" --stacktrace
 
@@ -65,21 +85,17 @@ jobs:
           name: app-bundle
           path: app/build/outputs/bundle/release/*.aab
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download AAB artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: app-bundle
-          path: .
+      - name: Publish bundle and bilingual store listing atomically
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: python scripts/play_release.py publish --bundle app/build/outputs/bundle/release/app-release.aab --code ${{ steps.play.outputs.version_code }}
 
-      - name: Upload to Google Play Production
-        uses: r0adkll/upload-google-play@v1.1.3
+      - name: Save verified Play submission result
+        uses: actions/upload-artifact@v4
         with:
-          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-          packageName: com.nullpointer.running
-          releaseFiles: ./*.aab
-          track: production
-          status: completed
+          name: play-release-result
+          path: play-release-result.json
+
+      - name: Clean signing material
+        if: always()
+        run: rm -f app/release.keystore local.properties gradle.properties

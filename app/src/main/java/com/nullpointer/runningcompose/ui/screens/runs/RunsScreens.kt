@@ -2,10 +2,11 @@ package com.nullpointer.runningcompose.ui.screens.runs
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,6 +39,8 @@ import com.nullpointer.runningcompose.ui.screens.config.viewModel.ConfigViewMode
 import com.nullpointer.runningcompose.ui.screens.destinations.DetailsRunDestination
 import com.nullpointer.runningcompose.ui.screens.destinations.TrackingScreenDestination
 import com.nullpointer.runningcompose.ui.screens.runs.componets.ListRuns
+import com.nullpointer.runningcompose.ui.screens.runs.componets.RunsActionBar
+import com.nullpointer.runningcompose.ui.share.material3.RunningSnackbarHost
 import com.nullpointer.runningcompose.ui.screens.runs.componets.filters.DropFilterAndOrder
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.ContainerPermissionLocation
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.ContainerPermissionNotify
@@ -153,15 +156,14 @@ fun RunsScreens(
 ) {
 
     Scaffold(
-        scaffoldState = scaffoldState,
-        floatingActionButton = {
-            ButtonToggleAddRemove(
-                actionAdd = actionAddRun,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        snackbarHost = { RunningSnackbarHost(scaffoldState.snackbarHostState) },
+        bottomBar = {
+            RunsActionBar(
+                onStartOrContinue = actionAddRun,
                 trackingState = stateTracking,
-                actionRemove = actionRemoveRun,
-                isSelectedEnable = isSelectEnable,
-                descriptionButtonAdd = stringResource(R.string.description_button_add_run),
-                descriptionButtonRemove = stringResource(R.string.description_deleter_select_runs)
+                onDelete = actionRemoveRun,
+                isSelecting = isSelectEnable,
             )
         }
     ) {

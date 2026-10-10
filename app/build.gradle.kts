@@ -23,7 +23,7 @@ android {
         versionCode = providers.gradleProperty("versionCode")
             .map(String::toInt)
             .getOrElse(10)
-        versionName = "5.0.1"
+        versionName = "5.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -105,6 +105,8 @@ dependencies {
     implementation("androidx.core:core-ktx:1.16.0")
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material:material")
+    // M2 remains during the phased screen migration; both themes share tokens.
+    implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2")
     implementation("androidx.activity:activity-compose:1.10.1")

@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +18,7 @@ import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.core.utils.getPlural
 
 
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun SelectToolbar(
     @StringRes
@@ -35,21 +37,26 @@ fun SelectToolbar(
 
 
     val backgroundToolbar by animateColorAsState(
-        if (numberSelection == 0) MaterialTheme.colors.primary else MaterialTheme.colors.secondary,
+        if (numberSelection == 0) androidx.compose.material3.MaterialTheme.colorScheme.surfaceContainer
+        else androidx.compose.material3.MaterialTheme.colorScheme.primaryContainer,
         label = ""
     )
     val contextColor by animateColorAsState(
-        if(numberSelection == 0) Color.White else Color.Black, label = ""
+        if(numberSelection == 0) androidx.compose.material3.MaterialTheme.colorScheme.onSurface
+        else androidx.compose.material3.MaterialTheme.colorScheme.onPrimaryContainer, label = ""
     )
 
-    TopAppBar(
-        backgroundColor = backgroundToolbar,
-        contentColor = contextColor,
-        title = { Text(title) },
+    androidx.compose.material3.TopAppBar(
+        colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
+            containerColor = backgroundToolbar,
+            titleContentColor = contextColor,
+            actionIconContentColor = contextColor,
+        ),
+        title = { androidx.compose.material3.Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         actions = {
             if (numberSelection != 0) {
-                IconButton(onClick = actionClear) {
-                    Icon(
+                androidx.compose.material3.IconButton(onClick = actionClear) {
+                    androidx.compose.material3.Icon(
                         painterResource(id = R.drawable.ic_clear),
                         contentDescription = stringResource(R.string.description_clear_selection)
                     )

@@ -4,23 +4,47 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.RoundCap
+import com.google.android.gms.maps.model.JointType
 import com.google.maps.android.ktx.addPolyline
 import com.google.maps.android.ktx.awaitMap
 import com.nullpointer.runningcompose.models.data.DrawPolyData
 import com.nullpointer.runningcompose.models.data.config.MapConfig
-import timber.log.Timber
+
+internal class TrackingPolylineRenderer {
+    val lines = mutableListOf<Polyline>()
+    private var config: MapConfig? = null
+
+    fun update(map: GoogleMap, data: DrawPolyData) {
+        if (lines.size != data.listLocation.size || config != data.mapConfig) {
+            lines.forEach { it.remove() }
+            lines.clear()
+            config = data.mapConfig
+            data.listLocation.forEach { points ->
+                lines.add(map.addPolyline {
+                    color(data.mapConfig.colorValue)
+                    width(data.mapConfig.weight.toFloat())
+                    startCap(RoundCap())
+                    endCap(RoundCap())
+                    jointType(JointType.ROUND)
+                    addAll(points)
+                })
+            }
+        } else {
+            lines.lastOrNull()?.points = data.listLocation.last()
+        }
+    }
+}
 
 @Composable
 fun MapTracking(
@@ -31,8 +55,7 @@ fun MapTracking(
     context: Context = LocalContext.current
 ) {
 
-    val listPolyline = remember { mutableListOf<Polyline>() }
-    var currentConfig by remember { mutableStateOf(MapConfig()) }
+    val renderer = remember(mapViewState) { TrackingPolylineRenderer() }
 
     LaunchedEffect(key1 = lastLocation) {
         lastLocation?.let {
@@ -43,29 +66,7 @@ fun MapTracking(
 
     LaunchedEffect(key1 = drawPolyData) {
         val map = mapViewState.awaitMap()
-        // ! Disparity = clear map
-        // ! clear map and re draw all polyline if the style change or ir the list in repo
-        // ! is different to the lines draw
-
-        // * this for no draw Unnecessary polyline and only update the last polyline points
-        if ((listPolyline.size != drawPolyData.listLocation.size) || (currentConfig != drawPolyData.mapConfig)) {
-            Timber.d("Disparity: clear map and update styles ")
-            currentConfig = drawPolyData.mapConfig
-            listPolyline.clear()
-            drawPolyData.listLocation.forEach {
-                listPolyline.add(
-                    map.addPolyline {
-                        color(currentConfig.colorValue)
-                        width(currentConfig.weight.toFloat())
-                        addAll(it)
-                    }
-                )
-            }
-        } else {
-            // * update the last polyline points
-            val lastPolyline = listPolyline.last()
-            lastPolyline.points = drawPolyData.listLocation.last()
-        }
+        renderer.update(map, drawPolyData)
     }
 
 

@@ -1,0 +1,4 @@
+<resources>
+    <string name="m3_pause_run">Pause run</string>
+    <string name="m3_save_run">Save run</string>
+</resources>

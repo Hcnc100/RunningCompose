@@ -1,97 +1,42 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets.filters
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.Modifier
 import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.types.SortType
-import com.nullpointer.runningcompose.ui.preview.config.SimplePreview
-import com.nullpointer.runningcompose.ui.preview.states.SortTypeProvider
-
 
 @Composable
-fun DropDownSorterOptions(
-    sortType: SortType,
-    changeSort: (SortType) -> Unit,
-) {
-
-    var isDropSelect by rememberSaveable {
-        mutableStateOf(false)
-    }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        Text(
-            stringResource(R.string.text_order_by),
-            style = MaterialTheme.typography.caption
-        )
-        Box(
-            modifier = Modifier.clickable {
-                isDropSelect = !isDropSelect
-            }
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = stringResource(id = sortType.idName),
-                    style = MaterialTheme.typography.caption,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+fun DropDownSorterOptions(sortType: SortType, changeSort: (SortType) -> Unit) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    Box {
+        OutlinedButton(onClick = { expanded = !expanded }) {
+            Text(stringResource(sortType.idName))
+            Icon(painterResource(R.drawable.ic_arrow_drop), contentDescription = stringResource(R.string.description_drop_sort_menu))
+        }
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            SortType.entries.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(stringResource(option.idName), color = if (option == sortType)
+                        MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface) },
+                    modifier = Modifier.semantics { selected = option == sortType },
+                    onClick = { expanded = false; changeSort(option) },
                 )
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_drop),
-                    contentDescription = stringResource(R.string.description_drop_sort_menu)
-                )
-            }
-            DropdownMenu(
-                expanded = isDropSelect,
-                onDismissRequest = { isDropSelect = false },
-            ) {
-                SortType.values().forEach { sortType ->
-                    DropdownMenuItem(
-                        onClick = {
-                            isDropSelect = false
-                            changeSort(sortType)
-                        },
-                    ) {
-                        Text(text = stringResource(id = sortType.idName))
-                    }
-                }
             }
         }
     }
-}
-
-@SimplePreview
-@Composable
-private fun MenuDropDownPreview(
-    @PreviewParameter(SortTypeProvider::class) sortType: SortType
-) {
-    DropDownSorterOptions(
-        sortType = sortType,
-        changeSort = {}
-    )
 }

@@ -1,0 +1,10 @@
+<resources>
+    <string name="m3_runs_heading">Your runs</string>
+    <plurals name="m3_runs_count"><item quantity="one">%d saved run</item><item quantity="other">%d saved runs</item></plurals>
+    <string name="m3_start_run">Start run</string>
+    <string name="m3_continue_run">Continue run</string>
+    <string name="m3_delete_runs">Delete selected</string>
+    <string name="m3_empty_runs_body">Start your first run. Your routes, times and progress will appear here.</string>
+    <string name="m3_retry">Retry</string>
+    <string name="m3_select_run">Select run</string>
+</resources>

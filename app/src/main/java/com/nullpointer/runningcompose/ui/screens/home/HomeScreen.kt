@@ -1,20 +1,11 @@
 package com.nullpointer.runningcompose.ui.screens.home
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -27,6 +18,7 @@ import com.nullpointer.runningcompose.ui.navigation.HomeDestinations
 import com.nullpointer.runningcompose.ui.navigation.MainNavGraph
 import com.nullpointer.runningcompose.ui.screens.NavGraphs
 import com.nullpointer.runningcompose.ui.share.SelectToolbar
+import com.nullpointer.runningcompose.ui.share.material3.RunningSnackbarHost
 import com.nullpointer.runningcompose.ui.states.HomeScreenState
 import com.nullpointer.runningcompose.ui.states.rememberHomeScreenState
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -63,7 +55,7 @@ fun HomeScreen(
     actionRootDestinations: ActionRootDestinations
 ) {
     Scaffold(
-        scaffoldState = scaffoldState,
+        snackbarHost = { RunningSnackbarHost(scaffoldState.snackbarHostState) },
         bottomBar = {
             MainButtonNavigation(
                 navController = navHostController,
@@ -81,7 +73,7 @@ fun HomeScreen(
     ) { innerPadding ->
         DestinationsNavHost(
             navGraph = NavGraphs.home,
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(innerPadding).consumeWindowInsets(innerPadding),
             startRoute = NavGraphs.home.startRoute,
             navController = navHostController,
             dependenciesContainerBuilder = {
@@ -99,11 +91,9 @@ private fun MainButtonNavigation(
 ) {
     val currentDestination = navController.currentBackStackEntryAsState()
         .value?.destination
-    BottomNavigation {
-        HomeDestinations.values().forEach { destination ->
-            BottomNavigationItem(
-                selected = currentDestination?.route == destination.destination.route,
-                onClick = {
+    HomeNavigationBar(
+        selectedRoute = currentDestination?.route,
+        onDestinationClick = { destination ->
                     if (currentDestination?.route != destination.destination.route) actionClear()
                     navController.navigate(destination.destination) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -112,19 +102,6 @@ private fun MainButtonNavigation(
                         launchSingleTop = true
                         restoreState = true
                     }
-                },
-                icon = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = destination.iconNavigation),
-                        contentDescription = stringResource(id = destination.titleShow)
-                    )
-                },
-                label = { Text(stringResource(id = destination.titleShow)) },
-                selectedContentColor = MaterialTheme.colors.secondary.copy(alpha = 0.7f),
-                unselectedContentColor = Color.White,
-                alwaysShowLabel = false,
-                modifier = Modifier.background(MaterialTheme.colors.primary)
-            )
-        }
-    }
+        },
+    )
 }

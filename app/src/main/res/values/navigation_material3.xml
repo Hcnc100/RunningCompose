@@ -1,0 +1,6 @@
+<resources>
+    <!-- Short labels retain readability at 200% font scale on phone navigation. -->
+    <string name="m3_nav_runs">Carreras</string>
+    <string name="m3_nav_statistics">Progreso</string>
+    <string name="m3_nav_settings">Ajustes</string>
+</resources>

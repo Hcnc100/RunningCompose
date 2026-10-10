@@ -1,0 +1,10 @@
+<resources>
+    <string name="m3_runs_heading">Tus recorridos</string>
+    <plurals name="m3_runs_count"><item quantity="one">%d recorrido guardado</item><item quantity="other">%d recorridos guardados</item></plurals>
+    <string name="m3_start_run">Iniciar recorrido</string>
+    <string name="m3_continue_run">Continuar recorrido</string>
+    <string name="m3_delete_runs">Eliminar seleccionados</string>
+    <string name="m3_empty_runs_body">Inicia tu primer recorrido. Aquí verás tus rutas, tiempos y progreso.</string>
+    <string name="m3_retry">Reintentar</string>
+    <string name="m3_select_run">Seleccionar recorrido</string>
+</resources>

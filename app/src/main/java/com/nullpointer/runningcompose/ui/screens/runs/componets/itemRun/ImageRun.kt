@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,13 +37,13 @@ fun ImageRun(
     )
 
     Image(
-        painter = painter,
+        painter = if (pathImage == null) painterResource(R.drawable.ic_map) else painter,
         contentDescription = stringResource(R.string.description_current_run_img),
         contentScale = if (painter.isSuccess) ContentScale.Crop else ContentScale.Fit,
-        colorFilter = if (painter.isSuccess) null else ColorFilter.tint(getGrayColor()),
+        colorFilter = if (painter.isSuccess) null else ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
         modifier = modifier
             .fillMaxHeight()
-            .clip(RoundedCornerShape(10.dp))
+            .clip(MaterialTheme.shapes.medium)
     )
 }
 

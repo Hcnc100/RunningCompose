@@ -1,0 +1,4 @@
+<resources>
+    <string name="m3_pause_run">Pausar recorrido</string>
+    <string name="m3_save_run">Guardar recorrido</string>
+</resources>

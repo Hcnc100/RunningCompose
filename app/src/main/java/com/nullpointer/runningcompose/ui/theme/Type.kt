@@ -1,28 +1,32 @@
 package com.nullpointer.runningcompose.ui.theme
 
-import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    body1 = TextStyle(
+val RunningTypography = androidx.compose.material3.Typography(
+    bodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp,
     )
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
-    ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
+)
+
+val Typography = androidx.compose.material.Typography(
+    h1 = RunningTypography.displayLarge,
+    h2 = RunningTypography.displayMedium,
+    h3 = RunningTypography.displaySmall,
+    h4 = RunningTypography.headlineLarge,
+    h5 = RunningTypography.headlineSmall,
+    h6 = RunningTypography.titleLarge,
+    subtitle1 = RunningTypography.titleMedium,
+    subtitle2 = RunningTypography.titleSmall,
+    body1 = RunningTypography.bodyLarge,
+    body2 = RunningTypography.bodyMedium,
+    button = RunningTypography.labelLarge,
+    caption = RunningTypography.bodySmall,
+    overline = RunningTypography.labelSmall,
 )

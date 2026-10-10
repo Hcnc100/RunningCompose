@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,7 +42,7 @@ fun MapAndTime(
 ) {
 
     val textRun = remember(timeRun) {
-        timeRun.toFullFormatTime(true)
+        timeRun.toFullFormatTime(false)
     }
 
     when (orientation) {
@@ -63,7 +64,7 @@ fun MapAndTime(
         }
 
         Configuration.ORIENTATION_LANDSCAPE -> {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = modifier.fillMaxSize()) {
                 MapTracking(
                     lastLocation = lastLocation,
                     drawPolyData = drawPolyData,
@@ -75,7 +76,7 @@ fun MapAndTime(
                     textTimeRun = textRun,
                     modifier = Modifier
                         .align(Alignment.TopCenter)
-                        .background(MaterialTheme.colors.primary)
+                        .background(MaterialTheme.colorScheme.surfaceContainer)
                         .padding(5.dp)
                 )
 
@@ -83,8 +84,11 @@ fun MapAndTime(
                     actionServices = actionServices,
                     servicesState = servicesState,
                     modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(5.dp)
+                        .align(Alignment.BottomEnd)
+                        .padding(12.dp)
+                        .widthIn(max = 240.dp)
+                        .background(MaterialTheme.colorScheme.surfaceContainer, MaterialTheme.shapes.large)
+                        .padding(12.dp)
                 )
             }
         }

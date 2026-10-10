@@ -17,18 +17,7 @@ fun ButtonsServicesLandscape(
     modifier: Modifier = Modifier,
     actionServices: (TrackingActions) -> Unit,
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        when (servicesState) {
-            TrackingState.WAITING, TrackingState.PAUSE -> PlayButton(actionServices)
-            TrackingState.TRACKING -> PauseButton(actionServices)
-        }
-        if (servicesState != TrackingState.WAITING) {
-            StopButton(actionServices)
-        }
-    }
+    TrackingControls(servicesState, actionServices, modifier)
 }
 
 

@@ -5,8 +5,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.consumeWindowInsets
+import com.nullpointer.runningcompose.ui.share.material3.RunningSnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,12 +48,12 @@ fun IntroductionScreen(
     val isFirstNotificationPermission by introductionViewModel.isFirstRequestNotification.collectAsState()
 
     Scaffold(
-        scaffoldState = introductionState.scaffoldState
+        snackbarHost = { RunningSnackbarHost(introductionState.scaffoldState.snackbarHostState) }
     ) {
         Column(
             modifier = Modifier
-                .padding(it)
-                .background(MaterialTheme.colors.primary)
+                .padding(it).consumeWindowInsets(it)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             IntroductionPager(
                 pagerState = introductionState.pagerState,
@@ -71,8 +73,8 @@ fun IntroductionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 PageIndicator(
-                    colorCurrent = Color.Cyan,
-                    colorOther = Color.White,
+                    colorCurrent = MaterialTheme.colorScheme.primary,
+                    colorOther = MaterialTheme.colorScheme.outlineVariant,
                     numberPages = introductionState.pageCount,
                     currentPage = introductionState.currentPager
                 )

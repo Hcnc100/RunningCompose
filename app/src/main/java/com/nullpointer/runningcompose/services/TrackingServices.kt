@@ -106,6 +106,8 @@ class TrackingServices : LifecycleService() {
      * @return The return value indicates what semantics the system should use for the service's current started state.
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // LifecycleService dispatches ON_START here; collectors gated on STARTED need it.
+        super.onStartCommand(intent, flags, startId)
         intent?.action?.let { commandAction ->
             lifecycleScope.launch {
                 val stateServices = locationRepository.stateTracking.first()

@@ -1,8 +1,9 @@
 package com.nullpointer.runningcompose.ui.screens.tracking
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.consumeWindowInsets
+import com.nullpointer.runningcompose.ui.share.material3.RunningSnackbarHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -58,7 +59,7 @@ fun TrackingScreen(
 
 
     Scaffold(
-        scaffoldState = trackingState.scaffoldState,
+        snackbarHost = { RunningSnackbarHost(trackingState.scaffoldState.snackbarHostState) },
         topBar = {
             ToolbarTracking(
                 servicesState = servicesState,
@@ -69,7 +70,7 @@ fun TrackingScreen(
     ) {
 
         MapAndTime(
-            modifier = Modifier.padding(it),
+            modifier = Modifier.padding(it).consumeWindowInsets(it),
             drawPolyData = drawPolyData,
             timeRun = timeRun,
             lastLocation = lastLocation,
@@ -99,7 +100,6 @@ fun TrackingScreen(
                 }
             }
         )
-        Text(text = lastLocation.toString())
 
         if (trackingViewModel.isSavingRun) {
             DialogSavingRun()

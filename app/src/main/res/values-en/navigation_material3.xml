@@ -1,0 +1,5 @@
+<resources>
+    <string name="m3_nav_runs">Runs</string>
+    <string name="m3_nav_statistics">Progress</string>
+    <string name="m3_nav_settings">Settings</string>
+</resources>

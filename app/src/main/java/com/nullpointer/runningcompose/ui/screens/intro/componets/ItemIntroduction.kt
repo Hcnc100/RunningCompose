@@ -2,10 +2,10 @@ package com.nullpointer.runningcompose.ui.screens.intro.componets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,8 +29,9 @@ fun DescriptionScreen(
 
         Text(
             text = stringResource(R.string.text_welcome),
-            style = MaterialTheme.typography.h5,
-            color = Color.White,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
         )
 
         Image(
@@ -41,7 +42,9 @@ fun DescriptionScreen(
 
         Text(
             text = stringResource(R.string.description_map),
-            color = Color.White
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
         )
 
     }
@@ -65,27 +68,26 @@ fun LocationScreen(
     ) {
         Text(
             text = stringResource(R.string.title_location_permission),
-            style = MaterialTheme.typography.h5,
-            color = Color.White,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
         )
 
         LottieContainerForever(
             animation = R.raw.location,
-            modifier = Modifier.size(250.dp)
+            modifier = Modifier.size(180.dp)
         )
 
         Button(
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.White,
-                contentColor = MaterialTheme.colors.primary
-            ),
             onClick = { permissionAction( PermissionActions.LAUNCH_LOCATION_PERMISSION)}) {
             Text(text = textButtonPermission)
         }
 
         Text(
             text = stringResource(R.string.title_description_permission),
-            color = Color.White
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
         )
 
     }
@@ -110,20 +112,17 @@ fun NotifyScreen(
     ) {
         Text(
             text = stringResource(R.string.title_notify_permission),
-            style = MaterialTheme.typography.h5,
-            color = Color.White,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center,
         )
 
         LottieContainerForever(
             animation = R.raw.notify,
-            modifier = Modifier.size(250.dp)
+            modifier = Modifier.size(180.dp)
         )
 
         Button(
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.White,
-                contentColor = MaterialTheme.colors.primary
-            ),
             onClick = {permissionAction( PermissionActions.LAUNCH_NOTIFICATION_PERMISSION)}
         ) {
             Text(text =textButtonPermission)
@@ -131,7 +130,9 @@ fun NotifyScreen(
 
         Text(
             text = stringResource(R.string.title_notify_description),
-            color = Color.White
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
         )
 
     }

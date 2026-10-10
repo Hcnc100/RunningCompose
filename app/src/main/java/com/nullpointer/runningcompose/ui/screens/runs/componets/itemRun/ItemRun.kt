@@ -1,26 +1,31 @@
 package com.nullpointer.runningcompose.ui.screens.runs.componets.itemRun
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.nullpointer.runningcompose.R
 import com.nullpointer.runningcompose.models.data.RunData
 import com.nullpointer.runningcompose.models.types.MetricType
 import com.nullpointer.runningcompose.ui.actions.RunActions
 import com.nullpointer.runningcompose.ui.preview.config.ThemePreviews
-import com.nullpointer.runningcompose.ui.preview.states.MetrictTypeProvider
-
+import com.nullpointer.runningcompose.ui.theme.RunningSpacing
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -32,72 +37,44 @@ fun ItemRun(
     modifier: Modifier = Modifier,
     actionRun: (RunActions) -> Unit,
 ) {
-
-    val colorSelect by animateColorAsState(
-        if (isSelect) MaterialTheme.colors.secondaryVariant else MaterialTheme.colors.surface,
-        label = "ANIMATE_SELECT_COLOR"
-    )
-
+    val longClickLabel = stringResource(R.string.m3_select_run)
     Surface(
-        color = colorSelect,
-        shape = MaterialTheme.shapes.small,
-        elevation = 3.dp,
-        modifier = modifier
-            .combinedClickable(
-                onClick = {
-                    val action = if (isSelectEnable) RunActions.SELECT else RunActions.DETAILS
-                    actionRun(action)
-                },
-                onLongClick = { if (!isSelectEnable) actionRun(RunActions.SELECT) }
-            )
+        color = if (isSelect) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceContainerLow,
+        contentColor = if (isSelect) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+        shape = MaterialTheme.shapes.medium,
+        modifier = modifier.fillMaxWidth().semantics { selected = isSelect }.combinedClickable(
+            onClick = { actionRun(if (isSelectEnable) RunActions.SELECT else RunActions.DETAILS) },
+            onLongClickLabel = longClickLabel,
+            onLongClick = { if (!isSelectEnable) actionRun(RunActions.SELECT) },
+        ),
     ) {
-        Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .height(150.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            verticalAlignment =  Alignment.CenterVertically
-        ) {
-            ImageRun(
-                pathImage = runData.pathImgRun,
-                modifier = Modifier.weight(.5f)
-            )
-            InfoRun(
-                itemRun = runData,
-                modifier = Modifier.weight(.5f),
-                metricType = metricType
-            )
+        BoxWithConstraints(Modifier.padding(RunningSpacing.medium)) {
+            if (maxWidth < 300.dp || LocalDensity.current.fontScale > 1.3f) {
+                Column(verticalArrangement = Arrangement.spacedBy(RunningSpacing.medium)) {
+                    ImageRun(runData.pathImgRun, Modifier.fillMaxWidth().height(120.dp))
+                    InfoRun(runData, metricType)
+                }
+            } else {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(RunningSpacing.medium),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    ImageRun(runData.pathImgRun, Modifier.size(width = 96.dp, height = 120.dp))
+                    InfoRun(runData, metricType, Modifier.weight(1f))
+                }
+            }
         }
     }
 }
 
+@ThemePreviews
+@Composable
+private fun ItemRunUnselectPreview() {
+    ItemRun(false, RunData.runDataExample, false, MetricType.Meters, actionRun = {})
+}
 
 @ThemePreviews
 @Composable
-private fun ItemRunUnselectPreview(
-    @PreviewParameter(MetrictTypeProvider::class) metricType: MetricType
-) {
-    ItemRun(
-        isSelect = false,
-        runData = RunData.runDataExample,
-        isSelectEnable = false,
-        metricType = metricType,
-        actionRun = {}
-    )
+private fun ItemRunSelectPreview() {
+    ItemRun(true, RunData.runDataExample, true, MetricType.Meters, actionRun = {})
 }
-
-
-@ThemePreviews
-@Composable
-private fun ItemRunSelectPreview(
-    @PreviewParameter(MetrictTypeProvider::class) metricType: MetricType
-) {
-    ItemRun(
-        isSelect = true,
-        runData = RunData.runDataExample,
-        isSelectEnable = true,
-        metricType = metricType,
-        actionRun = {}
-    )
-}
-

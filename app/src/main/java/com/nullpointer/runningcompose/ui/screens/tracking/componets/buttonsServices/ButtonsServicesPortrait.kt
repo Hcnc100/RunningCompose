@@ -20,18 +20,7 @@ fun ButtonsServicesPortrait(
     actionServices: (TrackingActions) -> Unit,
     servicesState: TrackingState,
 ) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        when (servicesState) {
-            WAITING, PAUSE -> PlayButton(actionServices)
-            TRACKING -> PauseButton(actionServices)
-        }
-        if (servicesState != WAITING) {
-            StopButton(actionServices)
-        }
-    }
+    TrackingControls(servicesState, actionServices, modifier)
 }
 
 @SimplePreview

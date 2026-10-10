@@ -11,6 +11,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.RoundCap
+import com.google.android.gms.maps.model.JointType
 import com.google.maps.android.PolyUtil
 import com.google.maps.android.ktx.addPolyline
 import com.nullpointer.runningcompose.models.data.RunData
@@ -57,6 +59,9 @@ fun MapRunItem(
                         map.addPolyline {
                             color(itemRunEntity.mapConfig.colorValue)
                             width(itemRunEntity.mapConfig.weight.toFloat())
+                            startCap(RoundCap())
+                            endCap(RoundCap())
+                            jointType(JointType.ROUND)
                             addAll(it)
                         }
                     }
