@@ -1,0 +1,31 @@
+{
+  "versionCode": 1791659915,
+  "versionName": "5.1.1",
+  "track": {
+    "track": "production",
+    "releases": [
+      {
+        "name": "5.1.1 (1791659915)",
+        "versionCodes": [
+          "1791659915"
+        ],
+        "releaseNotes": [
+          {
+            "language": "en-US",
+            "text": "Restored hundredths of a second on the tracking stopwatch, while keeping the refreshed design."
+          },
+          {
+            "language": "es-419",
+            "text": "Restauramos las cent\u00e9simas de segundo en el cron\u00f3metro de seguimiento, conservando el dise\u00f1o renovado."
+          }
+        ],
+        "status": "completed"
+      }
+    ]
+  },
+  "listings": [
+    "en-US",
+    "es-419"
+  ],
+  "publication": "Submitted; verify review/live state in Play Console"
+}

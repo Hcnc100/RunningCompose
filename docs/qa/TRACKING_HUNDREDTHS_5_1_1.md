@@ -24,3 +24,10 @@ Fractional digits use the existing `titleLarge` size beside the monospace `headl
 
 ## Next steps
 Push the targeted change and verify the existing automatic Play release workflow. Google's approval remains separate from successful submission.
+
+## Publication result
+- Commit `029dd07` pushed to main.
+- Workflow https://github.com/Hcnc100/RunningCompose/actions/runs/38079267285 completed successfully (including full JVM suite and signed release build).
+- Play accepted **5.1.1 (1791659915)**; production track post-commit verification passed. No duplicate version error.
+- Submission evidence: `tracking-hundredths/release/play-release-result.json`. This confirms submission, not Google review approval/public availability.
+- Next step: Google review; publication is automatic after approval under the existing Console configuration.
