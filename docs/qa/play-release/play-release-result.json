@@ -1,0 +1,31 @@
+{
+  "versionCode": 1791646262,
+  "versionName": "5.1.0",
+  "track": {
+    "track": "production",
+    "releases": [
+      {
+        "name": "5.1.0 (1791646262)",
+        "versionCodes": [
+          "1791646262"
+        ],
+        "releaseNotes": [
+          {
+            "language": "en-US",
+            "text": "Refreshed design with clearer controls, improved light and dark themes, and a more consistent introduction and tracking screen. Improved route drawing and GPS tracking reliability. Updated English and Spanish text."
+          },
+          {
+            "language": "es-419",
+            "text": "Dise\u00f1o renovado con controles m\u00e1s claros, mejoras en los temas claro y oscuro y mayor consistencia en la introducci\u00f3n y el seguimiento. Mejoras en el dibujo de rutas y la fiabilidad del seguimiento GPS. Textos actualizados en espa\u00f1ol e ingl\u00e9s."
+          }
+        ],
+        "status": "completed"
+      }
+    ]
+  },
+  "listings": [
+    "en-US",
+    "es-419"
+  ],
+  "publication": "Submitted; verify review/live state in Play Console"
+}

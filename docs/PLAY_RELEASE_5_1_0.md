@@ -32,3 +32,12 @@ Publish the Material 3 UI improvements, bilingual store copy and refreshed scree
 
 ## Next steps
 Run the workflow after committing, inspect API/CI outcome, then verify review/live status in Console. Record the actual version code and outcome below; never mark publication complete while review is pending.
+
+## Executed outcome (2026-10-10)
+- Commit `95e3099` pushed successfully to `origin/main`.
+- Workflow https://github.com/Hcnc100/RunningCompose/actions/runs/38063915350 completed successfully: unit tests, signed release bundle, listings and production submission.
+- API preflight maximum was 1008; new accepted versionCode **1791646262**, versionName **5.1.0**. No duplicate-version error.
+- API confirmed three phone screenshots and copy per language (`en-US`, `es-419`); post-commit read confirmed production release.
+- Console showed **Cambios en la etapa de revisión**, with automated checks running and automatic submission after successful checks. Managed publishing is disabled. This is **not yet a live-release confirmation**.
+- Evidence: `docs/qa/play-release/play-console-review.jpg`, `play-release-result.json`.
+- Next action: wait for Google's checks/review; if approved, publication is automatic. If rejected, inspect the specific policy/quality finding before another release. Do not resend the same AAB or reuse its versionCode.
