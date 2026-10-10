@@ -3,12 +3,12 @@
     "title": "RunningApp",
     "shortDescription": "Track your runs with GPS, save your routes and see your progress.",
     "fullDescription": "Make every run part of your story with RunningApp. Record your outdoor sessions, follow your route on the map and keep your running history in one place.\n\nYOUR RUN, AT YOUR PACE\nStart a session, pause when you need a break and continue when you are ready. Save your run to review it later.\n\nSEE WHERE YOU WENT\nFollow your GPS route on the map and revisit your saved routes with their time and distance. Location permission is needed to record your route. GPS accuracy depends on your device and surroundings.\n\nKEEP YOUR PROGRESS IN VIEW\nBrowse your run history and review your activity statistics. Customize your preferences and choose the units that suit you.\n\nA CLEARER EXPERIENCE\nEnjoy a refreshed interface with consistent controls, improved readability, light and dark themes, and support for English and Spanish.\n\nPut on your running shoes, head outside and start your next run.",
-    "releaseNotes": "Refreshed design with clearer controls, improved light and dark themes, and a more consistent introduction and tracking screen. Improved route drawing and GPS tracking reliability. Updated English and Spanish text."
+    "releaseNotes": "Restored hundredths of a second on the tracking stopwatch, while keeping the refreshed design."
   },
   "es-419": {
     "title": "RunningApp",
     "shortDescription": "Registra tus carreras con GPS, guarda tus rutas y consulta tu progreso.",
     "fullDescription": "Haz que cada carrera forme parte de tu historia con RunningApp. Registra tus sesiones al aire libre, sigue tu ruta en el mapa y reúne tu historial de carreras en un solo lugar.\n\nCORRE A TU RITMO\nInicia una sesión, haz una pausa cuando necesites descansar y continúa cuando estés listo. Guarda tu recorrido para revisarlo después.\n\nVUELVE A VER TUS RUTAS\nSigue tu recorrido GPS en el mapa y consulta tus rutas guardadas con su tiempo y distancia. Para registrar la ruta se necesita permiso de ubicación. La precisión del GPS depende del dispositivo y del entorno.\n\nTU PROGRESO A LA VISTA\nExplora tu historial de carreras y consulta las estadísticas de tu actividad. Personaliza tus preferencias y elige las unidades que mejor se adapten a ti.\n\nUNA EXPERIENCIA MÁS CLARA\nDisfruta una interfaz renovada con controles consistentes, mejor legibilidad, temas claro y oscuro y compatibilidad con español e inglés.\n\nPonte los tenis, sal al aire libre y comienza tu próxima carrera.",
-    "releaseNotes": "Diseño renovado con controles más claros, mejoras en los temas claro y oscuro y mayor consistencia en la introducción y el seguimiento. Mejoras en el dibujo de rutas y la fiabilidad del seguimiento GPS. Textos actualizados en español e inglés."
+    "releaseNotes": "Restauramos las centésimas de segundo en el cronómetro de seguimiento, conservando el diseño renovado."
   }
 }

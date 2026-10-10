@@ -20,6 +20,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.unit.Density
 import androidx.test.platform.app.InstrumentationRegistry
 import com.nullpointer.runningcompose.R
@@ -37,6 +38,30 @@ class RunningConsistencyTest {
     @get:Rule val compose = createComposeRule()
     private val context get() = InstrumentationRegistry.getInstrumentation().targetContext
     private fun text(id: Int) = context.getString(id)
+
+    @Test fun trackingTimerPreservesFractionsAtLargeFont() {
+        var elapsed by mutableStateOf(3_723_450L)
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
+                RunningComposeTheme {
+                    com.nullpointer.runningcompose.ui.screens.tracking.componets.mapAndTime.TimeRunContainer(
+                        com.nullpointer.runningcompose.ui.screens.tracking.componets.mapAndTime.formatTrackingTime(elapsed)
+                    ) {}
+                }
+            }
+        }
+        compose.onNodeWithText("01:02:03:45").assertIsDisplayed()
+        compose.runOnIdle { elapsed += 10 }
+        compose.onNodeWithText("01:02:03:46").assertIsDisplayed()
+        val layouts = mutableListOf<androidx.compose.ui.text.TextLayoutResult>()
+        compose.onNodeWithText("01:02:03:46").performSemanticsAction(
+            androidx.compose.ui.semantics.SemanticsActions.GetTextLayoutResult
+        ) { it(layouts) }
+        assertEquals(1, layouts.single().lineCount)
+        assertEquals(false, layouts.single().didOverflowWidth)
+        capture("tracking-hundredths-large-font")
+    }
 
     @Test fun trackingControlsPreserveAllCallbacks() {
         var state by mutableStateOf(TrackingState.WAITING)

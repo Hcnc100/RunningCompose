@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
 import com.nullpointer.runningcompose.core.utils.toFullFormatTime
+
 import com.nullpointer.runningcompose.models.data.DrawPolyData
 import com.nullpointer.runningcompose.models.types.TrackingState
 import com.nullpointer.runningcompose.ui.preview.config.OrientationPreviews
@@ -28,6 +29,8 @@ import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServi
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.buttonsServices.ButtonsServicesPortrait
 import com.nullpointer.runningcompose.ui.screens.tracking.componets.map.MapTracking
 
+// Preserve the original hundredths-of-a-second display in both orientations.
+internal fun formatTrackingTime(timeInMillis: Long): String = timeInMillis.toFullFormatTime(true)
 
 @Composable
 fun MapAndTime(
@@ -42,7 +45,7 @@ fun MapAndTime(
 ) {
 
     val textRun = remember(timeRun) {
-        timeRun.toFullFormatTime(false)
+        formatTrackingTime(timeRun)
     }
 
     when (orientation) {

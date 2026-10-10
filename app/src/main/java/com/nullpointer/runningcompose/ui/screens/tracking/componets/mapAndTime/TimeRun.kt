@@ -10,6 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +31,13 @@ fun TextTimeRun(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = textTimeRun,
+        text = buildAnnotatedString {
+            val fractionStart = if (textTimeRun.count { it == ':' } == 3) textTimeRun.lastIndexOf(':') else textTimeRun.length
+            append(textTimeRun.take(fractionStart))
+            withStyle(SpanStyle(fontSize = MaterialTheme.typography.titleLarge.fontSize)) {
+                append(textTimeRun.drop(fractionStart))
+            }
+        },
         style = MaterialTheme.typography.headlineMedium,
         fontFamily = FontFamily.Monospace,
         color = MaterialTheme.colorScheme.onSurface,
@@ -60,7 +69,7 @@ fun TimeRunContainer(
 @Composable
 private fun TimeRunPreview() {
     TextTimeRun(
-        textTimeRun = "00:00:00"
+        textTimeRun = "00:00:00:00"
     )
 }
 
@@ -74,7 +83,7 @@ private fun TimeRunContainerPreview(
     @PreviewParameter(TrackingStateProvider::class) state: TrackingState
 ) {
     TimeRunContainer(
-        textTimeRun = "00:00:00"
+        textTimeRun = "00:00:00:00"
     ) {
         ButtonsServicesPortrait(
             actionServices = {},
